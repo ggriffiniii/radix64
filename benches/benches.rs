@@ -75,6 +75,21 @@ mod radix {
             black_box(&decoded);
         })
     }
+
+    pub(crate) fn decode_reader<C: Config>(config: C, b: &mut Bencher, &size: &usize) {
+        use std::io::Read;
+        let mut input: Vec<u8> = vec![0; size];
+        rand::thread_rng().fill(input.as_mut_slice());
+        let encoded = config.encode(&input);
+        let mut decoded = Vec::with_capacity(input.len());
+        b.iter(|| {
+            decoded.clear();
+            let mut rdr = radix64::io::DecodeReader::new(config, std::io::Cursor::new(&encoded));
+            rdr.read_to_end(&mut decoded)
+                .expect("failed to read to the end");
+            black_box(&decoded);
+        })
+    }
 }
 
 mod b64 {
@@ -201,6 +216,14 @@ pub fn decode_slice_benches(byte_sizes: &[usize]) -> ParameterizedBenchmark<usiz
     .with_function("base64", |b, s| b64::decode_slice(B64_CONFIG, b, s))
 }
 
+pub fn decode_reader_benches(byte_sizes: &[usize]) -> ParameterizedBenchmark<usize> {
+    ParameterizedBenchmark::new(
+        "radix64",
+        |b, s| radix::decode_reader(RADIX_CONFIG, b, s),
+        byte_sizes.iter().cloned(),
+    )
+}
+
 fn customize_benchmark(benchmark: ParameterizedBenchmark<usize>) -> ParameterizedBenchmark<usize> {
     benchmark.throughput(|s| Throughput::Bytes(*s as u32))
 }
@@ -229,6 +252,10 @@ fn bench(c: &mut Criterion) {
     c.bench(
         "decode_with_buffer_bench",
         customize_benchmark(decode_with_buffer_benches(&BYTE_SIZES[..])),
+    );
+    c.bench(
+        "decode_reader",
+        customize_benchmark(decode_reader_benches(&BYTE_SIZES[..])),
     );
 }
 

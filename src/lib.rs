@@ -288,5 +288,6 @@ macro_rules! define_block_iter {
 pub(crate) mod config;
 pub(crate) mod decode;
 pub(crate) mod encode;
+pub mod io;
 pub(crate) mod tables;
 pub(crate) mod u6;
