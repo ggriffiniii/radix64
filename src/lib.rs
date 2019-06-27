@@ -69,7 +69,7 @@
 //! #### Encoding
 //! | Input Byte Size | radix64 Throughput | base64 Throughput |
 //! | --------------- | ------------------ | ----------------- |
-//! | 3 bytes         | 401 MiB/s          | 344 MiB/s         |
+//! | 3 bytes         | 567 MiB/s          | 344 MiB/s         |
 //! | 32 bytes        | 1.92 GiB/s         | 1.31 GiB/s        |
 //! | 128 bytes       | 4.15 GiB/s         | 1.92 GiB/s        |
 //! | 8192 bytes      | 6.42 GiB/s         | 2.23 GiB/s        |
@@ -77,27 +77,27 @@
 //! #### Decoding
 //! | Input Byte Size | radix64 Throughput | base64 Throughput |
 //! | --------------- | ------------------ | ----------------- |
-//! | 3 bytes         | 310 MiB/s          | 178 MiB/s         |
-//! | 32 bytes        | 1.09 GiB/s         | 966 MiB/s         |
-//! | 128 bytes       | 3.09 GiB/s         | 1.53 GiB/s        |
-//! | 8192 bytes      | 8.37 GiB/s         | 1.99 GiB/s        |
+//! | 3 bytes         | 324 MiB/s          | 178 MiB/s         |
+//! | 32 bytes        | 1.15 GiB/s         | 966 MiB/s         |
+//! | 128 bytes       | 3.12 GiB/s         | 1.53 GiB/s        |
+//! | 8192 bytes      | 8.55 GiB/s         | 1.99 GiB/s        |
 //!
 //! ## Without any SIMD optimizations (--no-default-features)
 //! #### Encoding
 //! | Input Byte Size | radix64 Throughput | base64 Throughput |
 //! | --------------- | ------------------ | ----------------- |
-//! | 3 bytes         | 499 MiB/s          | 346 MiB/s         |
-//! | 32 bytes        | 1.39 GiB/s         | 1.31 GiB/s        |
-//! | 128 bytes       | 2.00 GiB/s         | 1.92 GiB/s        |
-//! | 8192 bytes      | 2.32 GiB/s         | 2.25 GiB/s        |
+//! | 3 bytes         | 566 MiB/s          | 346 MiB/s         |
+//! | 32 bytes        | 1.49 GiB/s         | 1.31 GiB/s        |
+//! | 128 bytes       | 2.03 GiB/s         | 1.92 GiB/s        |
+//! | 8192 bytes      | 2.27 GiB/s         | 2.25 GiB/s        |
 //!
 //! #### Decoding
 //! | Input Byte Size | radix64 Throughput | base64 Throughput |
 //! | --------------- | ------------------ | ----------------- |
-//! | 3 bytes         | 311 MiB/s          | 176 MiB/s         |
-//! | 32 bytes        | 1.02 GiB/s         | 970 MiB/s         |
+//! | 3 bytes         | 326 MiB/s          | 176 MiB/s         |
+//! | 32 bytes        | 1.04 GiB/s         | 970 MiB/s         |
 //! | 128 bytes       | 1.69 GiB/s         | 1.54 GiB/s        |
-//! | 8192 bytes      | 2.14 GiB/s         | 1.98 GiB/s        |
+//! | 8192 bytes      | 2.04 GiB/s         | 1.98 GiB/s        |
 
 #![deny(missing_docs)]
 
@@ -144,35 +144,16 @@ macro_rules! define_block_iter {
             output: &'b mut [u8],
             input_index: usize,
             output_index: usize,
-            /// Do not yield a value unless input_index is less than this value. The
-            /// comparison to input_index is only going to happen on indexes evenly
-            /// divisible by $input_chunk_size.
-            /// i.e. The first comparison will be at index 0, which will yield
-            /// $input_chunk_size elements. The second comparison will be at
-            /// index $input_stride yielding another $input_chunk_size elements.
-            input_end: usize,
         }
 
         impl<'a, 'b> $name<'a, 'b> {
             #[inline]
             fn new(input: &'a [u8], output: &'b mut [u8]) -> Self {
-                let input_chunks = if input.len() >= $input_chunk_size {
-                    (input.len() - $input_chunk_size) / $input_stride + 1
-                } else {
-                    0
-                };
-                let output_chunks = if output.len() >= $output_chunk_size {
-                    (output.len() - $output_chunk_size) / $output_stride + 1
-                } else {
-                    0
-                };
-                let num_chunks = std::cmp::min(input_chunks, output_chunks);
                 $name {
                     input,
                     output,
                     input_index: 0,
                     output_index: 0,
-                    input_end: num_chunks * $input_stride,
                 }
             }
 
@@ -182,6 +163,13 @@ macro_rules! define_block_iter {
                     self.input.split_at(self.input_index).1,
                     self.output.split_at_mut(self.output_index).1,
                 )
+            }
+
+            #[inline]
+            unsafe fn get(&mut self) -> (&'a [u8; $input_chunk_size], &'b mut [u8; $output_chunk_size]) {
+                let input = &*(self.input.as_ptr().add(self.input_index) as *const [u8; $input_chunk_size]);
+                let output = &mut *(self.output.as_mut_ptr().add(self.output_index) as *mut [u8; $output_chunk_size]);
+                (input, output)
             }
         }
 
@@ -193,15 +181,8 @@ macro_rules! define_block_iter {
 
             #[inline]
             fn next(&mut self) -> Option<Self::Item> {
-                if self.input_index < self.input_end {
-                    let input = unsafe {
-                        &*(self.input.as_ptr().add(self.input_index)
-                            as *const [u8; $input_chunk_size])
-                    };
-                    let output = unsafe {
-                        &mut *(self.output.as_mut_ptr().add(self.output_index)
-                            as *mut [u8; $output_chunk_size])
-                    };
+                if self.input_index + $input_chunk_size <= self.input.len() && self.output_index + $output_chunk_size <= self.output.len() {
+                    let (input, output) = unsafe { self.get() };
                     self.input_index += $input_stride;
                     self.output_index += $output_stride;
                     Some((input, output))
@@ -216,15 +197,7 @@ macro_rules! define_block_iter {
                 if self.input_index > 0 {
                     self.input_index -= $input_stride;
                     self.output_index -= $output_stride;
-                    let input = unsafe {
-                        &*(self.input.as_ptr().add(self.input_index)
-                            as *const [u8; $input_chunk_size])
-                    };
-                    let output = unsafe {
-                        &mut *(self.output.as_mut_ptr().add(self.output_index)
-                            as *mut [u8; $output_chunk_size])
-                    };
-                    Some((input, output))
+                    Some(unsafe { self.get() })
                 } else {
                     None
                 }

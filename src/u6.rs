@@ -11,7 +11,7 @@ impl U6 {
     #[inline]
     pub fn new(x: u8) -> U6 {
         assert!(x < 64);
-        unsafe { Self::new_unchecked(x) }
+        U6(x)
     }
 
     #[inline]

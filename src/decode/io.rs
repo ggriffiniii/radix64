@@ -169,18 +169,12 @@ where
         let bytes_to_copy = std::cmp::min(self.bytes_contained_in_partial_chunk, output.len());
         output[..bytes_to_copy].copy_from_slice(&self.decoded_partial_chunk[..bytes_to_copy]);
         self.bytes_contained_in_partial_chunk -= bytes_to_copy;
-        if self.bytes_contained_in_partial_chunk != 0 {
-            // if bytes remain in the partial chunk move them to the beginning of the array.
-            // An alternative to copying the bytes would be to maintain a
-            // current position within the decoded_partial_chunk, but that seems
-            // like more complexity to save copying at most 2 bytes.
-            unsafe {
-                std::ptr::copy(
-                    self.decoded_partial_chunk.as_ptr().add(bytes_to_copy),
-                    self.decoded_partial_chunk.as_mut_ptr(),
-                    self.bytes_contained_in_partial_chunk,
-                );
-            }
+        // if bytes remain in the partial chunk move them to the beginning of the array.
+        // An alternative to copying the bytes would be to maintain a
+        // current position within the decoded_partial_chunk, but that seems
+        // like unnecessary complexity to save copying at most 2 bytes.
+        for idx in 0..self.bytes_contained_in_partial_chunk {
+            self.decoded_partial_chunk[idx] = self.decoded_partial_chunk[idx + bytes_to_copy];
         }
         &mut output[bytes_to_copy..]
     }
