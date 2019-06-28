@@ -158,10 +158,10 @@ macro_rules! define_block_iter {
             }
 
             #[inline]
-            fn remaining(self) -> (&'a [u8], &'b mut [u8]) {
+            fn remaining(self) -> (usize, usize) {
                 (
-                    self.input.split_at(self.input_index).1,
-                    self.output.split_at_mut(self.output_index).1,
+                    self.input_index,
+                    self.output_index,
                 )
             }
 
@@ -216,39 +216,32 @@ macro_rules! define_block_iter {
             proptest! {
                 #[test]
                 fn stay_within_bounds(input in any::<Vec<u8>>(), mut output in any::<Vec<u8>>()) {
+                    let input_ptr = input.as_ptr();
+                    let input_len = input.len();
+                    let output_ptr = output.as_ptr();
+                    let output_len = output.len();
                     unsafe {
-                        let input_len = input.len();
-                        let output_len = output.len();
-                        let input_start = input.as_ptr();
-                        let input_end = input_start.add(input_len);
-                        let output_start = output.as_ptr();
-                        let output_end = output_start.add(output_len);
                         let mut iter = $name::new(&input, output.as_mut_slice());
                         let mut chunk_count = 0;
                         for (input_chunk, output_chunk) in iter.by_ref() {
                             chunk_count += 1;
-                            assert!(input_chunk.as_ptr() >= input_start);
-                            assert!(input_chunk.as_ptr().add($input_chunk_size) <= input_end);
-                            assert!(output_chunk.as_ptr() >= output_start);
-                            assert!(output_chunk.as_ptr().add($output_chunk_size) <= output_end);
+                            assert!(input_chunk.as_ptr() >= input_ptr);
+                            assert!(input_chunk.as_ptr().add($input_chunk_size) <= input_ptr.add(input_len));
+                            assert!(output_chunk.as_ptr() >= output_ptr);
+                            assert!(output_chunk.as_ptr().add($output_chunk_size) <= output_ptr.add(output_len));
                         }
-                        let (input_remaining, output_remaining) = iter.remaining();
-                        let input_bytes_remaining = input_len - (chunk_count * $input_stride);
-                        assert_eq!(input_bytes_remaining, input_remaining.len());
-                        assert_eq!(input_remaining.as_ptr().add(input_remaining.len()), input_end);
-                        let output_bytes_remaining = output_len - (chunk_count * $output_stride);
-                        assert_eq!(output_bytes_remaining, output_remaining.len());
-                        assert_eq!(output_remaining.as_ptr().add(output_remaining.len()), output_end);
-                    }
-                }
+                        let (input_idx, output_idx) = iter.remaining();
 
-                #[test]
-                fn remaining_size_less_than_chunk_size(input in any::<Vec<u8>>(), mut output in any::<Vec<u8>>()) {
-                    let mut iter = $name::new(&input, output.as_mut_slice());
-                    for _ in iter.by_ref() {}
-                    let (input_remaining, output_remaining) = iter.remaining();
-                    if $input_chunk_size < input_remaining.len() && $output_chunk_size < output_remaining.len() {
-                        panic!("iteration terminated early, leaving a larger than expected remaining slice");
+                        assert!(input_idx <= input.len());
+                        assert!(output_idx <= output.len());
+                        let input_advanced = chunk_count * $input_stride;
+                        assert_eq!(input_idx, input_advanced);
+                        let output_advanced = chunk_count * $output_stride;
+                        assert_eq!(output_idx, output_advanced);
+
+                        let input_remaining = input.len() - input_idx;
+                        let output_remaining = output.len() - output_idx;
+                        assert!(input_remaining < $input_chunk_size || output_remaining < $output_chunk_size);
                     }
                 }
             }

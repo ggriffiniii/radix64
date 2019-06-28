@@ -10,11 +10,7 @@ pub trait IntoBlockDecoder: Copy {
 }
 
 pub trait BlockDecoder: Copy {
-    fn decode_blocks<'a, 'b>(
-        self,
-        input: &'a [u8],
-        output: &'b mut [u8],
-    ) -> Result<(&'a [u8], &'b mut [u8]), DecodeError>;
+    fn decode_blocks(self, input: &[u8], output: &mut [u8]) -> Result<(usize, usize), DecodeError>;
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -62,11 +58,7 @@ impl<C> BlockDecoder for ScalarBlockDecoder<C>
 where
     C: Config,
 {
-    fn decode_blocks<'a, 'b>(
-        self,
-        input: &'a [u8],
-        output: &'b mut [u8],
-    ) -> Result<(&'a [u8], &'b mut [u8]), DecodeError> {
+    fn decode_blocks(self, input: &[u8], output: &mut [u8]) -> Result<(usize, usize), DecodeError> {
         let mut iter = BlockIter::new(input, output);
         for (input_block, output_block) in iter.by_ref() {
             self.decode_block(input_block, output_block)

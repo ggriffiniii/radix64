@@ -10,11 +10,7 @@ pub trait IntoBlockEncoder: Copy {
 }
 
 pub trait BlockEncoder: Copy {
-    fn encode_blocks<'a, 'b>(
-        self,
-        input: &'a [u8],
-        output: &'b mut [u8],
-    ) -> (&'a [u8], &'b mut [u8]);
+    fn encode_blocks(self, input: &[u8], output: &mut [u8]) -> (usize, usize);
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -43,11 +39,7 @@ where
     C: Config,
 {
     #[inline]
-    fn encode_blocks<'a, 'b>(
-        self,
-        input: &'a [u8],
-        output: &'b mut [u8],
-    ) -> (&'a [u8], &'b mut [u8]) {
+    fn encode_blocks(self, input: &[u8], output: &mut [u8]) -> (usize, usize) {
         use arrayref::{array_mut_ref, array_ref};
         let mut iter = BlockIter::new(input, output);
         for (input_block, output_block) in iter.by_ref() {

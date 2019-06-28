@@ -41,131 +41,7 @@ where
         }
     }
 
-    fn decode<'a>(&mut self, mut output: &'a mut [u8]) -> Result<&'a mut [u8], std::io::Error> {
-        // If we've previously partially returned a decoded chunk, return the
-        // remaining bytes of the partial result before anything else.
-        if self.bytes_contained_in_partial_chunk > 0 {
-            output = self.write_partial_chunk(output);
-            if self.bytes_contained_in_partial_chunk > 0 {
-                return Ok(output);
-            }
-        }
-
-        // Read until we get atleast one full chunk or see EOF.
-        while self.end_of_decodable_data() - self.pos < 4 && !self.eof_seen {
-            self.fill()?;
-        }
-
-        let mut decodable_data = &self.data[self.pos..self.end_of_decodable_data()];
-
-        if decodable_data.is_empty() && self.eof_seen {
-            // If we've seen EOF and don't have any decodable data we're done.
-            return Ok(output);
-        }
-
-        if self.eof_seen {
-            let start_len = decodable_data.len();
-            decodable_data = crate::decode::remove_padding(self.config, decodable_data);
-            self.cap -= start_len - decodable_data.len();
-        }
-
-        let decodable_data_len = decodable_data.len();
-        let (decodable_data, output_remaining) =
-            crate::decode::decode_full_chunks_without_padding(self.config, decodable_data, output)
-                .map_err(into_io_err)?;
-        let bytes_decoded = decodable_data_len - decodable_data.len();
-        self.pos += bytes_decoded;
-
-        let some_bytes_already_written = bytes_decoded > 0;
-        Ok(match (some_bytes_already_written, self.eof_seen) {
-            (some_bytes_already_written, true) => {
-                // EOF has been reached. We've already decoded as many full
-                // chunks as possible into the output buffer. Either the
-                // output buffer is too small to hold the next full chunk or
-                // we have a partial chunk of decodable data remaining that
-                // may or may not fit into the output buffer.
-                if decodable_data.len() < 4
-                    && output_remaining.len()
-                        >= output_bytes_needed_to_decode_partial_chunk(decodable_data.len())?
-                {
-                    // This is a partial chunk that fits within the output buffer. Decode it.
-                    let output_remaining = crate::decode::decode_partial_chunk(
-                        self.config,
-                        decodable_data,
-                        output_remaining,
-                    )
-                    .map_err(into_io_err)?;
-                    self.pos += decodable_data.len();
-                    return Ok(output_remaining);
-                } else if decodable_data.len() < 4 {
-                    // This is a partial chunk that does not fit within the output buffer.
-                    // Decode to partial chunk.
-                    let partial_chunk_remaining = crate::decode::decode_partial_chunk(
-                        self.config,
-                        decodable_data,
-                        &mut self.decoded_partial_chunk[..],
-                    )
-                    .map_err(into_io_err)?;
-                    self.pos += decodable_data.len();
-                    self.bytes_contained_in_partial_chunk = 3 - partial_chunk_remaining.len();
-                    self.write_partial_chunk(output_remaining)
-                } else {
-                    // We have atleast one full chunk of decodable data, but
-                    // the output buffer is not large enough to hold another
-                    // full chunk. If we've already written some bytes, just
-                    // return those (maybe we'll get lucky and the next read
-                    // will provide a large enough output buffer), otherwise
-                    // decode into a partial chunk and copy what we can fit.
-                    if some_bytes_already_written {
-                        return Ok(output_remaining);
-                    }
-                    let decodable_data_len = decodable_data.len();
-                    let (decodable_data, partial_chunk_remaining) =
-                        crate::decode::decode_full_chunks_without_padding(
-                            self.config,
-                            decodable_data,
-                            &mut self.decoded_partial_chunk,
-                        )
-                        .map_err(into_io_err)?;
-                    let bytes_decoded = decodable_data_len - decodable_data.len();
-                    debug_assert!(partial_chunk_remaining.is_empty());
-                    debug_assert!(bytes_decoded == 4);
-                    self.pos += 4;
-                    self.bytes_contained_in_partial_chunk = 3;
-                    self.write_partial_chunk(output_remaining)
-                }
-            }
-            (true, false) => {
-                // As many full chunks were written as possible and we
-                // haven't yet seen EOF. No more writing is possible until
-                // we get more data or see EOF.
-                output_remaining
-            }
-            (false, false) => {
-                // We have a full chunks worth of decodable data, but none
-                // were written. This must mean that the output buffer was
-                // too small to hold a full chunk. Decode into a partial
-                // chunk.
-                assert!(output_remaining.len() < 3);
-                let decodable_data_len = decodable_data.len();
-                let (decodable_data, partial_chunk_remaining) =
-                    crate::decode::decode_full_chunks_without_padding(
-                        self.config,
-                        decodable_data,
-                        &mut self.decoded_partial_chunk,
-                    )
-                    .map_err(into_io_err)?;
-                let bytes_decoded = decodable_data_len - decodable_data.len();
-                debug_assert!(partial_chunk_remaining.is_empty());
-                debug_assert!(bytes_decoded == 4);
-                self.pos += 4;
-                self.bytes_contained_in_partial_chunk = 3;
-                self.write_partial_chunk(output_remaining)
-            }
-        })
-    }
-
-    fn write_partial_chunk<'a>(&mut self, output: &'a mut [u8]) -> &'a mut [u8] {
+    fn write_partial_chunk(&mut self, output: &mut [u8]) -> usize {
         let bytes_to_copy = std::cmp::min(self.bytes_contained_in_partial_chunk, output.len());
         output[..bytes_to_copy].copy_from_slice(&self.decoded_partial_chunk[..bytes_to_copy]);
         self.bytes_contained_in_partial_chunk -= bytes_to_copy;
@@ -176,7 +52,7 @@ where
         for idx in 0..self.bytes_contained_in_partial_chunk {
             self.decoded_partial_chunk[idx] = self.decoded_partial_chunk[idx + bytes_to_copy];
         }
-        &mut output[bytes_to_copy..]
+        bytes_to_copy
     }
 
     fn fill(&mut self) -> std::io::Result<()> {
@@ -218,10 +94,125 @@ where
     C: Config,
     R: Read,
 {
-    fn read(&mut self, output: &mut [u8]) -> std::io::Result<usize> {
-        let output_len = output.len();
-        let output_remaining = self.decode(output)?;
-        Ok(output_len - output_remaining.len())
+    fn read(&mut self, mut output: &mut [u8]) -> std::io::Result<usize> {
+        // If we've previously partially returned a decoded chunk, return the
+        // remaining bytes of the partial result before anything else.
+        let mut bytes_written = 0;
+        if self.bytes_contained_in_partial_chunk > 0 {
+            bytes_written += self.write_partial_chunk(output);
+            if self.bytes_contained_in_partial_chunk > 0 {
+                return Ok(bytes_written);
+            }
+        }
+        output = &mut output[bytes_written..];
+
+        // Read until we get atleast one full chunk or see EOF.
+        while self.end_of_decodable_data() - self.pos < 4 && !self.eof_seen {
+            self.fill()?;
+        }
+
+        let mut decodable_data = &self.data[self.pos..self.end_of_decodable_data()];
+
+        if decodable_data.is_empty() && self.eof_seen {
+            // If we've seen EOF and don't have any decodable data we're done.
+            return Ok(bytes_written);
+        }
+
+        if self.eof_seen {
+            let start_len = decodable_data.len();
+            decodable_data = crate::decode::remove_padding(self.config, decodable_data);
+            self.cap -= start_len - decodable_data.len();
+        }
+
+        let (decodable_data_idx, output_idx) =
+            crate::decode::decode_full_chunks_without_padding(self.config, decodable_data, output)
+                .map_err(into_io_err)?;
+        self.pos += decodable_data_idx;
+        bytes_written += output_idx;
+        let some_bytes_already_written = decodable_data_idx > 0;
+
+        decodable_data = &decodable_data[decodable_data_idx..];
+        output = &mut output[output_idx..];
+
+        match (some_bytes_already_written, self.eof_seen) {
+            (some_bytes_already_written, true) => {
+                // EOF has been reached. We've already decoded as many full
+                // chunks as possible into the output buffer. Either the
+                // output buffer is too small to hold the next full chunk or
+                // we have a partial chunk of decodable data remaining that
+                // may or may not fit into the output buffer.
+                if decodable_data.len() < 4
+                    && output.len()
+                        >= output_bytes_needed_to_decode_partial_chunk(decodable_data.len())?
+                {
+                    // This is a partial chunk that fits within the output buffer. Decode it.
+                    let output_idx =
+                        crate::decode::decode_partial_chunk(self.config, decodable_data, output)
+                            .map_err(into_io_err)?;
+                    self.pos += decodable_data.len();
+                    bytes_written += output_idx;
+                } else if decodable_data.len() < 4 {
+                    // This is a partial chunk that does not fit within the output buffer.
+                    // Decode to partial chunk.
+                    let output_idx = crate::decode::decode_partial_chunk(
+                        self.config,
+                        decodable_data,
+                        &mut self.decoded_partial_chunk[..],
+                    )
+                    .map_err(into_io_err)?;
+                    self.pos += decodable_data.len();
+                    self.bytes_contained_in_partial_chunk = output_idx;
+                    bytes_written += self.write_partial_chunk(output);
+                } else {
+                    // We have atleast one full chunk of decodable data, but
+                    // the output buffer is not large enough to hold another
+                    // full chunk. If we've already written some bytes, just
+                    // return those (maybe we'll get lucky and the next read
+                    // will provide a large enough output buffer), otherwise
+                    // decode into a partial chunk and copy what we can fit.
+                    if some_bytes_already_written {
+                        return Ok(bytes_written);
+                    }
+                    let (bytes_decoded, output_idx) =
+                        crate::decode::decode_full_chunks_without_padding(
+                            self.config,
+                            decodable_data,
+                            &mut self.decoded_partial_chunk,
+                        )
+                        .map_err(into_io_err)?;
+                    debug_assert!(output_idx == self.decoded_partial_chunk.len());
+                    debug_assert!(bytes_decoded == 4);
+                    self.pos += 4;
+                    self.bytes_contained_in_partial_chunk = 3;
+                    bytes_written += self.write_partial_chunk(output);
+                }
+            }
+            (true, false) => {
+                // As many full chunks were written as possible and we
+                // haven't yet seen EOF. No more writing is possible until
+                // we get more data or see EOF.
+            }
+            (false, false) => {
+                // We have a full chunks worth of decodable data, but none
+                // were written. This must mean that the output buffer was
+                // too small to hold a full chunk. Decode into a partial
+                // chunk.
+                assert!(output.len() < 3);
+                let (bytes_decoded, output_idx) =
+                    crate::decode::decode_full_chunks_without_padding(
+                        self.config,
+                        decodable_data,
+                        &mut self.decoded_partial_chunk,
+                    )
+                    .map_err(into_io_err)?;
+                debug_assert!(output_idx == self.decoded_partial_chunk.len());
+                debug_assert!(bytes_decoded == 4);
+                self.pos += 4;
+                self.bytes_contained_in_partial_chunk = 3;
+                bytes_written += self.write_partial_chunk(output);
+            }
+        }
+        Ok(bytes_written)
     }
 }
 

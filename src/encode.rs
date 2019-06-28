@@ -3,16 +3,16 @@ use crate::u6::U6;
 
 pub(crate) mod block;
 
-pub fn encode_slice<C, I>(config: C, input: &I, output: &mut [u8])
+pub fn encode_slice<C, I>(config: C, input: &I, mut output: &mut [u8])
 where
     C: Config,
     I: AsRef<[u8]> + ?Sized,
 {
     use block::BlockEncoder;
-    let input = input.as_ref();
+    let mut input = input.as_ref();
 
-    let (input, output) = if input.len() < 28 {
-        (input, output)
+    let (input_idx, output_idx) = if input.len() < 28 {
+        (0, 0)
     } else {
         // If input is suitably large use an architecture optimized encoder.
         // The magic value of 28 was chosen because the avx2 encoder works with
@@ -22,6 +22,8 @@ where
         let block_encoder = config.into_block_encoder();
         block_encoder.encode_blocks(input, output)
     };
+    input = &input[input_idx..];
+    output = &mut output[output_idx..];
 
     // Encode the remaining non-padding 3 byte chunks of input.
     let mut iter = EncodeIter::new(input, output);
@@ -30,7 +32,10 @@ where
     }
 
     // Deal with the remaining partial chunk that possibly requires padding.
-    let (input, output) = iter.remaining();
+    let (input_idx, output_idx) = iter.remaining();
+    input = &input[input_idx..];
+    output = &mut output[output_idx..];
+
     assert!(output.len() >= config.encoded_output_len(input.len()));
     match input.len() {
         0 => {}

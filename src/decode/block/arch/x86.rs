@@ -8,11 +8,11 @@ pub struct Decoder<C>(C);
 
 impl<C> BlockDecoder for Decoder<C> where C: Config + avx2::Translate256i {
     #[inline]
-    fn decode_blocks<'a, 'b>(
+    fn decode_blocks(
         self,
-        input: &'a [u8],
-        output: &'b mut [u8],
-    ) -> Result<(&'a [u8], &'b mut [u8]), DecodeError> {
+        input: &[u8],
+        output: &mut [u8],
+    ) -> Result<(usize, usize), DecodeError> {
         if let Ok(decoder) = avx2::Decoder::new(self.0) {
             Ok(decoder.decode_blocks(input, output))
         } else {
@@ -59,11 +59,11 @@ mod avx2 {
             }
         }
 
-        pub(crate) fn decode_blocks<'a, 'b>(
+        pub(crate) fn decode_blocks(
             self,
-            input: &'a [u8],
-            output: &'b mut [u8],
-        ) -> (&'a [u8], &'b mut [u8]) {
+            input: &[u8],
+            output: &mut [u8],
+        ) -> (usize, usize) {
             // The unsafe block is required because _encode_blocks relies on AVX2
             // intrinsics. This is safe because Encoder::new() ensures that an
             // encoder is only successfully created when the CPU supports AVX2.
@@ -71,11 +71,11 @@ mod avx2 {
         }
 
         #[target_feature(enable = "avx2")]
-        unsafe fn _decode_blocks<'a, 'b>(
+        unsafe fn _decode_blocks(
             self,
-            input: &'a [u8],
-            output: &'b mut [u8],
-        ) -> (&'a [u8], &'b mut [u8]) {
+            input: &[u8],
+            output: &mut [u8],
+        ) -> (usize, usize) {
             let mut iter = BlockIter::new(input, output);
             for (input_block, output_block) in iter.by_ref() {
                 #[allow(clippy::cast_ptr_alignment)]

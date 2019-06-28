@@ -8,7 +8,7 @@ pub struct Encoder<C>(C);
 
 impl<C> BlockEncoder for Encoder<C> where C: Config + avx2::Translate256i {
     #[inline]
-    fn encode_blocks<'a, 'b>(self, input: &'a [u8], output: &'b mut [u8]) -> (&'a [u8], &'b mut [u8]) {
+    fn encode_blocks(self, input: &[u8], output: &mut [u8]) -> (usize, usize) {
         if let Ok(encoder) = avx2::Encoder::new(self.0) {
             encoder.encode_blocks(input, output)
         } else {
@@ -55,7 +55,7 @@ mod avx2 {
             }
         }
 
-        pub(crate) fn encode_blocks<'a, 'b>(self, input: &'a [u8], output: &'b mut [u8]) -> (&'a [u8], &'b mut [u8]) {
+        pub(crate) fn encode_blocks(self, input: &[u8], output: &mut [u8]) -> (usize, usize) {
             // The unsafe block is required because _encode_blocks relies on AVX2
             // intrinsics. This is safe because Encoder::new() ensures that an
             // encoder is only successfully created when the CPU supports AVX2.
@@ -63,7 +63,7 @@ mod avx2 {
         }
 
         #[target_feature(enable = "avx2")]
-        unsafe fn _encode_blocks<'a, 'b>(self, input: &'a [u8], output: &'b mut [u8]) -> (&'a [u8], &'b mut [u8]) {
+        unsafe fn _encode_blocks(self, input: &[u8], output: &mut [u8]) -> (usize, usize) {
             let mut iter = BlockIter::new(input, output);
             for (input, output) in iter.by_ref() {
                 #[allow(clippy::cast_ptr_alignment)]

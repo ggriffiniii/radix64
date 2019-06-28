@@ -62,12 +62,19 @@ where
 // _decode_slice on success will return the length of the output buffer
 // remaining. i.e. The length of the output buffer that has *not* been written
 // to.
-fn _decode_slice<C>(config: C, input: &[u8], output: &mut [u8]) -> Result<usize, DecodeError>
+fn _decode_slice<C>(
+    config: C,
+    mut input: &[u8],
+    mut output: &mut [u8],
+) -> Result<usize, DecodeError>
 where
     C: Config,
 {
-    let input = remove_padding(config, input);
-    let (input, output) = decode_full_chunks_without_padding(config, input, output)?;
+    input = remove_padding(config, input);
+    let (input_idx, output_idx) = decode_full_chunks_without_padding(config, input, output)?;
+    input = &input[input_idx..];
+    output = &mut output[output_idx..];
+
     // Deal with the remaining partial chunk. The padding characters have already been removed.
     let output_remaining_len = output.len()
         - match input.len() {
@@ -138,17 +145,17 @@ where
 }
 
 #[inline]
-fn decode_full_chunks_without_padding<'a, 'b, C>(
+fn decode_full_chunks_without_padding<C>(
     config: C,
-    input: &'a [u8],
-    output: &'b mut [u8],
-) -> Result<(&'a [u8], &'b mut [u8]), DecodeError>
+    mut input: &[u8],
+    mut output: &mut [u8],
+) -> Result<(usize, usize), DecodeError>
 where
     C: Config,
 {
     use block::BlockDecoder;
-    let (input, output) = if input.len() < 32 {
-        (input, output)
+    let (input_idx, output_idx) = if input.len() < 32 {
+        (0, 0)
     } else {
         // If input is suitably large use an architecture optimized encoder.
         // The magic value of 27 was chosen because the avx2 encoder works with
@@ -159,25 +166,26 @@ where
         block_encoder.decode_blocks(input, output)?
     };
 
+    input = &input[input_idx..];
+    output = &mut output[output_idx..];
+
     let mut iter = DecodeIter::new(input, output);
     for (input, output) in iter.by_ref() {
         decode_chunk(config, *input, output).map_err(DecodeError::InvalidByte)?;
     }
-    Ok(iter.remaining())
+
+    let (input_idx2, output_idx2) = iter.remaining();
+    Ok((input_idx + input_idx2, output_idx + output_idx2))
 }
 
 #[inline]
-fn decode_partial_chunk<'a, 'b, C>(
-    config: C,
-    input: &'a [u8],
-    output: &'b mut [u8],
-) -> Result<&'b mut [u8], DecodeError>
+fn decode_partial_chunk<C>(config: C, input: &[u8], output: &mut [u8]) -> Result<usize, DecodeError>
 where
     C: Config,
 {
     // Deal with the remaining partial chunk. The padding characters have already been removed.
     match input.len() {
-        0 => Ok(output),
+        0 => Ok(0),
         1 => Err(DecodeError::InvalidLength),
         2 => {
             let first = config.decode_u8(input[0]);
@@ -192,7 +200,7 @@ where
             if second & 0b0000_1111 != 0 {
                 return Err(DecodeError::InvalidTrailingBits);
             }
-            Ok(&mut output[1..])
+            Ok(1)
         }
         3 => {
             let first = config.decode_u8(input[0]);
@@ -212,7 +220,7 @@ where
             if third & 0b0000_0011 != 0 {
                 return Err(DecodeError::InvalidTrailingBits);
             }
-            Ok(&mut output[2..])
+            Ok(2)
         }
         x => unreachable!("impossible remainder: {}", x),
     }
