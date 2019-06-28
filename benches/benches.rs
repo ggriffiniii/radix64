@@ -76,6 +76,20 @@ mod radix {
         })
     }
 
+    pub(crate) fn encode_writer<C: Config>(config: C, b: &mut Bencher, &size: &usize) {
+        use std::io::Write;
+        let mut input: Vec<u8> = vec![0; size];
+        rand::thread_rng().fill(input.as_mut_slice());
+        let mut output = Vec::with_capacity(config.encoded_output_len(size));
+        b.iter(|| {
+            output.clear();
+            let mut writer = radix64::io::EncodeWriter::new(config, &mut output);
+            writer.write_all(&input).expect("failed to write all input");
+            writer.finish().expect("failed to finish write");
+            black_box(&output);
+        })
+    }
+
     pub(crate) fn decode_reader<C: Config>(config: C, b: &mut Bencher, &size: &usize) {
         use std::io::Read;
         let mut input: Vec<u8> = vec![0; size];
@@ -158,6 +172,22 @@ mod b64 {
             black_box(&decoded);
         })
     }
+
+    pub(crate) fn encode_writer(config: base64::Config, b: &mut Bencher, &size: &usize) {
+        use std::io::Write;
+        let mut input: Vec<u8> = vec![0; size];
+        rand::thread_rng().fill(input.as_mut_slice());
+        let mut output = Vec::with_capacity(size * 4 / 3 + 4);
+        b.iter(|| {
+            output.clear();
+            {
+                let mut writer = base64::write::EncoderWriter::new(&mut output, config);
+                writer.write_all(&input).expect("failed to write all input");
+                writer.finish().expect("failed to finish write");
+            }
+            black_box(&output);
+        })
+    }
 }
 
 const BYTE_SIZES: [usize; 7] = [3, 32, 64, 128, 512, 4096, 8192];
@@ -187,6 +217,15 @@ pub fn encode_slice_benches(byte_sizes: &[usize]) -> ParameterizedBenchmark<usiz
         byte_sizes.iter().cloned(),
     )
     .with_function("base64", |b, s| b64::encode_slice(B64_CONFIG, b, s))
+}
+
+pub fn encode_writer_benches(byte_sizes: &[usize]) -> ParameterizedBenchmark<usize> {
+    ParameterizedBenchmark::new(
+        "radix64",
+        |b, s| radix::encode_writer(RADIX_CONFIG, b, s),
+        byte_sizes.iter().cloned(),
+    )
+    .with_function("base64", |b, s| b64::encode_writer(B64_CONFIG, b, s))
 }
 
 pub fn decode_benches(byte_sizes: &[usize]) -> ParameterizedBenchmark<usize> {
@@ -240,6 +279,10 @@ fn bench(c: &mut Criterion) {
     c.bench(
         "encode_with_buffer_bench",
         customize_benchmark(encode_with_buffer_benches(&BYTE_SIZES[..])),
+    );
+    c.bench(
+        "encode_writer_bench",
+        customize_benchmark(encode_writer_benches(&BYTE_SIZES[..])),
     );
     c.bench(
         "decode_bench",

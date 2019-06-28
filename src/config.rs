@@ -8,7 +8,7 @@ pub(crate) const INVALID_VALUE: u8 = 255;
 
 mod private {
     use crate::u6::U6;
-    pub trait SealedConfig {
+    pub trait SealedConfig: std::fmt::Debug {
         /// Encodes the six bits of input into the 8 bits of output.
         fn encode_u6(self, input: U6) -> u8;
 
@@ -456,8 +456,8 @@ impl CustomConfig {
 impl fmt::Debug for CustomConfig {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("CustomConfig")
-            .field("encode_table", &(&self.encode_table[..]))
-            .field("decode_table", &(&self.decode_table[..]))
+            .field("encode_table", &&self.encode_table[..])
+            .field("decode_table", &&self.decode_table[..])
             .field("padding_byte", &self.padding_byte)
             .finish()
     }

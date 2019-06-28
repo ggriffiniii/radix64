@@ -1,6 +1,7 @@
 use proptest::prelude::Strategy;
-use radix64::{CRYPT, STD, STD_NO_PAD, URL_SAFE, URL_SAFE_NO_PAD};
-use std::io::Read;
+use radix64::io::EncodeWriter;
+use radix64::{Config, CRYPT, STD, STD_NO_PAD, URL_SAFE, URL_SAFE_NO_PAD};
+use std::io;
 
 // Create a custom config that should match each of the builtin configs.
 mod custom_configs {
@@ -52,9 +53,9 @@ macro_rules! tests_for_configs {
             $(
             #[allow(non_snake_case)]
             mod $cfg {
+                use crate::*;
                 use proptest::prelude::{any, proptest};
                 use proptest::collection::vec;
-                use crate::{$cfg, custom_configs, read_to_end_using_varying_buffer_sizes, vec_and_buffer_sizes};
                 proptest! {
                     #[test]
                     fn roundtrip(input in any::<Vec<u8>>()) {
@@ -149,6 +150,37 @@ macro_rules! tests_for_configs {
                         std::str::from_utf8(encoded.as_bytes()).expect("invalid UTF-8 returned from encode_with_buffer");
                     }
 
+                    // Write input through an EncodeWriter ensuring that the output matches.
+                    // The reads are done with varying buffer sizes to try and
+                    // catch edge cases around chunking.
+                    #[test]
+                    fn encode_writer_matches((input, flaky_behavior) in vec_and_flaky_writer_behavior()) {
+                        use radix64::io::EncodeWriter;
+                        let encoded = $cfg.encode(&input);
+                        let mut writer_encoded = Vec::new();
+                        {
+                            let flaky_writer = FlakyWriter::new(&mut writer_encoded, flaky_behavior.into_iter());
+                            let mut writer = EncodeWriter::new($cfg, flaky_writer);
+                            write_all_with_retries(&mut writer, &input);
+                            finish_encode_writer_with_retries(writer);
+                        }
+                        assert_eq!(encoded.as_bytes(), writer_encoded.as_slice());
+                    }
+
+                    // Ensure that EncodeWriter writes the final partial chunk on Drop.
+                    fn encode_writer_writes_final_chunk_on_drop(input in any::<Vec<u8>>()) {
+                        use std::io::Write;
+                        use radix64::io::EncodeWriter;
+                        let encoded = $cfg.encode(&input);
+                        let mut writer_encoded = Vec::new();
+                        {
+                            let mut writer = EncodeWriter::new($cfg, &mut writer_encoded);
+                            writer.write_all(&input).expect("failed to write all input");
+                            // do not call finish explicitly.
+                        }
+                        assert_eq!(encoded.as_bytes(), writer_encoded.as_slice());
+                    }
+
                     // read a vector from a DecodeReader, ensuring that it matches the encoded input.
                     // The reads are done with varying buffer sizes to try and
                     // catch edge cases around chunking.
@@ -180,7 +212,7 @@ macro_rules! tests_for_configs {
     }
 }
 
-// define a proptest strategy that returns a random buffer, and an additional
+// define a proptest strategy that returns a random buffer and an additional
 // vector that contains usize values of buffer sizes to read from the buffer
 // with. The buffer sizes are kept significantly smaller than the size of the
 // random buffer to try and catch edge cases around chunked reads.
@@ -190,8 +222,53 @@ fn vec_and_buffer_sizes() -> impl Strategy<Value = (Vec<u8>, Vec<usize>)> {
     vec(any::<u8>(), 1..100).prop_flat_map(|v| {
         let len = v.len();
         let max_buffer_size = std::cmp::max(2, len / 3);
-        (Just(v), vec(1..max_buffer_size, 1..5))
+        (Just(v), vec(1..max_buffer_size, 1..10))
     })
+}
+
+// define a proptest strategy that returns a random buffer and an additional
+// vector that contains a series of writer behaviors (max number of bytes the
+// writer should consume, return an error, etc.). The max number of bytes
+// consumed are kept significantly smaller than the size of the random buffer to
+// try and catch edge cases around chunking.
+fn vec_and_flaky_writer_behavior() -> impl Strategy<Value = (Vec<u8>, Vec<FlakyWriterBehavior>)> {
+    use proptest::collection::vec;
+    use proptest::prelude::{any, Just};
+    vec(any::<u8>(), 1..100).prop_flat_map(|v| {
+        let len = v.len();
+        let max_write_size = std::cmp::max(2, len / 3);
+        // Flaky behavior cycles between 9 random conditions, and one condition
+        // that consumes 1 bytes. This ensures that all flaky writers makes some
+        // amount of progress.
+        let flaky_behavior = vec![
+            flaky_writer_behavior_strategy(max_write_size).boxed(),
+            flaky_writer_behavior_strategy(max_write_size).boxed(),
+            flaky_writer_behavior_strategy(max_write_size).boxed(),
+            flaky_writer_behavior_strategy(max_write_size).boxed(),
+            flaky_writer_behavior_strategy(max_write_size).boxed(),
+            flaky_writer_behavior_strategy(max_write_size).boxed(),
+            flaky_writer_behavior_strategy(max_write_size).boxed(),
+            flaky_writer_behavior_strategy(max_write_size).boxed(),
+            flaky_writer_behavior_strategy(max_write_size).boxed(),
+            Just(FlakyWriterBehavior::ConsumeBytes(1)).boxed(),
+        ];
+        (Just(v), flaky_behavior)
+    })
+}
+
+// A proptest strategry to return a FlakyWriterBehavior that never consumes more
+// than max_write_size bytes.
+fn flaky_writer_behavior_strategy(
+    max_write_size: usize,
+) -> impl Strategy<Value = FlakyWriterBehavior> {
+    use proptest::prelude::{prop_oneof, Just};
+    prop_oneof![
+        // For cases without data, `Just` is all you need
+        Just(FlakyWriterBehavior::Err(std::io::ErrorKind::Other)),
+        // For cases with data, write a strategy for the interior data, then
+        // map into the actual enum case.
+        (0..max_write_size).prop_map(FlakyWriterBehavior::ConsumeBytes)
+    ]
 }
 
 // read to the end of the provided reader collecting the results into a vector.
@@ -205,7 +282,7 @@ fn read_to_end_using_varying_buffer_sizes<R, I>(
     buffer_sizes: I,
 ) -> std::io::Result<Vec<u8>>
 where
-    R: Read,
+    R: io::Read,
     I: Iterator<Item = usize> + Clone,
 {
     let mut v = Vec::new();
@@ -219,6 +296,83 @@ where
         }
     }
     unreachable!();
+}
+
+// Not a generally useful utility. You wouldn't want to retry indefinitely, but
+// in our case the errors are known to be intermittent and will resolve in a
+// timely fashion.
+fn write_all_with_retries<W>(mut writer: W, mut input: &[u8])
+where
+    W: io::Write,
+{
+    while !input.is_empty() {
+        match writer.write(input) {
+            Ok(n) => input = &input[n..],
+            Err(_) => {}
+        }
+    }
+}
+
+// Again, not generally useful. Continue retrying EncodeWriter::finish until it
+// eventually succeeds.
+fn finish_encode_writer_with_retries<C, W>(mut writer: EncodeWriter<C, W>)
+where
+    C: Config,
+    W: io::Write,
+{
+    loop {
+        writer = match writer.finish() {
+            Ok(_) => break,
+            Err(finish_err) => finish_err.into_encode_writer(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+enum FlakyWriterBehavior {
+    ConsumeBytes(usize),
+    Err(io::ErrorKind),
+}
+
+struct FlakyWriter<W, I> {
+    writer: W,
+    behavior_iter: std::iter::Cycle<I>,
+}
+
+impl<W, I> FlakyWriter<W, I>
+where
+    W: io::Write,
+    I: Iterator<Item = FlakyWriterBehavior> + Clone,
+{
+    fn new(writer: W, behavior: I) -> Self {
+        FlakyWriter {
+            writer,
+            behavior_iter: behavior.cycle(),
+        }
+    }
+}
+
+impl<W, I> io::Write for FlakyWriter<W, I>
+where
+    W: io::Write,
+    std::iter::Cycle<I>: Iterator<Item = FlakyWriterBehavior>,
+{
+    fn write(&mut self, input: &[u8]) -> io::Result<usize> {
+        let behavior = self.behavior_iter.next().unwrap();
+        match behavior {
+            FlakyWriterBehavior::ConsumeBytes(num_bytes) => {
+                let num_bytes = std::cmp::min(input.len(), num_bytes);
+                self.writer.write(&input[..num_bytes])
+            }
+            FlakyWriterBehavior::Err(kind) => {
+                Err(io::Error::new(kind, "flaky writer error".to_owned()))
+            }
+        }
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        self.writer.flush()
+    }
 }
 
 tests_for_configs!(STD, STD_NO_PAD, URL_SAFE, URL_SAFE_NO_PAD, CRYPT);

@@ -2,16 +2,33 @@ use crate::config::Config;
 use crate::u6::U6;
 
 pub(crate) mod block;
+pub(crate) mod io;
 
 pub fn encode_slice<C, I>(config: C, input: &I, mut output: &mut [u8])
 where
     C: Config,
     I: AsRef<[u8]> + ?Sized,
 {
-    use block::BlockEncoder;
     let mut input = input.as_ref();
 
-    let (input_idx, output_idx) = if input.len() < 28 {
+    let (input_idx, output_idx) = encode_full_chunks_without_padding(config, input, output);
+    input = &input[input_idx..];
+    output = &mut output[output_idx..];
+
+    encode_partial_chunk(config, input, output);
+}
+
+#[inline]
+fn encode_full_chunks_without_padding<C>(
+    config: C,
+    mut input: &[u8],
+    mut output: &mut [u8],
+) -> (usize, usize)
+where
+    C: Config,
+{
+    use block::BlockEncoder;
+    let (full_block_input_idx, full_block_output_idx) = if input.len() < 28 {
         (0, 0)
     } else {
         // If input is suitably large use an architecture optimized encoder.
@@ -22,29 +39,37 @@ where
         let block_encoder = config.into_block_encoder();
         block_encoder.encode_blocks(input, output)
     };
-    input = &input[input_idx..];
-    output = &mut output[output_idx..];
+    input = &input[full_block_input_idx..];
+    output = &mut output[full_block_output_idx..];
 
     // Encode the remaining non-padding 3 byte chunks of input.
     let mut iter = EncodeIter::new(input, output);
     for (input, output) in iter.by_ref() {
         encode_chunk(config, *input, output);
     }
+    let (chunk_input_idx, chunk_output_idx) = iter.remaining();
+    (
+        full_block_input_idx + chunk_input_idx,
+        full_block_output_idx + chunk_output_idx,
+    )
+}
 
-    // Deal with the remaining partial chunk that possibly requires padding.
-    let (input_idx, output_idx) = iter.remaining();
-    input = &input[input_idx..];
-    output = &mut output[output_idx..];
-
-    assert!(output.len() >= config.encoded_output_len(input.len()));
+#[inline]
+fn encode_partial_chunk<C>(config: C, input: &[u8], output: &mut [u8]) -> usize
+where
+    C: Config,
+{
     match input.len() {
-        0 => {}
+        0 => 0,
         1 => {
             output[0] = config.encode_u6(U6::from_low_six_bits(input[0] >> 2));
             output[1] = config.encode_u6(U6::from_low_six_bits(input[0] << 4));
             if let Some(padding) = config.padding_byte() {
                 output[2] = padding;
                 output[3] = padding;
+                4
+            } else {
+                2
             }
         }
         2 => {
@@ -53,10 +78,13 @@ where
             output[2] = config.encode_u6(U6::from_low_six_bits(input[1] << 2));
             if let Some(padding) = config.padding_byte() {
                 output[3] = padding;
+                4
+            } else {
+                3
             }
         }
-        x => unreachable!("invalid remaining length: {}", x),
-    };
+        x => unreachable!("not a partial chunk: {} bytes", x),
+    }
 }
 
 fn encode_chunk<C: Config>(config: C, input: [u8; 3], output: &mut [u8; 4]) {
@@ -69,6 +97,7 @@ fn encode_chunk<C: Config>(config: C, input: [u8; 3], output: &mut [u8; 4]) {
 #[inline]
 pub(crate) fn encode_using_table(table: &[u8; 64], input: U6) -> u8 {
     let idx: usize = input.into();
+    // No need to do bounds checking because a U6 is guaranteed to only contain 0-63
     let encoded = unsafe { table.get_unchecked(idx) };
     *encoded
 }
