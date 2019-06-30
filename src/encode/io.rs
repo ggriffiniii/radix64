@@ -232,7 +232,8 @@ where
         }
     }
 
-    /// This will only flush full chunks of base64 data. Partial chunks cannot be written until we're done writing completely.
+    /// This will only flush full chunks of base64 data. Partial chunks cannot be
+    /// written until we're done writing completely.
     fn flush(&mut self) -> io::Result<()> {
         let bytes_written = self.write_to_inner(..self.bytes_in_pending_output)?;
         self.consume_pending_output(bytes_written);

@@ -2,14 +2,12 @@ use crate::decode::DecodeError;
 use crate::Config;
 use std::io::Read;
 
-const BUF_SIZE: usize = 1024;
-
 /// Decode base64 data from a std::io::Read.
 pub struct DecodeReader<C, R> {
     config: C,
     rdr: R,
 
-    data: [u8; BUF_SIZE],
+    data: [u8; 1024],
     pos: usize,
     cap: usize,
     eof_seen: bool,
@@ -32,7 +30,7 @@ where
         DecodeReader {
             config,
             rdr,
-            data: [0; BUF_SIZE],
+            data: [0; 1024],
             pos: 0,
             cap: 0,
             eof_seen: false,
@@ -56,17 +54,9 @@ where
     }
 
     fn fill(&mut self) -> std::io::Result<()> {
-        let bytes_to_copy = self.cap - self.pos;
-        // TODO: find the safe way to do this.
-        unsafe {
-            std::ptr::copy(
-                self.data.as_ptr().add(self.pos),
-                self.data.as_mut_ptr(),
-                bytes_to_copy,
-            );
-        }
+        crate::copy_in_place(&mut self.data, self.pos..self.cap, 0);
+        self.cap -= self.pos;
         self.pos = 0;
-        self.cap = bytes_to_copy;
         let n = self.rdr.read(&mut self.data[self.cap..])?;
         if n == 0 {
             self.eof_seen = true;
