@@ -3,7 +3,7 @@
  * Configs are different zero sized types, that implement a Config trait.
  * There is an AVX2 optimized encoder/decoder for the non custom types.
  * Custom alphabets are supported (though you lose AVX2 optimization).
- * encode/decode are methods on the config rather than free fucntions that
+ * encode/decode are methods on the config rather than free functions that
    accept the config.
  * The _buffer variants of encode and decode accept a buffer and return a slice
    (&str when encoding, &[u8] when decoding) into the buffer. The buffer does not need to be, and
@@ -18,5 +18,3 @@
    or not. DecodeReader behaves the same way.
  * DecodeReader exists.
 
-# Still todo
- * No display type yet.

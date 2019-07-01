@@ -3,6 +3,11 @@ name = "radix64"
 version = "0.1.0"
 authors = ["Glenn Griffin <ggriffiniii@gmail.com>"]
 edition = "2018"
+description = "A base64 library by another name"
+repository = "https://github.com/ggriffiniii/radix64"
+readme = "README.md"
+keywords = ["base64", "encoding", "encode", "decoding", "decode"]
+categories = ["encoding"]
 
 [features]
 default = ["simd"]

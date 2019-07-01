@@ -32,6 +32,29 @@
 //! assert_eq!(URL_SAFE.decode_with_buffer("ABCF", &mut buffer).unwrap(), &[0, 16, 133]);
 //! ```
 //!
+//! Decode data from stdin.
+//! ```
+//! # fn example() -> Result<(), Box<std::error::Error>> {
+//! # use std::io::Read;
+//! use radix64::{STD, io::DecodeReader};
+//! let mut reader = DecodeReader::new(STD, std::io::stdin());
+//! let mut decoded = Vec::new();
+//! reader.read_to_end(&mut decoded)?;
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! Encode data to stdout.
+//! ```
+//! # fn example() -> Result<(), Box<std::error::Error>> {
+//! # use std::io::Write;
+//! use radix64::{STD, io::EncodeWriter};
+//! let mut writer = EncodeWriter::new(STD, std::io::stdout());
+//! writer.write_all("my message".as_bytes())?;
+//! # Ok(())
+//! # }
+//! ```
+//!
 //! # Configs
 //!
 //! There are a variety of base64 configurations. There are constants defined
