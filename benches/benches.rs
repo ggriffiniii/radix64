@@ -108,9 +108,10 @@ mod radix {
     pub(crate) fn display<C: Config>(config: C, b: &mut Bencher, &size: &usize) {
         let mut input: Vec<u8> = vec![0; size];
         rand::thread_rng().fill(input.as_mut_slice());
+        let display = radix64::Display::new(config, &input);
         b.iter(|| {
-            let display = radix64::Display::new(config, &input).to_string();
-            black_box(&display);
+            let encoded = display.to_string();
+            black_box(&encoded);
         })
     }
 }
@@ -201,9 +202,10 @@ mod b64 {
     pub(crate) fn display(config: base64::Config, b: &mut Bencher, &size: &usize) {
         let mut input: Vec<u8> = vec![0; size];
         rand::thread_rng().fill(input.as_mut_slice());
+        let display = base64::display::Base64Display::with_config(&input, config);
         b.iter(|| {
-            let display = base64::display::Base64Display::with_config(&input, config).to_string();
-            black_box(&display);
+            let encoded = display.to_string();
+            black_box(&encoded);
         })
     }
 }
@@ -324,11 +326,11 @@ fn bench(c: &mut Criterion) {
         customize_benchmark(decode_with_buffer_benches(&BYTE_SIZES[..])),
     );
     c.bench(
-        "decode_reader",
+        "decode_reader_bench",
         customize_benchmark(decode_reader_benches(&BYTE_SIZES[..])),
     );
     c.bench(
-        "display",
+        "display_bench",
         customize_benchmark(display_benches(&BYTE_SIZES[..])),
     );
 }
