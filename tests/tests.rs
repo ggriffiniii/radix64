@@ -101,6 +101,13 @@ macro_rules! tests_for_configs {
                     }
 
                     #[test]
+                    fn display_matches_encode(input in any::<Vec<u8>>()) {
+                        let encoded = $cfg.encode(&input);
+                        let display = radix64::Display::new($cfg, &input).to_string();
+                        assert_eq!(encoded, display);
+                    }
+
+                    #[test]
                     fn decode_with_buffer_matches_decode(input in any::<Vec<u8>>()) {
                         let encoded = $cfg.encode(&input);
                         let mut buf = Vec::new();

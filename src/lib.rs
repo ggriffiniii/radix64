@@ -106,6 +106,7 @@ pub use config::{
     UrlSafeNoPad,
 };
 pub use decode::DecodeError;
+pub use display::Display;
 
 /// Encode and Decode using the standard characer set with padding.
 ///
@@ -253,6 +254,7 @@ macro_rules! define_block_iter {
 // mod definitions need to appear after the macro definition.
 pub(crate) mod config;
 pub(crate) mod decode;
+pub(crate) mod display;
 pub(crate) mod encode;
 pub mod io;
 pub(crate) mod tables;

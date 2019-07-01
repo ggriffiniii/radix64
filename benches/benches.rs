@@ -104,6 +104,15 @@ mod radix {
             black_box(&decoded);
         })
     }
+
+    pub(crate) fn display<C: Config>(config: C, b: &mut Bencher, &size: &usize) {
+        let mut input: Vec<u8> = vec![0; size];
+        rand::thread_rng().fill(input.as_mut_slice());
+        b.iter(|| {
+            let display = radix64::Display::new(config, &input).to_string();
+            black_box(&display);
+        })
+    }
 }
 
 mod b64 {
@@ -188,6 +197,15 @@ mod b64 {
             black_box(&output);
         })
     }
+
+    pub(crate) fn display(config: base64::Config, b: &mut Bencher, &size: &usize) {
+        let mut input: Vec<u8> = vec![0; size];
+        rand::thread_rng().fill(input.as_mut_slice());
+        b.iter(|| {
+            let display = base64::display::Base64Display::with_config(&input, config).to_string();
+            black_box(&display);
+        })
+    }
 }
 
 const BYTE_SIZES: [usize; 7] = [3, 32, 64, 128, 512, 4096, 8192];
@@ -263,6 +281,15 @@ pub fn decode_reader_benches(byte_sizes: &[usize]) -> ParameterizedBenchmark<usi
     )
 }
 
+pub fn display_benches(byte_sizes: &[usize]) -> ParameterizedBenchmark<usize> {
+    ParameterizedBenchmark::new(
+        "radix64",
+        |b, s| radix::display(RADIX_CONFIG, b, s),
+        byte_sizes.iter().cloned(),
+    )
+    .with_function("base64", |b, s| b64::display(B64_CONFIG, b, s))
+}
+
 fn customize_benchmark(benchmark: ParameterizedBenchmark<usize>) -> ParameterizedBenchmark<usize> {
     benchmark.throughput(|s| Throughput::Bytes(*s as u32))
 }
@@ -299,6 +326,10 @@ fn bench(c: &mut Criterion) {
     c.bench(
         "decode_reader",
         customize_benchmark(decode_reader_benches(&BYTE_SIZES[..])),
+    );
+    c.bench(
+        "display",
+        customize_benchmark(display_benches(&BYTE_SIZES[..])),
     );
 }
 

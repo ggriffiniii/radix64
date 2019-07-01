@@ -19,7 +19,7 @@ where
 }
 
 #[inline]
-fn encode_full_chunks_without_padding<C>(
+pub(crate) fn encode_full_chunks_without_padding<C>(
     config: C,
     mut input: &[u8],
     mut output: &mut [u8],
@@ -55,7 +55,7 @@ where
 }
 
 #[inline]
-fn encode_partial_chunk<C>(config: C, input: &[u8], output: &mut [u8]) -> usize
+pub(crate) fn encode_partial_chunk<C>(config: C, input: &[u8], output: &mut [u8]) -> usize
 where
     C: Config,
 {
