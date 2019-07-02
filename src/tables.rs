@@ -1,4 +1,4 @@
-use crate::config::INVALID_VALUE;
+use crate::decode::INVALID_VALUE;
 
 #[rustfmt::skip]
 pub const STD_ENCODE: &[u8; 64] = &[

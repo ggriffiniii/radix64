@@ -4,6 +4,8 @@ use std::{error, fmt};
 pub(crate) mod block;
 pub(crate) mod io;
 
+pub(crate) const INVALID_VALUE: u8 = 255;
+
 /// Errors that can occur during decoding.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DecodeError {
@@ -82,11 +84,11 @@ where
             1 => return Err(DecodeError::InvalidLength),
             2 => {
                 let first = config.decode_u8(input[0]);
-                if first == crate::config::INVALID_VALUE {
+                if first == INVALID_VALUE {
                     return Err(DecodeError::InvalidByte(input[0]));
                 }
                 let second = config.decode_u8(input[1]);
-                if second == crate::config::INVALID_VALUE {
+                if second == INVALID_VALUE {
                     return Err(DecodeError::InvalidByte(input[1]));
                 }
                 output[0] = (first << 2) | (second >> 4);
@@ -97,15 +99,15 @@ where
             }
             3 => {
                 let first = config.decode_u8(input[0]);
-                if first == crate::config::INVALID_VALUE {
+                if first == INVALID_VALUE {
                     return Err(DecodeError::InvalidByte(input[0]));
                 }
                 let second = config.decode_u8(input[1]);
-                if second == crate::config::INVALID_VALUE {
+                if second == INVALID_VALUE {
                     return Err(DecodeError::InvalidByte(input[1]));
                 }
                 let third = config.decode_u8(input[2]);
-                if third == crate::config::INVALID_VALUE {
+                if third == INVALID_VALUE {
                     return Err(DecodeError::InvalidByte(input[2]));
                 }
                 output[0] = (first << 2) | (second >> 4);
@@ -189,11 +191,11 @@ where
         1 => Err(DecodeError::InvalidLength),
         2 => {
             let first = config.decode_u8(input[0]);
-            if first == crate::config::INVALID_VALUE {
+            if first == INVALID_VALUE {
                 return Err(DecodeError::InvalidByte(input[0]));
             }
             let second = config.decode_u8(input[1]);
-            if second == crate::config::INVALID_VALUE {
+            if second == INVALID_VALUE {
                 return Err(DecodeError::InvalidByte(input[1]));
             }
             output[0] = (first << 2) | (second >> 4);
@@ -204,15 +206,15 @@ where
         }
         3 => {
             let first = config.decode_u8(input[0]);
-            if first == crate::config::INVALID_VALUE {
+            if first == INVALID_VALUE {
                 return Err(DecodeError::InvalidByte(input[0]));
             }
             let second = config.decode_u8(input[1]);
-            if second == crate::config::INVALID_VALUE {
+            if second == INVALID_VALUE {
                 return Err(DecodeError::InvalidByte(input[1]));
             }
             let third = config.decode_u8(input[2]);
-            if third == crate::config::INVALID_VALUE {
+            if third == INVALID_VALUE {
                 return Err(DecodeError::InvalidByte(input[2]));
             }
             output[0] = (first << 2) | (second >> 4);
@@ -232,7 +234,7 @@ fn decode_chunk<C: Config>(config: C, input: [u8; 4], output: &mut [u8; 3]) -> R
     let mut chunk_output: u32 = 0;
     for (idx, input) in input.iter().cloned().enumerate() {
         let decoded = config.decode_u8(input);
-        if decoded == crate::config::INVALID_VALUE {
+        if decoded == INVALID_VALUE {
             return Err(input);
         }
         let shift_amount = 32 - (idx as u32 + 1) * 6;

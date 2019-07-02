@@ -1,3 +1,4 @@
+use crate::decode::INVALID_VALUE;
 use crate::DecodeError;
 use crate::{Config, CustomConfig};
 
@@ -42,7 +43,7 @@ where
         let mut chunk_output: u64 = 0;
         for (idx, input) in input.iter().cloned().enumerate() {
             let decoded = self.0.decode_u8(input);
-            if decoded == crate::config::INVALID_VALUE {
+            if decoded == INVALID_VALUE {
                 return Err(input);
             }
             let shift_amount = 64 - (idx as u64 + 1) * 6;

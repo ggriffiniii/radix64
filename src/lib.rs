@@ -124,7 +124,7 @@
 
 #![deny(missing_docs)]
 
-pub use config::{
+pub use configs::{
     ConfigBuilder, Crypt, CustomConfig, CustomConfigError, Std, StdNoPad, UrlSafe, UrlSafeNoPad,
 };
 pub use decode::DecodeError;
@@ -443,7 +443,7 @@ macro_rules! define_block_iter {
 }
 
 // mod definitions need to appear after the macro definition.
-pub(crate) mod config;
+pub(crate) mod configs;
 pub(crate) mod decode;
 pub(crate) mod display;
 pub(crate) mod encode;
