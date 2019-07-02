@@ -3,6 +3,7 @@ use criterion::{
     Throughput,
 };
 use radix64::Config;
+use std::fmt::Debug;
 
 use base64::STANDARD as B64_CONFIG;
 use radix64::STD as RADIX_CONFIG;
@@ -76,7 +77,7 @@ mod radix {
         })
     }
 
-    pub(crate) fn encode_writer<C: Config>(config: C, b: &mut Bencher, &size: &usize) {
+    pub(crate) fn encode_writer<C: Config + Debug>(config: C, b: &mut Bencher, &size: &usize) {
         use std::io::Write;
         let mut input: Vec<u8> = vec![0; size];
         rand::thread_rng().fill(input.as_mut_slice());
