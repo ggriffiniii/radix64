@@ -258,13 +258,12 @@ where
 
 impl<C, W> Debug for EncodeWriter<C, W>
 where
-    C: Config,
+    C: Config + Debug,
     W: io::Write,
 {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
         f.debug_struct("EncodeWriter")
             .field("config", &self.config)
-            //           .field("inner", &self.inner)
             .field("pending_output", &&self.pending_output[..])
             .field("bytes_in_pending_output", &self.bytes_in_pending_output)
             .field("partial_input", &&self.partial_input[..])
