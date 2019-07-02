@@ -181,6 +181,7 @@ macro_rules! tests_for_configs {
                     }
 
                     // Ensure that EncodeWriter writes the final partial chunk on Drop.
+                    #[test]
                     fn encode_writer_writes_final_chunk_on_drop(input in any::<Vec<u8>>()) {
                         use std::io::Write;
                         use radix64::io::EncodeWriter;
@@ -210,7 +211,7 @@ macro_rules! tests_for_configs {
                     // ensure that padding in the middle of the input stream is not silently accepted.
                     // The buffer sizes to use are randomly chosen between 1 and 5.
                     #[test]
-                    fn decode_reader_(buffer_sizes in vec(1 as usize ..5, 1..3)) {
+                    fn decode_reader_reject_middle_padding(buffer_sizes in vec(1 as usize ..5, 1..3)) {
                         use radix64::io::DecodeReader;
                         use std::io::Cursor;
                         let mut input = $cfg.encode("A");
@@ -220,6 +221,22 @@ macro_rules! tests_for_configs {
                             Ok(_) => panic!("incorrect padding accepted"),
                             Err(_) => {}, // this is good
                         }
+                    }
+
+                    // ensure that reading from a DecodeReader and decoding from
+                    // a vector result in the same response.
+                    #[test]
+                    fn decode_reader_error_matches_decode(input in any::<String>()) {
+                        use radix64::io::DecodeReader;
+                        use std::io::{Cursor, Read};
+                        let mut reader = DecodeReader::new($cfg, Cursor::new(&input));
+                        let mut buffer = Vec::new();
+                        let reader_res = match reader.read_to_end(&mut buffer) {
+                            Ok(_) => Ok(buffer),
+                            Err(_) => Err(()),
+                        };
+                        let res = $cfg.decode(&input).map_err(|_| ());
+                        assert_eq!(res, reader_res);
                     }
                 }
             })+
