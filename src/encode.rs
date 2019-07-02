@@ -1,5 +1,5 @@
-use crate::config::Config;
 use crate::u6::U6;
+use crate::Config;
 
 pub(crate) mod block;
 pub(crate) mod io;

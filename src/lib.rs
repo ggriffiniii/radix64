@@ -125,8 +125,7 @@
 #![deny(missing_docs)]
 
 pub use config::{
-    Config, ConfigBuilder, Crypt, CustomConfig, CustomConfigError, Std, StdNoPad, UrlSafe,
-    UrlSafeNoPad,
+    ConfigBuilder, Crypt, CustomConfig, CustomConfigError, Std, StdNoPad, UrlSafe, UrlSafeNoPad,
 };
 pub use decode::DecodeError;
 pub use display::Display;
@@ -153,6 +152,175 @@ pub const URL_SAFE_NO_PAD: UrlSafeNoPad = UrlSafeNoPad;
 
 /// Encode and Decode using the `crypt(3)` character set.
 pub const CRYPT: Crypt = Crypt;
+
+mod private {
+    use crate::decode::block::IntoBlockDecoder;
+    use crate::encode::block::IntoBlockEncoder;
+    use crate::u6::U6;
+    pub trait SealedConfig: IntoBlockEncoder + IntoBlockDecoder {
+        /// Encodes the six bits of input into the 8 bits of output.
+        fn encode_u6(self, input: U6) -> u8;
+
+        /// Decodes the encoded byte into six bits matching the original input.
+        /// config::INVALID_VALUE is returned on invalid input.
+        fn decode_u8(self, input: u8) -> u8;
+
+        /// Indicates whether this configuration uses padding and if so, which
+        /// character to use.
+        fn padding_byte(self) -> Option<u8>;
+    }
+}
+
+/// Config represents a base64 configuration.
+///
+/// Each Config provides methods to encode and decode according to the
+/// configuration. This trait is sealed and not intended to be implemented
+/// outside of this crate. Custom configurations can be defined using
+/// [ConfigBuilder](struct.ConfigBuilder.html).
+pub trait Config: Copy + private::SealedConfig {
+    /// Encode the provided input into a String.
+    fn encode<I>(self, input: &I) -> String
+    where
+        I: AsRef<[u8]> + ?Sized,
+    {
+        let input = input.as_ref();
+        let mut output = vec![0; self.encoded_output_len(input.len())];
+        self.encode_slice(input, output.as_mut_slice());
+        // The builtin alphabets are all ascii and the CustomConfigBuilder
+        // ensures any custom alphabets only contain ascii characters as well.
+        // Therefore we can bypass the utf8 check on the encoded output.
+        debug_assert!(output.iter().all(u8::is_ascii));
+        unsafe { String::from_utf8_unchecked(output) }
+    }
+
+    /// Encode the provided input into the provided buffer, returning a &str of
+    /// the encoded input. The returned &str is a view into the beginning of the
+    /// provided buffer that contains the encoded data. This method *overwrites*
+    /// the data in the buffer, it *does not* append to the buffer. This method
+    /// exists to provide an efficient way to amortize allocations when
+    /// repeatedly encoding different inputs. The same buffer can be provided for
+    /// each invocation and will only be resized when necessary. Any data in the
+    /// buffer outside the range of the returned &str is not part of the encoded
+    /// output and should be ignored.
+    fn encode_with_buffer<'i, 'b, I>(self, input: &'i I, buffer: &'b mut Vec<u8>) -> &'b str
+    where
+        I: AsRef<[u8]> + ?Sized,
+    {
+        let input = input.as_ref();
+        let output_size = self.encoded_output_len(input.len());
+        if output_size > buffer.len() {
+            buffer.resize(output_size, 0);
+        }
+        let output = &mut buffer[..output_size];
+        self.encode_slice(input, output);
+        // The builtin alphabets are all ascii and the CustomConfigBuilder
+        // ensures any custom alphabets only contain ascii characters as well.
+        // Therefore we can bypass the utf8 check on the encoded output.
+        debug_assert!(output.iter().all(u8::is_ascii));
+        unsafe { std::str::from_utf8_unchecked(output) }
+    }
+
+    /// Encode the provided input into the provided output slice. The slice must
+    /// be large enough to contain the encoded output. Use `encoded_output_len`
+    /// to determine how large the output slice needs to be and how much of the
+    /// slice was written to. This method allows for the most control over memory
+    /// placement, but `encode_with_buffer` is typically more ergonomic and just
+    /// as performant.
+    #[inline]
+    fn encode_slice<I>(self, input: &I, output: &mut [u8])
+    where
+        I: AsRef<[u8]> + ?Sized,
+    {
+        crate::encode::encode_slice(self, input, output)
+    }
+
+    /// Decode the provided input.
+    fn decode<I>(self, input: &I) -> Result<Vec<u8>, DecodeError>
+    where
+        I: AsRef<[u8]> + ?Sized,
+    {
+        let input = input.as_ref();
+        let mut output = vec![0; self.maximum_decoded_output_len(input.len())];
+        let decoded_len = self.decode_slice(input, output.as_mut_slice())?.len();
+        debug_assert!(decoded_len <= output.len());
+        output.truncate(decoded_len);
+        Ok(output)
+    }
+
+    /// Decode the provided input into the provided buffer, returning a &[u8] of
+    /// the decoded input. The returned &[u8] is a view into the beginning of the
+    /// provided buffer that contains the decoded data. This method *overwrites*
+    /// the data in the buffer, it *does not* append to the buffer. This method
+    /// exists to provide an efficient way to amortize allocations when
+    /// repeatedly decoding different inputs. The same buffer can be provided for
+    /// each invocation and will only be resized when necessary. Any data in the
+    /// buffer outside the range of the returned &[u8] is not part of the decoded
+    /// output and should be ignored.
+    fn decode_with_buffer<'i, 'b, I>(
+        self,
+        input: &'i I,
+        buffer: &'b mut Vec<u8>,
+    ) -> Result<&'b [u8], DecodeError>
+    where
+        I: AsRef<[u8]> + ?Sized,
+    {
+        let input = input.as_ref();
+        let output_size = self.maximum_decoded_output_len(input.len());
+        if output_size > buffer.len() {
+            buffer.resize(output_size, 0);
+        }
+        self.decode_slice(input, buffer.as_mut_slice())
+    }
+
+    /// Decode the provided input into the provided output slice. The slice must
+    /// be large enough to contain the decoded output. Use `maximum_decoded_output_len`
+    /// to determine how large the output slice needs to be. The returned &[u8]
+    /// is a view into the beginning of the output slice that indicates the
+    /// length of the decoded output. This method allows for the most control
+    /// over memory placement, but `decode_with_buffer` is typically more
+    /// ergonomic and just as performant.
+    #[inline]
+    fn decode_slice<'a, 'b, I>(
+        self,
+        input: &'a I,
+        output: &'b mut [u8],
+    ) -> Result<&'b [u8], DecodeError>
+    where
+        I: AsRef<[u8]> + ?Sized,
+    {
+        crate::decode::decode_slice(self, input, output)
+    }
+
+    /// Determine the size of encoded output for the given input length.
+    fn encoded_output_len(self, input_len: usize) -> usize {
+        let complete_chunks = input_len / 3;
+        let input_remaining = input_len % 3;
+
+        if input_remaining == 0 {
+            return complete_chunks * 4;
+        }
+
+        if self.padding_byte().is_some() {
+            (complete_chunks + 1) * 4
+        } else {
+            let encoded_remaining = match input_remaining {
+                1 => 2,
+                2 => 3,
+                _ => unreachable!("impossible remainder"),
+            };
+            complete_chunks * 4 + encoded_remaining
+        }
+    }
+
+    /// Determine the maximum size of decoded output for the given input length.
+    /// Note that this does not necessarily match the actual decoded size, but
+    /// represents the upper bound.
+    fn maximum_decoded_output_len(self, input_len: usize) -> usize {
+        const BITS_PER_ENCODED_BYTE: usize = 6;
+        let encoded_bits = input_len * BITS_PER_ENCODED_BYTE;
+        (encoded_bits / 8) + 1
+    }
+}
 
 /// Both encoding and decoding iterate work on chunks of input and output slices.
 /// This macro allows creating an efficient iterator to break the slices into
