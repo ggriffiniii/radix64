@@ -5,38 +5,38 @@ use std::io;
 
 // Create a custom config that should match each of the builtin configs.
 mod custom_configs {
-    use radix64::{ConfigBuilder, CustomConfig};
+    use radix64::CustomConfig;
     lazy_static::lazy_static! {
 
-        pub static ref STD: CustomConfig = ConfigBuilder::with_alphabet(
+        pub static ref STD: CustomConfig = CustomConfig::with_alphabet(
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
         )
         .with_padding(b'=')
         .build()
         .expect("failed to build custom base64 config");
 
-        pub static ref STD_NO_PAD: CustomConfig = ConfigBuilder::with_alphabet(
+        pub static ref STD_NO_PAD: CustomConfig = CustomConfig::with_alphabet(
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
         )
         .no_padding()
         .build()
         .expect("failed to build custom base64 config");
 
-        pub static ref URL_SAFE: CustomConfig = ConfigBuilder::with_alphabet(
+        pub static ref URL_SAFE: CustomConfig = CustomConfig::with_alphabet(
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_",
         )
         .with_padding(b'=')
         .build()
         .expect("failed to build custom base64 config");
 
-        pub static ref URL_SAFE_NO_PAD: CustomConfig = ConfigBuilder::with_alphabet(
+        pub static ref URL_SAFE_NO_PAD: CustomConfig = CustomConfig::with_alphabet(
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_",
         )
         .no_padding()
         .build()
         .expect("failed to build custom base64 config");
 
-        pub static ref CRYPT: CustomConfig = ConfigBuilder::with_alphabet(
+        pub static ref CRYPT: CustomConfig = CustomConfig::with_alphabet(
             "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
         )
         .no_padding()

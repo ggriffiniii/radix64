@@ -124,11 +124,12 @@
 
 #![deny(missing_docs)]
 
-pub use configs::{
-    ConfigBuilder, Crypt, CustomConfig, CustomConfigError, Std, StdNoPad, UrlSafe, UrlSafeNoPad,
-};
+#[doc(inline)]
+pub use configs::CustomConfig;
 pub use decode::DecodeError;
 pub use display::Display;
+
+use configs::{Crypt, Std, StdNoPad, UrlSafe, UrlSafeNoPad};
 
 /// Encode and Decode using the standard characer set with padding.
 ///
@@ -176,7 +177,7 @@ mod private {
 /// Each Config provides methods to encode and decode according to the
 /// configuration. This trait is sealed and not intended to be implemented
 /// outside of this crate. Custom configurations can be defined using
-/// [ConfigBuilder](struct.ConfigBuilder.html).
+/// [CustomConfig](struct.CustomConfig.html).
 pub trait Config: Copy + private::SealedConfig {
     /// Encode the provided input into a String.
     fn encode<I>(self, input: &I) -> String
@@ -443,7 +444,7 @@ macro_rules! define_block_iter {
 }
 
 // mod definitions need to appear after the macro definition.
-pub(crate) mod configs;
+pub mod configs;
 pub(crate) mod decode;
 pub(crate) mod display;
 pub(crate) mod encode;

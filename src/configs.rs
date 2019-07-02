@@ -1,8 +1,7 @@
+//! The different varieties of base64.
 use crate::u6::U6;
 use crate::{private::SealedConfig, Config, DecodeError};
 use std::fmt;
-
-pub(crate) const INVALID_VALUE: u8 = 255;
 
 macro_rules! impl_config_from_table {
     ($cfg:ty, $encode_table:ident, $decode_table:ident, $padding:expr) => {
@@ -157,30 +156,48 @@ define_inherent_impl!(Crypt);
 /// All characters of the alphabet, as well as the padding character (if any),
 /// must be ascii characters.
 ///
-/// A CustomConfig is relatively expensive to create. You would typically want to
-/// create a CustomConfig once on startup (perhaps using lazy_static) and pass
-/// around a reference. Note that Config is only implemented for shared
-/// references to CustomConfig, not for CustomConfig itself. Method calls
-/// will implicitly take a reference with the `.` operator, but when passing a
-/// CustomConfig into a function that expects a Config you will need to pass by
-/// reference explicitly.
-///
+/// # Examples
 /// ```
-/// use radix64::{Config, ConfigBuilder};
-/// let my_cfg = ConfigBuilder::with_alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/").with_padding(b'=').build().unwrap();
+/// // Create a custom base64 configuration that matches what `crypt(3)`
+/// // produces. This is equivalent to using radix64::CRYPT except the builtin
+/// // constant provides SIMD optimized encoding/decoding when available while a
+/// // custom config cannot.
+/// use radix64::CustomConfig;
 ///
-/// // This works
-/// my_cfg.encode("my message");
+/// let my_config = CustomConfig::with_alphabet(
+///     "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+/// )
+/// .no_padding()
+/// .build()
+/// .unwrap();
 ///
-/// // So does this:
+/// let my_encoded_msg = my_config.encode("my message");
+/// assert_eq!("PLYUPKJnQq3bNE", my_encoded_msg.as_str());
+/// assert_eq!("my message".as_bytes(), my_config.decode(&my_encoded_msg).unwrap().as_slice());
+/// ```
 ///
-/// fn do_some_base64<C: Config>(config: C) {
-///     config.encode("my message");
+/// Note that building a custom configuration is somewhat expensive. It needs to
+/// iterate over the provided alphabet, sanity check it's contents, create an
+/// inverted alphabet for decoding, and store the results. For this reason it's
+/// encouraged to create a custom config early in program execution and share a
+/// single instance throughout the code. A simple way to do this is by utilizing
+/// lazy_static.
+/// ```
+/// use lazy_static::lazy_static;
+/// use radix64::CustomConfig;
+///
+/// lazy_static::lazy_static! {
+///     pub static ref my_config: CustomConfig = CustomConfig::with_alphabet(
+///         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
+///     )
+///     .with_padding(b'=')
+///     .build()
+///     .expect("failed to build custom base64 config");
 /// }
-/// do_some_base64(&my_cfg);
 ///
-/// // But this would not
-/// // do_some_base64(my_cfg);
+/// let my_encoded_msg = my_config.encode("my message");
+/// assert_eq!("bXkgbWVzc2FnZQ==", my_encoded_msg.as_str());
+/// assert_eq!("my message".as_bytes(), my_config.decode(&my_encoded_msg).unwrap().as_slice());
 /// ```
 #[derive(Clone)]
 pub struct CustomConfig {
@@ -206,6 +223,12 @@ impl SealedConfig for &CustomConfig {
 impl Config for &CustomConfig {}
 
 impl CustomConfig {
+    /// Start creating a new CustomConfig with the provided alphabet.
+    /// The provided alphabet needs to be 64 non-repeating ascii bytes.
+    pub fn with_alphabet<A: AsRef<[u8]> + ?Sized>(alphabet: &A) -> CustomConfigBuilder {
+        CustomConfigBuilder::with_alphabet(alphabet)
+    }
+
     /// See [Config::encode](trait.Config.html#method.encode).
     #[inline]
     pub fn encode<I>(&self, input: &I) -> String
@@ -293,51 +316,9 @@ impl fmt::Debug for CustomConfig {
 
 /// A constructor for custom configurations.
 ///
-/// # Examples
-/// ```
-/// // Create a custom base64 configuration that matches what `crypt(3)`
-/// // produces. This is equivalent to using radix64::CRYPT except the builtin
-/// // constant provides SIMD optimized encoding/decoding when available while a
-/// // custom config cannot.
-/// use radix64::ConfigBuilder;
-///
-/// let my_config = ConfigBuilder::with_alphabet(
-///     "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-/// )
-/// .no_padding()
-/// .build()
-/// .unwrap();
-///
-/// let my_encoded_msg = my_config.encode("my message");
-/// assert_eq!("PLYUPKJnQq3bNE", my_encoded_msg.as_str());
-/// assert_eq!("my message".as_bytes(), my_config.decode(&my_encoded_msg).unwrap().as_slice());
-/// ```
-///
-/// Note that building a custom configuration is somewhat expensive. It needs to
-/// iterate over the provided alphabet, sanity check it's contents, create an
-/// inverted alphabet for decoding, and store the results. For this reason it's
-/// encouraged to create a custom config early in program execution and share a
-/// single instance throughout the code. A simple way to do this is by utilizing
-/// lazy_static.
-/// ```
-/// use lazy_static::lazy_static;
-/// use radix64::{ConfigBuilder, CustomConfig};
-///
-/// lazy_static::lazy_static! {
-///     pub static ref my_config: CustomConfig = ConfigBuilder::with_alphabet(
-///         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
-///     )
-///     .with_padding(b'=')
-///     .build()
-///     .expect("failed to build custom base64 config");
-/// }
-///
-/// let my_encoded_msg = my_config.encode("my message");
-/// assert_eq!("bXkgbWVzc2FnZQ==", my_encoded_msg.as_str());
-/// assert_eq!("my message".as_bytes(), my_config.decode(&my_encoded_msg).unwrap().as_slice());
-/// ```
+/// See [CustomConfig](struct.CustomConfig.html)
 #[derive(Debug, Clone)]
-pub struct ConfigBuilder<'a> {
+pub struct CustomConfigBuilder<'a> {
     alphabet: &'a [u8],
     padding_byte: Option<u8>,
 }
@@ -353,11 +334,11 @@ pub enum CustomConfigError {
     DuplicateValue(u8),
 }
 
-impl<'a> ConfigBuilder<'a> {
+impl<'a> CustomConfigBuilder<'a> {
     /// Set the alphabet to use.
     /// The provided alphabet needs to be 64 non-repeating ascii bytes.
     pub fn with_alphabet<A: AsRef<[u8]> + ?Sized>(alphabet: &'a A) -> Self {
-        ConfigBuilder {
+        CustomConfigBuilder {
             alphabet: alphabet.as_ref(),
             padding_byte: Some(b'='),
         }
@@ -377,6 +358,7 @@ impl<'a> ConfigBuilder<'a> {
 
     /// Validate and build the `CustomConfig`.
     pub fn build(self) -> Result<CustomConfig, CustomConfigError> {
+        use crate::decode::INVALID_VALUE;
         if self.alphabet.len() != 64 {
             return Err(CustomConfigError::AlphabetNot64Bytes);
         }
