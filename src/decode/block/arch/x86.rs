@@ -97,13 +97,13 @@ mod avx2 {
         }
 
         #[target_feature(enable = "avx2")]
-        unsafe fn decode_block(self, mut input: __m256i) -> Result<__m256i, ()> {
-            input = C::translate_m256i(input)?;
-            input = _mm256_maddubs_epi16(input, _mm256_set1_epi32(0x0140_0140));
-            input = _mm256_madd_epi16(input, _mm256_set1_epi32(0x0001_1000));
-            input = _mm256_shuffle_epi8(
+        unsafe fn decode_block(self, input: __m256i) -> Result<__m256i, ()> {
+            let input = C::translate_m256i(input)?;
+            let input = _mm256_maddubs_epi16(input, _mm256_set1_epi32(0x0140_0140));
+            let input = _mm256_madd_epi16(input, _mm256_set1_epi32(0x0001_1000));
+            #[rustfmt::skip]
+            let input = _mm256_shuffle_epi8(
                 input,
-                #[cfg_attr(rustfmt, rustfmt_skip)]
                 _mm256_setr_epi8(
                     2, 1, 0,
                     6, 5, 4,
@@ -133,7 +133,7 @@ mod avx2 {
             return Err(());
         }
 
-        #[cfg_attr(rustfmt, rustfmt_skip)]
+        #[rustfmt::skip]
         let shift_lut = _mm256_setr_epi8(
             0,   0,  19,   4, -65, -65, -71, -71,
             0,   0,   0,   0,   0,   0,   0,   0,
@@ -151,7 +151,7 @@ mod avx2 {
     #[inline]
     #[allow(overflowing_literals)]
     unsafe fn is_valid_std(hi_nibbles: __m256i, low_nibbles: __m256i) -> bool {
-        #[cfg_attr(rustfmt, rustfmt_skip)]
+        #[rustfmt::skip]
         let mask_lut = _mm256_setr_epi8(
             0b1010_1000,                            // 0
             0b1111_1000, 0b1111_1000, 0b1111_1000,  // 1 .. 9
@@ -172,7 +172,7 @@ mod avx2 {
             0b0101_0100,                            // 15
         );
 
-        #[cfg_attr(rustfmt, rustfmt_skip)]
+        #[rustfmt::skip]
         let bit_pos_lut = _mm256_setr_epi8(
             0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -195,7 +195,7 @@ mod avx2 {
             return Err(());
         }
 
-        #[cfg_attr(rustfmt, rustfmt_skip)]
+        #[rustfmt::skip]
         let shift_lut = _mm256_setr_epi8(
             0,   0,  17,   4, -65, -65, -71, -71,
             0,   0,   0,   0,   0,   0,   0,   0,
@@ -213,7 +213,7 @@ mod avx2 {
     #[inline]
     #[allow(overflowing_literals)]
     unsafe fn is_valid_url_safe(hi_nibbles: __m256i, low_nibbles: __m256i) -> bool {
-        #[cfg_attr(rustfmt, rustfmt_skip)]
+        #[rustfmt::skip]
         let mask_lut = _mm256_setr_epi8(
             0b1010_1000,                            // 0
             0b1111_1000, 0b1111_1000, 0b1111_1000,  // 1 .. 9
@@ -236,7 +236,7 @@ mod avx2 {
             0b0111_0000,                            // 15
         );
 
-        #[cfg_attr(rustfmt, rustfmt_skip)]
+        #[rustfmt::skip]
         let bit_pos_lut = _mm256_setr_epi8(
             0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -259,7 +259,7 @@ mod avx2 {
             return Err(());
         }
 
-        #[cfg_attr(rustfmt, rustfmt_skip)]
+        #[rustfmt::skip]
         let shift_lut = _mm256_setr_epi8(
             0,   0, -46, -46, -53, -53, -59, -59,
             0,   0,   0,   0,   0,   0,   0,   0,
@@ -274,7 +274,7 @@ mod avx2 {
     #[inline]
     #[allow(overflowing_literals)]
     unsafe fn is_valid_crypt(hi_nibbles: __m256i, low_nibbles: __m256i) -> bool {
-        #[cfg_attr(rustfmt, rustfmt_skip)]
+        #[rustfmt::skip]
         let mask_lut = _mm256_setr_epi8(
             0b1010_1000,                            // 0
             0b1111_1000, 0b1111_1000, 0b1111_1000,  // 1 .. 9 
@@ -293,7 +293,7 @@ mod avx2 {
             0b0101_0100, 0b0101_0100,               // 14 .. 15
         );
 
-        #[cfg_attr(rustfmt, rustfmt_skip)]
+        #[rustfmt::skip]
         let bit_pos_lut = _mm256_setr_epi8(
             0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,

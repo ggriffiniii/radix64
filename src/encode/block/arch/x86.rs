@@ -78,27 +78,41 @@ mod avx2 {
         }
 
         #[target_feature(enable = "avx2")]
-        unsafe fn encode_block(self, mut input: __m256i) -> __m256i {
-            input = _mm256_shuffle_epi8(
+        unsafe fn encode_block(self, input: __m256i) -> __m256i {
+            #[rustfmt::skip]
+            let input = _mm256_shuffle_epi8(
                 input,
                 _mm256_setr_epi8(
-                    2, 2, 1, 0, 5, 5, 4, 3, 8, 8, 7, 6, 11, 11, 10, 9, 2, 2, 1, 0, 5, 5, 4, 3, 8,
-                    8, 7, 6, 11, 11, 10, 9,
+                    2,  2,  1,  0,
+                    5,  5,  4,  3,
+                    8,  8,  7,  6,
+                    11, 11, 10, 9,
+                    2,  2,  1,  0,
+                    5,  5,  4,  3,
+                    8,  8,  7,  6,
+                    11, 11, 10, 9,
                 ),
             );
-            let mut mask = _mm256_set1_epi32(0x3F00_0000);
-            let mut res = _mm256_and_si256(_mm256_srli_epi32(input, 2), mask);
-            mask = _mm256_srli_epi32(mask, 8);
-            res = _mm256_or_si256(res, _mm256_and_si256(_mm256_srli_epi32(input, 4), mask));
-            mask = _mm256_srli_epi32(mask, 8);
-            res = _mm256_or_si256(res, _mm256_and_si256(_mm256_srli_epi32(input, 6), mask));
-            mask = _mm256_srli_epi32(mask, 8);
-            res = _mm256_or_si256(res, _mm256_and_si256(input, mask));
-            res = _mm256_shuffle_epi8(
+            let mask = _mm256_set1_epi32(0x3F00_0000);
+            let res = _mm256_and_si256(_mm256_srli_epi32(input, 2), mask);
+            let mask = _mm256_srli_epi32(mask, 8);
+            let res = _mm256_or_si256(res, _mm256_and_si256(_mm256_srli_epi32(input, 4), mask));
+            let mask = _mm256_srli_epi32(mask, 8);
+            let res = _mm256_or_si256(res, _mm256_and_si256(_mm256_srli_epi32(input, 6), mask));
+            let mask = _mm256_srli_epi32(mask, 8);
+            let res = _mm256_or_si256(res, _mm256_and_si256(input, mask));
+            #[rustfmt::skip]
+            let res = _mm256_shuffle_epi8(
                 res,
                 _mm256_setr_epi8(
-                    3, 2, 1, 0, 7, 6, 5, 4, 11, 10, 9, 8, 15, 14, 13, 12, 19, 18, 17, 16, 23, 22,
-                    21, 20, 27, 26, 25, 24, 31, 30, 29, 28,
+                    3,  2,  1,  0,
+                    7,  6,  5,  4,
+                    11, 10, 9,  8,
+                    15, 14, 13, 12,
+                    19, 18, 17, 16,
+                    23, 22, 21, 20,
+                    27, 26, 25, 24,
+                    31, 30, 29, 28,
                 ),
             );
             C::translate_m256i(res)
