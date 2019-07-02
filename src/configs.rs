@@ -151,6 +151,15 @@ pub struct Crypt;
 impl_config_from_table!(Crypt, CRYPT_ENCODE, CRYPT_DECODE, None);
 define_inherent_impl!(Crypt);
 
+/// The Fast character set
+///
+/// (uses `:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz`)
+/// *without* padding.
+#[derive(Debug, Clone, Copy)]
+pub struct Fast;
+impl_config_from_table!(Fast, FAST_ENCODE, FAST_DECODE, None);
+define_inherent_impl!(Fast);
+
 /// A custom defined alphabet and padding.
 ///
 /// All characters of the alphabet, as well as the padding character (if any),

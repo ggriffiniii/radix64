@@ -129,7 +129,7 @@ pub use configs::CustomConfig;
 pub use decode::DecodeError;
 pub use display::Display;
 
-use configs::{Crypt, Std, StdNoPad, UrlSafe, UrlSafeNoPad};
+use configs::{Crypt, Fast, Std, StdNoPad, UrlSafe, UrlSafeNoPad};
 
 /// Encode and Decode using the standard characer set with padding.
 ///
@@ -153,6 +153,15 @@ pub const URL_SAFE_NO_PAD: UrlSafeNoPad = UrlSafeNoPad;
 
 /// Encode and Decode using the `crypt(3)` character set.
 pub const CRYPT: Crypt = Crypt;
+
+/// Encode and Decode using a fast alphabet with no padding.
+///
+/// This is not part of any official specification and should only be used when
+/// interoperability is not a concern. The alphabet used is\
+/// ``:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz``\
+/// It's specifically tailored for fast encoding and decoding when AVX2 is in
+/// use.
+pub const FAST: Fast = Fast;
 
 mod private {
     use crate::decode::block::IntoBlockDecoder;

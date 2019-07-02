@@ -1,7 +1,7 @@
 //! This module is included whenever running on an architecture that doesn't have a specialized module.
 
 use crate::decode::block::{IntoBlockDecoder, ScalarBlockDecoder};
-use crate::{Crypt, Std, StdNoPad, UrlSafe, UrlSafeNoPad};
+use crate::{Crypt, Std, StdNoPad, UrlSafe, UrlSafeNoPad, Fast};
 
 macro_rules! impl_into_block_decoder {
     ($( $cfg:ident ),+) => {$(
@@ -15,4 +15,4 @@ macro_rules! impl_into_block_decoder {
         }
     )+}
 }
-impl_into_block_decoder!(Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt);
+impl_into_block_decoder!(Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt, Fast);

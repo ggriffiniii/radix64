@@ -2,7 +2,7 @@
 use crate::Config;
 use crate::decode::block::{BlockDecoder, IntoBlockDecoder, ScalarBlockDecoder};
 use crate::decode::DecodeError;
-use crate::{Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt};
+use crate::{Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt, Fast};
 #[derive(Debug, Clone, Copy)]
 pub struct Decoder<C>(C);
 
@@ -33,14 +33,14 @@ macro_rules! define_into_block_decoder {
         }
     )+}
 }
-define_into_block_decoder!(Std,StdNoPad,UrlSafe,UrlSafeNoPad,Crypt);
+define_into_block_decoder!(Std,StdNoPad,UrlSafe,UrlSafeNoPad,Crypt,Fast);
 
 mod avx2 {
      #[cfg(target_arch = "x86")]
     use std::arch::x86::*;
     #[cfg(target_arch = "x86_64")]
     use std::arch::x86_64::*;
-    use crate::{Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt};
+    use crate::{Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt, Fast};
 
     pub trait Translate256i: Copy {
         unsafe fn translate_m256i(input: __m256i) -> Result<__m256i, ()>;
@@ -307,6 +307,24 @@ mod avx2 {
         _mm256_movemask_epi8(non_match) == 0
     }
 
+    #[target_feature(enable = "avx2")]
+    #[inline]
+    unsafe fn translate_fast(input: __m256i) -> Result<__m256i, ()> {
+        if !is_valid_fast(input) {
+            return Err(());
+        }
+        Ok(_mm256_sub_epi8(input, _mm256_set1_epi8(62)))
+    }
+
+    #[target_feature(enable = "avx2")]
+    #[inline]
+    #[allow(overflowing_literals)]
+    unsafe fn is_valid_fast(input: __m256i) -> bool {
+        let gt_125 = _mm256_cmpgt_epi8(input, _mm256_set1_epi8(125));
+        let lt_61 = _mm256_cmpgt_epi8(_mm256_set1_epi8(62), input);
+        _mm256_movemask_epi8(_mm256_or_si256(gt_125, lt_61)) == 0
+    }
+
     impl Translate256i for Std {
         #[inline]
         unsafe fn translate_m256i(input: __m256i) -> Result<__m256i, ()> {
@@ -339,6 +357,13 @@ mod avx2 {
         #[inline]
         unsafe fn translate_m256i(input: __m256i) -> Result<__m256i, ()> {
             translate_crypt(input)
+        }
+    }
+
+    impl Translate256i for Fast {
+        #[inline]
+        unsafe fn translate_m256i(input: __m256i) -> Result<__m256i, ()> {
+            translate_fast(input)
         }
     }
 }

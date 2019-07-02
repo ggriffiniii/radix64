@@ -1,7 +1,7 @@
 /// SSE implementation of base64 encoding.
 use crate::Config;
 use crate::encode::block::{BlockEncoder, IntoBlockEncoder, ScalarBlockEncoder};
-use crate::{Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt};
+use crate::{Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt, Fast};
 
 #[derive(Debug,Clone,Copy)]
 pub struct Encoder<C>(C);
@@ -29,14 +29,14 @@ macro_rules! define_into_block_encoder {
         }
     )+}
 }
-define_into_block_encoder!(Std,StdNoPad,UrlSafe,UrlSafeNoPad,Crypt);
+define_into_block_encoder!(Std,StdNoPad,UrlSafe,UrlSafeNoPad,Crypt,Fast);
 
 mod avx2 {
      #[cfg(target_arch = "x86")]
     use std::arch::x86::*;
     #[cfg(target_arch = "x86_64")]
     use std::arch::x86_64::*;
-    use crate::{Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt};
+    use crate::{Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt, Fast};
 
     pub trait Translate256i: Copy {
         unsafe fn translate_m256i(input: __m256i) -> __m256i;
@@ -183,6 +183,12 @@ mod avx2 {
         _mm256_or_si256(s1, _mm256_or_si256(s2, s3))
     }
 
+    #[target_feature(enable = "avx2")]
+    #[inline]
+    unsafe fn translate_fast(input: __m256i) -> __m256i {
+        _mm256_add_epi8(input, _mm256_set1_epi8(62))
+    }
+
     impl Translate256i for Std {
         #[inline]
         unsafe fn translate_m256i(input: __m256i) -> __m256i {
@@ -215,6 +221,13 @@ mod avx2 {
         #[inline]
         unsafe fn translate_m256i(input: __m256i) -> __m256i {
             translate_crypt(input)
+        }
+    }
+
+    impl Translate256i for Fast {
+        #[inline]
+        unsafe fn translate_m256i(input: __m256i) -> __m256i {
+            translate_fast(input)
         }
     }
 }

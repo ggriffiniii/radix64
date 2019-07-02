@@ -1,6 +1,6 @@
 //! This module is included whenever running on an architecture that doesn't have a specialized module.
 
-use crate::{Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt};
+use crate::{Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt, Fast};
 use crate::encode::block::{IntoBlockEncoder, ScalarBlockEncoder};
 
 macro_rules! impl_into_block_encoder {
@@ -15,4 +15,4 @@ macro_rules! impl_into_block_encoder {
         }
     )+}
 }
-impl_into_block_encoder!(Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt);
+impl_into_block_encoder!(Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt, Fast);

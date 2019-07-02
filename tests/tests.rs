@@ -1,6 +1,6 @@
 use proptest::prelude::Strategy;
 use radix64::io::EncodeWriter;
-use radix64::{Config, CRYPT, STD, STD_NO_PAD, URL_SAFE, URL_SAFE_NO_PAD};
+use radix64::{Config, CRYPT, FAST, STD, STD_NO_PAD, URL_SAFE, URL_SAFE_NO_PAD};
 use std::io;
 
 // Create a custom config that should match each of the builtin configs.
@@ -38,6 +38,12 @@ mod custom_configs {
 
         pub static ref CRYPT: CustomConfig = CustomConfig::with_alphabet(
             "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+        )
+        .no_padding()
+        .build()
+        .expect("failed to build custom base64 config");
+        pub static ref FAST: CustomConfig = CustomConfig::with_alphabet(
+            r#">?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}"#
         )
         .no_padding()
         .build()
@@ -207,7 +213,9 @@ macro_rules! tests_for_configs {
                     fn decode_reader_(buffer_sizes in vec(1 as usize ..5, 1..3)) {
                         use radix64::io::DecodeReader;
                         use std::io::Cursor;
-                        let reader = DecodeReader::new($cfg, Cursor::new("AA==BBQQ"));
+                        let mut input = $cfg.encode("A");
+                        input.push_str(&$cfg.encode("BBB"));
+                        let reader = DecodeReader::new($cfg, Cursor::new(&input));
                         match read_to_end_using_varying_buffer_sizes(reader, buffer_sizes.iter().cloned()) {
                             Ok(_) => panic!("incorrect padding accepted"),
                             Err(_) => {}, // this is good
@@ -382,4 +390,4 @@ where
     }
 }
 
-tests_for_configs!(STD, STD_NO_PAD, URL_SAFE, URL_SAFE_NO_PAD, CRYPT);
+tests_for_configs!(STD, STD_NO_PAD, URL_SAFE, URL_SAFE_NO_PAD, CRYPT, FAST);
