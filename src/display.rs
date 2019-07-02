@@ -32,7 +32,8 @@ where
         let mut buffer = [0; 1024];
         let mut input = self.data;
         while !input.is_empty() {
-            let (input_idx, mut output_idx) = encode_full_chunks_without_padding(self.config, input, &mut buffer);
+            let (input_idx, mut output_idx) =
+                encode_full_chunks_without_padding(self.config, input, &mut buffer);
             input = &input[input_idx..];
             let output_remaining = buffer.len() - output_idx;
             if output_remaining > 3 {

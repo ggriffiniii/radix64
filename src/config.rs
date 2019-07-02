@@ -131,7 +131,7 @@ pub trait Config: Copy + SealedConfig + IntoBlockEncoder + IntoBlockDecoder {
     /// to determine how large the output slice needs to be. The returned &[u8]
     /// is a view into the beginning of the output slice that indicates the
     /// length of the decoded output. This method allows for the most control
-    /// over memory placement, but `encode_with_buffer` is typically more
+    /// over memory placement, but `decode_with_buffer` is typically more
     /// ergonomic and just as performant.
     #[inline]
     fn decode_slice<'a, 'b, I>(
@@ -464,6 +464,50 @@ impl fmt::Debug for CustomConfig {
 }
 
 /// A constructor for custom configurations.
+///
+/// # Examples
+/// ```
+/// // Create a custom base64 configuration that matches what `crypt(3)`
+/// // produces. This is equivalent to using radix64::CRYPT except the builtin
+/// // constant provides SIMD optimized encoding/decoding when available while a
+/// // custom config cannot.
+/// use radix64::ConfigBuilder;
+///
+/// let my_config = ConfigBuilder::with_alphabet(
+///     "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+/// )
+/// .no_padding()
+/// .build()
+/// .unwrap();
+///
+/// let my_encoded_msg = my_config.encode("my message");
+/// assert_eq!("PLYUPKJnQq3bNE", my_encoded_msg.as_str());
+/// assert_eq!("my message".as_bytes(), my_config.decode(&my_encoded_msg).unwrap().as_slice());
+/// ```
+///
+/// Note that building a custom configuration is somewhat expensive. It needs to
+/// iterate over the provided alphabet, sanity check it's contents, create an
+/// inverted alphabet for decoding, and store the results. For this reason it's
+/// encouraged to create a custom config early in program execution and share a
+/// single instance throughout the code. A simple way to do this is by utilizing
+/// lazy_static.
+/// ```
+/// use lazy_static::lazy_static;
+/// use radix64::{ConfigBuilder, CustomConfig};
+///
+/// lazy_static::lazy_static! {
+///     pub static ref my_config: CustomConfig = ConfigBuilder::with_alphabet(
+///         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
+///     )
+///     .with_padding(b'=')
+///     .build()
+///     .expect("failed to build custom base64 config");
+/// }
+///
+/// let my_encoded_msg = my_config.encode("my message");
+/// assert_eq!("bXkgbWVzc2FnZQ==", my_encoded_msg.as_str());
+/// assert_eq!("my message".as_bytes(), my_config.decode(&my_encoded_msg).unwrap().as_slice());
+/// ```
 #[derive(Debug, Clone)]
 pub struct ConfigBuilder<'a> {
     alphabet: &'a [u8],

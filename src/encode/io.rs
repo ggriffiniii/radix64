@@ -3,13 +3,15 @@ use crate::encode::{encode_chunk, encode_full_chunks_without_padding, encode_par
 use crate::Config;
 use std::{fmt, fmt::Debug, io};
 
-/// Encode base64 data as writing to a io::Write. Base64 encoding requires some
-/// amount of buffering. EncodeWriter behaves a lot like BufWriter. It will only
-/// write bytes to the underlying writer when the internal buffer is at capacity
-/// or when an explicit `flush()` is called. Additionally, only whole chunks will
-/// be encoded until `finish` is invoked to indicate that no more data will be
-/// written. `finish()` will automatically be invoked on Drop if not done explicitly,
-/// though if done in Drop it will ignore any errors from the underyling writer.
+/// Encode base64 data to a std::io::Write.
+///
+/// Base64 encoding requires some amount of buffering. EncodeWriter behaves a lot
+/// like BufWriter. It will only write bytes to the underlying writer when the
+/// internal buffer is at capacity or when an explicit `flush()` is called.
+/// Additionally, only whole chunks will be encoded until `finish` is invoked to
+/// indicate that no more data will be written. `finish()` will automatically be
+/// invoked on Drop if not done explicitly, though if done in Drop it will ignore
+/// any errors from the underyling writer.
 pub struct EncodeWriter<C, W>
 where
     C: Config,
@@ -50,9 +52,10 @@ where
     }
 
     /// Indicate that we are finished writing. Any partial chunks will be written
-    /// to the underyling writer. On error from the underlying write a
-    /// FinishError is returned that allows recovering the EncodedWriter if
-    /// needed for retries.
+    /// to the underyling writer. This may invoke write on the underlying writer
+    /// multiple times. On success the underlying writer is returned. On error a
+    /// `FinishError` is returned that allows recovering the EncodeWriter if
+    /// desired.
     pub fn finish(mut self) -> Result<W, FinishError<Self>> {
         match self.do_finish() {
             Ok(()) => Ok(self.inner.take().unwrap()),
@@ -279,10 +282,12 @@ where
 pub struct FinishError<T>(T, io::Error);
 
 impl<T> FinishError<T> {
+    /// The io::Error from the underlying writer.
     pub fn error(&self) -> &io::Error {
         &self.1
     }
 
+    /// Consume this error returning the EncodeWriter. Can be used to retry writes.
     pub fn into_encode_writer(self) -> T {
         self.0
     }

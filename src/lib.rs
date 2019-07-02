@@ -36,23 +36,23 @@
 //!
 //! There are a variety of base64 configurations. There are constants defined
 //! representing the most common varieties and the ability to define a custom
-//! configuration using [ConfigBuilder](struct.ConfigBuilder). Each
+//! configuration using [ConfigBuilder](struct.ConfigBuilder.html). Each
 //! configuration has a set of methods for encoding and decoding. The methods
 //! are as follows:
 //!
 //! #### Encoding
-//! | Function             | Output                           | Allocates                        |
-//! | -------------------- | -------------------------------- | -------------------------------- |
-//! | `encode`             | Returns a new String             | Always                           |
-//! | `encode_with_buffer` | Returns a &str within the buffer | Only if the buffer needs to grow |
-//! | `encode_slice`       | Writes to provided &mut [u8]     | Never                            |
+//! | Function             | Output                             | Allocates                        |
+//! | -------------------- | ---------------------------------- | -------------------------------- |
+//! | `encode`             | Returns a new `String`             | Always                           |
+//! | `encode_with_buffer` | Returns a `&str` within the buffer | Only if the buffer needs to grow |
+//! | `encode_slice`       | Writes to provided `&mut [u8]`     | Never                            |
 //!
 //! #### Decoding
-//! | Function             | Output                            | Allocates                        |
-//! | -------------------- | --------------------------------- | -------------------------------- |
-//! | `decode`             | Returns a new Vec<u8>             | Always                           |
-//! | `decode_with_buffer` | Returns a &[u8] within the buffer | Only if the buffer needs to grow |
-//! | `decode_slice`       | Writes to provided &mut [u8]      | Never                            |
+//! | Function             | Output                              | Allocates                        |
+//! | -------------------- | ----------------------------------- | -------------------------------- |
+//! | `decode`             | Returns a new `Vec<u8>`             | Always                           |
+//! | `decode_with_buffer` | Returns a `&[u8]` within the buffer | Only if the buffer needs to grow |
+//! | `decode_slice`       | Writes to provided `&mut [u8]`      | Never                            |
 //!
 //! # Performance
 //!
