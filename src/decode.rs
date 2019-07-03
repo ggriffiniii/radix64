@@ -45,26 +45,8 @@ impl error::Error for DecodeError {
     }
 }
 
-/// Decode the provided input slice writing the output to the output slice. It returns a
-#[inline]
-pub fn decode_slice<'a, 'b, C, I>(
-    config: C,
-    input: &'a I,
-    output: &'b mut [u8],
-) -> Result<&'b [u8], DecodeError>
-where
-    C: Config,
-    I: AsRef<[u8]> + ?Sized,
-{
-    let output_bytes_remaining = _decode_slice(config, input.as_ref(), output)?;
-    let output_len = output.len();
-    Ok(&output[..output_len - output_bytes_remaining])
-}
-
-// _decode_slice on success will return the length of the output buffer
-// remaining. i.e. The length of the output buffer that has *not* been written
-// to.
-fn _decode_slice<C>(
+// decode_slice on success will return the number of decoded bytes written.
+pub(crate) fn decode_slice<C>(
     config: C,
     mut input: &[u8],
     mut output: &mut [u8],
@@ -78,48 +60,7 @@ where
     output = &mut output[output_idx..];
 
     // Deal with the remaining partial chunk. The padding characters have already been removed.
-    let output_remaining_len = output.len()
-        - match input.len() {
-            0 => 0,
-            1 => return Err(DecodeError::InvalidLength),
-            2 => {
-                let first = config.decode_u8(input[0]);
-                if first == INVALID_VALUE {
-                    return Err(DecodeError::InvalidByte(input[0]));
-                }
-                let second = config.decode_u8(input[1]);
-                if second == INVALID_VALUE {
-                    return Err(DecodeError::InvalidByte(input[1]));
-                }
-                output[0] = (first << 2) | (second >> 4);
-                if second & 0b0000_1111 != 0 {
-                    return Err(DecodeError::InvalidTrailingBits);
-                }
-                1
-            }
-            3 => {
-                let first = config.decode_u8(input[0]);
-                if first == INVALID_VALUE {
-                    return Err(DecodeError::InvalidByte(input[0]));
-                }
-                let second = config.decode_u8(input[1]);
-                if second == INVALID_VALUE {
-                    return Err(DecodeError::InvalidByte(input[1]));
-                }
-                let third = config.decode_u8(input[2]);
-                if third == INVALID_VALUE {
-                    return Err(DecodeError::InvalidByte(input[2]));
-                }
-                output[0] = (first << 2) | (second >> 4);
-                output[1] = (second << 4) | (third >> 2);
-                if third & 0b0000_0011 != 0 {
-                    return Err(DecodeError::InvalidTrailingBits);
-                }
-                2
-            }
-            x => unreachable!("impossible remainder: {}", x),
-        };
-    Ok(output_remaining_len)
+    Ok(output_idx + decode_partial_chunk(config, input, output)?)
 }
 
 #[inline]

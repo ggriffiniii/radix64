@@ -53,7 +53,7 @@ macro_rules! define_inherent_impl {
 
             /// See [Config::encode_slice](trait.Config.html#method.encode_slice).
             #[inline]
-            pub fn encode_slice<I>(self, input: &I, output: &mut [u8])
+            pub fn encode_slice<I>(self, input: &I, output: &mut [u8]) -> usize
             where
                 I: AsRef<[u8]> + ?Sized,
             {
@@ -84,27 +84,11 @@ macro_rules! define_inherent_impl {
 
             /// See [Config::decode_slice](trait.Config.html#method.decode_slice).
             #[inline]
-            pub fn decode_slice<'a, 'b, I>(
-                self,
-                input: &'a I,
-                output: &'b mut [u8],
-            ) -> Result<&'b [u8], DecodeError>
+            pub fn decode_slice<I>(self, input: &I, output: &mut [u8]) -> Result<usize, DecodeError>
             where
                 I: AsRef<[u8]> + ?Sized,
             {
                 <Self as Config>::decode_slice(self, input, output)
-            }
-
-            /// See [Config::encoded_output_len](trait.Config.html#method.encoded_output_len).
-            #[inline]
-            pub fn encoded_output_len(self, input_len: usize) -> usize {
-                <Self as Config>::encoded_output_len(self, input_len)
-            }
-
-            /// See [Config::maximum_decoded_output_len](trait.Config.html#method.maximum_decoded_output_len).
-            #[inline]
-            pub fn maximum_decoded_output_len(self, input_len: usize) -> usize {
-                <Self as Config>::maximum_decoded_output_len(self, input_len)
             }
         }
     };
@@ -258,7 +242,7 @@ impl CustomConfig {
 
     /// See [Config::encode_slice](trait.Config.html#method.encode_slice).
     #[inline]
-    pub fn encode_slice<I>(&self, input: &I, output: &mut [u8])
+    pub fn encode_slice<I>(&self, input: &I, output: &mut [u8]) -> usize
     where
         I: AsRef<[u8]> + ?Sized,
     {
@@ -293,23 +277,11 @@ impl CustomConfig {
         &self,
         input: &'a I,
         output: &'b mut [u8],
-    ) -> Result<&'b [u8], DecodeError>
+    ) -> Result<usize, DecodeError>
     where
         I: AsRef<[u8]> + ?Sized,
     {
         <&Self as Config>::decode_slice(self, input, output)
-    }
-
-    /// See [Config::encoded_output_len](trait.Config.html#method.encoded_output_len).
-    #[inline]
-    pub fn encoded_output_len(&self, input_len: usize) -> usize {
-        <&Self as Config>::encoded_output_len(self, input_len)
-    }
-
-    /// See [Config::maximum_decoded_output_len](trait.Config.html#method.maximum_decoded_output_len).
-    #[inline]
-    pub fn maximum_decoded_output_len(&self, input_len: usize) -> usize {
-        <&Self as Config>::maximum_decoded_output_len(self, input_len)
     }
 }
 

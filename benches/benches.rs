@@ -34,7 +34,9 @@ mod radix {
     pub(crate) fn encode_with_buffer<C: Config>(config: C, b: &mut Bencher, &size: &usize) {
         let mut input = vec![0; size];
         rand::thread_rng().fill(input.as_mut_slice());
-        let mut buffer = Vec::new();
+        // This could be initialized to an empty buffer, but we want to remove
+        // allocations from the timed portion.
+        let mut buffer = vec![0; size * 4 / 3 + 3];
         b.iter(|| {
             let encoded = config.encode_with_buffer(&input, &mut buffer);
             black_box(&encoded);
@@ -45,7 +47,9 @@ mod radix {
         let mut input: Vec<u8> = vec![0; size];
         rand::thread_rng().fill(input.as_mut_slice());
         let encoded = config.encode(&input);
-        let mut buffer = Vec::new();
+        // This could be initialized to an empty buffer, but we want to remove
+        // allocations from the timed portion.
+        let mut buffer = vec![0; size];
         b.iter(|| {
             let decoded = config
                 .decode_with_buffer(&encoded, &mut buffer)
@@ -57,7 +61,7 @@ mod radix {
     pub(crate) fn encode_slice<C: Config>(config: C, b: &mut Bencher, &size: &usize) {
         let mut input: Vec<u8> = vec![0; size];
         rand::thread_rng().fill(input.as_mut_slice());
-        let mut output = vec![0; config.encoded_output_len(size)];
+        let mut output = vec![0; size * 4 / 3 + 3];
         b.iter(|| {
             config.encode_slice(&input, output.as_mut_slice());
             black_box(&output);
@@ -81,7 +85,7 @@ mod radix {
         use std::io::Write;
         let mut input: Vec<u8> = vec![0; size];
         rand::thread_rng().fill(input.as_mut_slice());
-        let mut output = Vec::with_capacity(config.encoded_output_len(size));
+        let mut output = Vec::with_capacity(size * 4 / 3 + 3);
         b.iter(|| {
             output.clear();
             let mut writer = radix64::io::EncodeWriter::new(config, &mut output);
@@ -143,7 +147,7 @@ mod b64 {
     pub(crate) fn encode_with_buffer(config: base64::Config, b: &mut Bencher, &size: &usize) {
         let mut input = vec![0; size];
         rand::thread_rng().fill(input.as_mut_slice());
-        let mut buffer = String::new();
+        let mut buffer = String::with_capacity(size * 4 / 3 + 3);
         b.iter(|| {
             buffer.clear();
             let encoded = base64::encode_config_buf(&input, config, &mut buffer);
@@ -155,7 +159,7 @@ mod b64 {
         let mut input: Vec<u8> = vec![0; size];
         rand::thread_rng().fill(input.as_mut_slice());
         let encoded = base64::encode(&input);
-        let mut buffer = Vec::new();
+        let mut buffer = Vec::with_capacity(size);
         b.iter(|| {
             buffer.clear();
             base64::decode_config_buf(&encoded, config, &mut buffer).expect("decode failed");

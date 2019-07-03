@@ -71,12 +71,6 @@ macro_rules! tests_for_configs {
                     }
 
                     #[test]
-                    fn input_encodes_to_expected_length(input in any::<Vec<u8>>()) {
-                        let encoded = $cfg.encode(&input);
-                        assert_eq!(encoded.len(), $cfg.encoded_output_len(input.len()));
-                    }
-
-                    #[test]
                     fn custom_can_be_decoded_by_builtin(input in any::<Vec<u8>>()) {
                         let encoded = custom_configs::$cfg.encode(&input);
                         let decoded = $cfg.decode(&encoded).expect("decode failed");
@@ -100,8 +94,9 @@ macro_rules! tests_for_configs {
 
                     #[test]
                     fn encode_slice_matches_encode(input in any::<Vec<u8>>()) {
-                        let mut encoded_vec = vec![0; $cfg.encoded_output_len(input.len())];
-                        $cfg.encode_slice(&input, encoded_vec.as_mut_slice());
+                        let mut encoded_vec = vec![0; input.len() * 4 / 3 + 3];
+                        let bytes_written = $cfg.encode_slice(&input, encoded_vec.as_mut_slice());
+                        encoded_vec.truncate(bytes_written);
                         let encoded_string = $cfg.encode(&input);
                         assert_eq!(encoded_vec.as_slice(), encoded_string.as_bytes())
                     }
@@ -126,7 +121,8 @@ macro_rules! tests_for_configs {
                     fn decode_slice_matches_decode(input in any::<Vec<u8>>()) {
                         let encoded = $cfg.encode(&input);
                         let mut decoded_slice = vec![0; input.len()];
-                        let decoded_slice = $cfg.decode_slice(&encoded, decoded_slice.as_mut_slice()).expect("decode failed");
+                        let bytes_written = $cfg.decode_slice(&encoded, decoded_slice.as_mut_slice()).expect("decode failed");
+                        decoded_slice.truncate(bytes_written);
                         let decoded_vec = $cfg.decode(&encoded).expect("decode failed");
                         assert_eq!(decoded_slice, decoded_vec.as_slice());
                     }
@@ -135,11 +131,12 @@ macro_rules! tests_for_configs {
                     fn encode_slice_always_panics_or_returns_ascii(input in any::<Vec<u8>>(), output_len in 0..1000usize) {
                         let res = std::panic::catch_unwind(|| {
                             let mut encoded = vec![255; output_len];
-                            $cfg.encode_slice(&input, encoded.as_mut_slice());
+                            let bytes_written = $cfg.encode_slice(&input, encoded.as_mut_slice());
+                            encoded.truncate(bytes_written);
                             encoded
                         });
                         match res {
-                            Ok(encoded) => assert!(&encoded[..$cfg.encoded_output_len(input.len())].iter().all(u8::is_ascii)),
+                            Ok(encoded) => assert!(encoded.iter().all(u8::is_ascii)),
                             Err(_) => {}, // Panic is expected when output len is too short.
                         }
                     }
@@ -378,7 +375,7 @@ where
                 eprintln!("Finish error: {}", finish_err);
                 eprintln!("Finish i/o error: {:?}", finish_err.error());
                 finish_err.into_encode_writer()
-            },
+            }
         }
     }
 }

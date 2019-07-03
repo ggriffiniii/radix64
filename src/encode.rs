@@ -4,18 +4,15 @@ use crate::Config;
 pub(crate) mod block;
 pub(crate) mod io;
 
-pub fn encode_slice<C, I>(config: C, input: &I, mut output: &mut [u8])
+pub(crate) fn encode_slice<C>(config: C, mut input: &[u8], mut output: &mut [u8]) -> usize
 where
     C: Config,
-    I: AsRef<[u8]> + ?Sized,
 {
-    let mut input = input.as_ref();
-
     let (input_idx, output_idx) = encode_full_chunks_without_padding(config, input, output);
     input = &input[input_idx..];
     output = &mut output[output_idx..];
 
-    encode_partial_chunk(config, input, output);
+    output_idx + encode_partial_chunk(config, input, output)
 }
 
 #[inline]
@@ -28,14 +25,10 @@ where
     C: Config,
 {
     use block::BlockEncoder;
-    let (full_block_input_idx, full_block_output_idx) = if input.len() < 28 {
+    let (full_block_input_idx, full_block_output_idx) = if input.len() < 32 {
         (0, 0)
     } else {
         // If input is suitably large use an architecture optimized encoder.
-        // The magic value of 28 was chosen because the avx2 encoder works with
-        // 28 byte chunks of input at a time. Benchmarks show that bypassing
-        // creating the block encoder when the input is small is up to 33%
-        // faster (50% throughput improvement).
         let block_encoder = config.into_block_encoder();
         block_encoder.encode_blocks(input, output)
     };
@@ -83,7 +76,7 @@ where
                 3
             }
         }
-        x => unreachable!("not a partial chunk: {} bytes", x),
+        _ => panic!("invalid input remaining. Is the output buffer too small?"),
     }
 }
 
@@ -118,7 +111,7 @@ mod tests {
     fn encode_slice_panics_on_short_output_slice() {
         let did_panic = std::panic::catch_unwind(|| {
             let mut output = vec![0; 1];
-            encode_slice(crate::STD, "aaaa", output.as_mut_slice());
+            encode_slice(crate::STD, "aaaa".as_ref(), output.as_mut_slice());
         })
         .is_err();
         assert!(did_panic);

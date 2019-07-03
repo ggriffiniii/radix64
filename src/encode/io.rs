@@ -67,10 +67,7 @@ where
         while self.bytes_in_pending_output > 0 || self.bytes_in_partial_input > 0 {
             let bytes_remaining_in_pending_output =
                 self.pending_output.len() - self.bytes_in_pending_output;
-            if self.bytes_in_partial_input > 0
-                && self.config.encoded_output_len(self.bytes_in_partial_input)
-                    < bytes_remaining_in_pending_output
-            {
+            if self.bytes_in_partial_input > 0 && bytes_remaining_in_pending_output > 3 {
                 let partial_chunk = &self.partial_input[..self.bytes_in_partial_input];
                 self.bytes_in_pending_output += encode_partial_chunk(
                     self.config,
