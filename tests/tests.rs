@@ -180,6 +180,25 @@ macro_rules! tests_for_configs {
                         assert_eq!(encoded.as_bytes(), writer_encoded.as_slice());
                     }
 
+                    #[test]
+                    fn encode_writer_one_byte_writes(input in any::<Vec<u8>>()) {
+                        use radix64::io::EncodeWriter;
+                        use std::io::{Cursor, Write};
+                        let encoded = $cfg.encode(&input);
+                        let mut writer_encoded = Vec::new();
+                        {
+                            let mut writer = EncodeWriter::new($cfg, Cursor::new(&mut writer_encoded));
+                            for b in input {
+                                writer.write(&[b][..]).expect("write failed");
+                                // invoking flush is not necessary, but nice to
+                                // exercise that codepath somewhere.
+                                writer.flush().expect("flush failed");
+                            }
+                            writer.finish().expect("finish failed");
+                        }
+                        assert_eq!(encoded.as_bytes(), writer_encoded.as_slice());
+                    }
+
                     // Ensure that EncodeWriter writes the final partial chunk on Drop.
                     #[test]
                     fn encode_writer_writes_final_chunk_on_drop(input in any::<Vec<u8>>()) {
@@ -266,7 +285,7 @@ fn vec_and_buffer_sizes() -> impl Strategy<Value = (Vec<u8>, Vec<usize>)> {
 fn vec_and_flaky_writer_behavior() -> impl Strategy<Value = (Vec<u8>, Vec<FlakyWriterBehavior>)> {
     use proptest::collection::vec;
     use proptest::prelude::{any, Just};
-    vec(any::<u8>(), 1..100).prop_flat_map(|v| {
+    vec(any::<u8>(), 1..1024).prop_flat_map(|v| {
         let len = v.len();
         let max_write_size = std::cmp::max(2, len / 3);
         // Flaky behavior cycles between 9 random conditions, and one condition
@@ -355,7 +374,11 @@ where
     loop {
         writer = match writer.finish() {
             Ok(_) => break,
-            Err(finish_err) => finish_err.into_encode_writer(),
+            Err(finish_err) => {
+                eprintln!("Finish error: {}", finish_err);
+                eprintln!("Finish i/o error: {:?}", finish_err.error());
+                finish_err.into_encode_writer()
+            },
         }
     }
 }

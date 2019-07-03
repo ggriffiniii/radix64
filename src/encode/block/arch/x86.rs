@@ -83,14 +83,14 @@ mod avx2 {
             let input = _mm256_shuffle_epi8(
                 input,
                 _mm256_setr_epi8(
-                    2,  2,  1,  0,
-                    5,  5,  4,  3,
-                    8,  8,  7,  6,
-                    11, 11, 10, 9,
-                    2,  2,  1,  0,
-                    5,  5,  4,  3,
-                    8,  8,  7,  6,
-                    11, 11, 10, 9,
+                    2,  2,  1,  0,  // The trailing comments fix a bug in tarpaulin
+                    5,  5,  4,  3,  // causing the args to be lines not covered.
+                    8,  8,  7,  6,  //
+                    11, 11, 10, 9,  //
+                    2,  2,  1,  0,  //
+                    5,  5,  4,  3,  //
+                    8,  8,  7,  6,  //
+                    11, 11, 10, 9,  //
                 ),
             );
             let mask = _mm256_set1_epi32(0x3F00_0000);
@@ -105,14 +105,14 @@ mod avx2 {
             let res = _mm256_shuffle_epi8(
                 res,
                 _mm256_setr_epi8(
-                    3,  2,  1,  0,
-                    7,  6,  5,  4,
-                    11, 10, 9,  8,
-                    15, 14, 13, 12,
-                    19, 18, 17, 16,
-                    23, 22, 21, 20,
-                    27, 26, 25, 24,
-                    31, 30, 29, 28,
+                    3,  2,  1,  0,  // The trailing comments fix a bug in tarpaulin
+                    7,  6,  5,  4,  // causing the args to be lines not covered.
+                    11, 10, 9,  8,  //
+                    15, 14, 13, 12, //
+                    19, 18, 17, 16, //
+                    23, 22, 21, 20, //
+                    27, 26, 25, 24, //
+                    31, 30, 29, 28, //
                 ),
             );
             C::translate_m256i(res)

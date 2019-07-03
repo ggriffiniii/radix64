@@ -7,17 +7,6 @@ impl U6 {
     pub const fn from_low_six_bits(x: u8) -> U6 {
         U6(x & 0x3f)
     }
-
-    #[inline]
-    pub fn new(x: u8) -> U6 {
-        assert!(x < 64);
-        U6(x)
-    }
-
-    #[inline]
-    pub const unsafe fn new_unchecked(x: u8) -> U6 {
-        U6(x)
-    }
 }
 
 impl Into<usize> for U6 {
