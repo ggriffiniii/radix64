@@ -1,0 +1,1 @@
+{"group_id":"decode_slice_bench","function_id":"base64","value_str":"512","throughput":{"Bytes":512},"full_id":"decode_slice_bench/base64/512","directory_name":"decode_slice_bench/base64/512","title":"decode_slice_bench/base64/512"}

@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Index - Criterion.rs</title>
+    <style type="text/css">
+        body {
+            font: 14px Helvetica Neue;
+            text-rendering: optimizelegibility;
+        }
+
+        .body {
+            width: 960px;
+            margin: auto;
+        }
+
+        a:link {
+            color: #1F78B4;
+            text-decoration: none;
+        }
+
+        h2 {
+            font-size: 36px;
+            font-weight: 300;
+        }
+
+        h3 {
+            font-size: 24px;
+            font-weight: 300;
+        }
+
+        #footer {
+            height: 40px;
+            background: #888;
+            color: white;
+            font-size: larger;
+            font-weight: 300;
+        }
+
+        #footer a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        #footer p {
+            text-align: center
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #888;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="body">
+        <h2>Criterion.rs Benchmark Index</h2>
+        See individual benchmark pages below for more details.
+        <ul>
+            <li><a href="../decode_bench/report/index.html">decode_bench</a></li>
+            
+            <ul>
+                <li>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th><a href="../decode_bench/base64/report/index.html">base64</a></th>
+                            <th><a href="../decode_bench/radix64/report/index.html">radix64</a></th>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_bench/3/report/index.html">3</a></th>
+                            <td><a href="../decode_bench/base64/3/report/index.html">decode_bench/base64/3</a></td>
+                            <td><a href="../decode_bench/radix64/3/report/index.html">decode_bench/radix64/3</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_bench/32/report/index.html">32</a></th>
+                            <td><a href="../decode_bench/base64/32/report/index.html">decode_bench/base64/32</a></td>
+                            <td><a href="../decode_bench/radix64/32/report/index.html">decode_bench/radix64/32</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_bench/64/report/index.html">64</a></th>
+                            <td><a href="../decode_bench/base64/64/report/index.html">decode_bench/base64/64</a></td>
+                            <td><a href="../decode_bench/radix64/64/report/index.html">decode_bench/radix64/64</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_bench/128/report/index.html">128</a></th>
+                            <td><a href="../decode_bench/base64/128/report/index.html">decode_bench/base64/128</a></td>
+                            <td><a href="../decode_bench/radix64/128/report/index.html">decode_bench/radix64/128</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_bench/512/report/index.html">512</a></th>
+                            <td><a href="../decode_bench/base64/512/report/index.html">decode_bench/base64/512</a></td>
+                            <td><a href="../decode_bench/radix64/512/report/index.html">decode_bench/radix64/512</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_bench/4096/report/index.html">4096</a></th>
+                            <td><a href="../decode_bench/base64/4096/report/index.html">decode_bench/base64/4096</a></td>
+                            <td><a href="../decode_bench/radix64/4096/report/index.html">decode_bench/radix64/4096</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_bench/8192/report/index.html">8192</a></th>
+                            <td><a href="../decode_bench/base64/8192/report/index.html">decode_bench/base64/8192</a></td>
+                            <td><a href="../decode_bench/radix64/8192/report/index.html">decode_bench/radix64/8192</a></td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+            <li><a href="../decode_reader_bench/report/index.html">decode_reader_bench</a></li>
+            
+            <ul>
+                <li>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th><a href="../decode_reader_bench/radix64/report/index.html">radix64</a></th>
+                        </tr>
+                        <tr>
+                            <th>3</th>
+                            <td><a href="../decode_reader_bench/radix64/3/report/index.html">decode_reader_bench/radix64/3</a></td>
+                        </tr>
+                        <tr>
+                            <th>32</th>
+                            <td><a href="../decode_reader_bench/radix64/32/report/index.html">decode_reader_bench/radix64/32</a></td>
+                        </tr>
+                        <tr>
+                            <th>64</th>
+                            <td><a href="../decode_reader_bench/radix64/64/report/index.html">decode_reader_bench/radix64/64</a></td>
+                        </tr>
+                        <tr>
+                            <th>128</th>
+                            <td><a href="../decode_reader_bench/radix64/128/report/index.html">decode_reader_bench/radix64/128</a></td>
+                        </tr>
+                        <tr>
+                            <th>512</th>
+                            <td><a href="../decode_reader_bench/radix64/512/report/index.html">decode_reader_bench/radix64/512</a></td>
+                        </tr>
+                        <tr>
+                            <th>4096</th>
+                            <td><a href="../decode_reader_bench/radix64/4096/report/index.html">decode_reader_bench/radix64/4096</a></td>
+                        </tr>
+                        <tr>
+                            <th>8192</th>
+                            <td><a href="../decode_reader_bench/radix64/8192/report/index.html">decode_reader_bench/radix64/8192</a></td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+            <li><a href="../decode_slice_bench/report/index.html">decode_slice_bench</a></li>
+            
+            <ul>
+                <li>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th><a href="../decode_slice_bench/base64/report/index.html">base64</a></th>
+                            <th><a href="../decode_slice_bench/radix64/report/index.html">radix64</a></th>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_slice_bench/3/report/index.html">3</a></th>
+                            <td><a href="../decode_slice_bench/base64/3/report/index.html">decode_slice_bench/base64/3</a></td>
+                            <td><a href="../decode_slice_bench/radix64/3/report/index.html">decode_slice_bench/radix64/3</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_slice_bench/32/report/index.html">32</a></th>
+                            <td><a href="../decode_slice_bench/base64/32/report/index.html">decode_slice_bench/base64/32</a></td>
+                            <td><a href="../decode_slice_bench/radix64/32/report/index.html">decode_slice_bench/radix64/32</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_slice_bench/64/report/index.html">64</a></th>
+                            <td><a href="../decode_slice_bench/base64/64/report/index.html">decode_slice_bench/base64/64</a></td>
+                            <td><a href="../decode_slice_bench/radix64/64/report/index.html">decode_slice_bench/radix64/64</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_slice_bench/128/report/index.html">128</a></th>
+                            <td><a href="../decode_slice_bench/base64/128/report/index.html">decode_slice_bench/base64/128</a></td>
+                            <td><a href="../decode_slice_bench/radix64/128/report/index.html">decode_slice_bench/radix64/128</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_slice_bench/512/report/index.html">512</a></th>
+                            <td><a href="../decode_slice_bench/base64/512/report/index.html">decode_slice_bench/base64/512</a></td>
+                            <td><a href="../decode_slice_bench/radix64/512/report/index.html">decode_slice_bench/radix64/512</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_slice_bench/4096/report/index.html">4096</a></th>
+                            <td><a href="../decode_slice_bench/base64/4096/report/index.html">decode_slice_bench/base64/4096</a></td>
+                            <td><a href="../decode_slice_bench/radix64/4096/report/index.html">decode_slice_bench/radix64/4096</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_slice_bench/8192/report/index.html">8192</a></th>
+                            <td><a href="../decode_slice_bench/base64/8192/report/index.html">decode_slice_bench/base64/8192</a></td>
+                            <td><a href="../decode_slice_bench/radix64/8192/report/index.html">decode_slice_bench/radix64/8192</a></td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+            <li><a href="../decode_with_buffer_bench/report/index.html">decode_with_buffer_bench</a></li>
+            
+            <ul>
+                <li>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th><a href="../decode_with_buffer_bench/base64/report/index.html">base64</a></th>
+                            <th><a href="../decode_with_buffer_bench/radix64/report/index.html">radix64</a></th>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_with_buffer_bench/3/report/index.html">3</a></th>
+                            <td><a href="../decode_with_buffer_bench/base64/3/report/index.html">decode_with_buffer_bench/base64/3</a></td>
+                            <td><a href="../decode_with_buffer_bench/radix64/3/report/index.html">decode_with_buffer_bench/radix64/3</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_with_buffer_bench/32/report/index.html">32</a></th>
+                            <td><a href="../decode_with_buffer_bench/base64/32/report/index.html">decode_with_buffer_bench/base64/32</a></td>
+                            <td><a href="../decode_with_buffer_bench/radix64/32/report/index.html">decode_with_buffer_bench/radix64/32</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_with_buffer_bench/64/report/index.html">64</a></th>
+                            <td><a href="../decode_with_buffer_bench/base64/64/report/index.html">decode_with_buffer_bench/base64/64</a></td>
+                            <td><a href="../decode_with_buffer_bench/radix64/64/report/index.html">decode_with_buffer_bench/radix64/64</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_with_buffer_bench/128/report/index.html">128</a></th>
+                            <td><a href="../decode_with_buffer_bench/base64/128/report/index.html">decode_with_buffer_bench/base64/128</a></td>
+                            <td><a href="../decode_with_buffer_bench/radix64/128/report/index.html">decode_with_buffer_bench/radix64/128</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_with_buffer_bench/512/report/index.html">512</a></th>
+                            <td><a href="../decode_with_buffer_bench/base64/512/report/index.html">decode_with_buffer_bench/base64/512</a></td>
+                            <td><a href="../decode_with_buffer_bench/radix64/512/report/index.html">decode_with_buffer_bench/radix64/512</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_with_buffer_bench/4096/report/index.html">4096</a></th>
+                            <td><a href="../decode_with_buffer_bench/base64/4096/report/index.html">decode_with_buffer_bench/base64/4096</a></td>
+                            <td><a href="../decode_with_buffer_bench/radix64/4096/report/index.html">decode_with_buffer_bench/radix64/4096</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../decode_with_buffer_bench/8192/report/index.html">8192</a></th>
+                            <td><a href="../decode_with_buffer_bench/base64/8192/report/index.html">decode_with_buffer_bench/base64/8192</a></td>
+                            <td><a href="../decode_with_buffer_bench/radix64/8192/report/index.html">decode_with_buffer_bench/radix64/8192</a></td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+            <li><a href="../display_bench/report/index.html">display_bench</a></li>
+            
+            <ul>
+                <li>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th><a href="../display_bench/base64/report/index.html">base64</a></th>
+                            <th><a href="../display_bench/radix64/report/index.html">radix64</a></th>
+                        </tr>
+                        <tr>
+                            <th><a href="../display_bench/3/report/index.html">3</a></th>
+                            <td><a href="../display_bench/base64/3/report/index.html">display_bench/base64/3</a></td>
+                            <td><a href="../display_bench/radix64/3/report/index.html">display_bench/radix64/3</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../display_bench/32/report/index.html">32</a></th>
+                            <td><a href="../display_bench/base64/32/report/index.html">display_bench/base64/32</a></td>
+                            <td><a href="../display_bench/radix64/32/report/index.html">display_bench/radix64/32</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../display_bench/64/report/index.html">64</a></th>
+                            <td><a href="../display_bench/base64/64/report/index.html">display_bench/base64/64</a></td>
+                            <td><a href="../display_bench/radix64/64/report/index.html">display_bench/radix64/64</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../display_bench/128/report/index.html">128</a></th>
+                            <td><a href="../display_bench/base64/128/report/index.html">display_bench/base64/128</a></td>
+                            <td><a href="../display_bench/radix64/128/report/index.html">display_bench/radix64/128</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../display_bench/512/report/index.html">512</a></th>
+                            <td><a href="../display_bench/base64/512/report/index.html">display_bench/base64/512</a></td>
+                            <td><a href="../display_bench/radix64/512/report/index.html">display_bench/radix64/512</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../display_bench/4096/report/index.html">4096</a></th>
+                            <td><a href="../display_bench/base64/4096/report/index.html">display_bench/base64/4096</a></td>
+                            <td><a href="../display_bench/radix64/4096/report/index.html">display_bench/radix64/4096</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../display_bench/8192/report/index.html">8192</a></th>
+                            <td><a href="../display_bench/base64/8192/report/index.html">display_bench/base64/8192</a></td>
+                            <td><a href="../display_bench/radix64/8192/report/index.html">display_bench/radix64/8192</a></td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+            <li><a href="../encode_bench/report/index.html">encode_bench</a></li>
+            
+            <ul>
+                <li>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th><a href="../encode_bench/base64/report/index.html">base64</a></th>
+                            <th><a href="../encode_bench/radix64/report/index.html">radix64</a></th>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_bench/3/report/index.html">3</a></th>
+                            <td><a href="../encode_bench/base64/3/report/index.html">encode_bench/base64/3</a></td>
+                            <td><a href="../encode_bench/radix64/3/report/index.html">encode_bench/radix64/3</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_bench/32/report/index.html">32</a></th>
+                            <td><a href="../encode_bench/base64/32/report/index.html">encode_bench/base64/32</a></td>
+                            <td><a href="../encode_bench/radix64/32/report/index.html">encode_bench/radix64/32</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_bench/64/report/index.html">64</a></th>
+                            <td><a href="../encode_bench/base64/64/report/index.html">encode_bench/base64/64</a></td>
+                            <td><a href="../encode_bench/radix64/64/report/index.html">encode_bench/radix64/64</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_bench/128/report/index.html">128</a></th>
+                            <td><a href="../encode_bench/base64/128/report/index.html">encode_bench/base64/128</a></td>
+                            <td><a href="../encode_bench/radix64/128/report/index.html">encode_bench/radix64/128</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_bench/512/report/index.html">512</a></th>
+                            <td><a href="../encode_bench/base64/512/report/index.html">encode_bench/base64/512</a></td>
+                            <td><a href="../encode_bench/radix64/512/report/index.html">encode_bench/radix64/512</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_bench/4096/report/index.html">4096</a></th>
+                            <td><a href="../encode_bench/base64/4096/report/index.html">encode_bench/base64/4096</a></td>
+                            <td><a href="../encode_bench/radix64/4096/report/index.html">encode_bench/radix64/4096</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_bench/8192/report/index.html">8192</a></th>
+                            <td><a href="../encode_bench/base64/8192/report/index.html">encode_bench/base64/8192</a></td>
+                            <td><a href="../encode_bench/radix64/8192/report/index.html">encode_bench/radix64/8192</a></td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+            <li><a href="../encode_slice_bench/report/index.html">encode_slice_bench</a></li>
+            
+            <ul>
+                <li>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th><a href="../encode_slice_bench/base64/report/index.html">base64</a></th>
+                            <th><a href="../encode_slice_bench/radix64/report/index.html">radix64</a></th>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_slice_bench/3/report/index.html">3</a></th>
+                            <td><a href="../encode_slice_bench/base64/3/report/index.html">encode_slice_bench/base64/3</a></td>
+                            <td><a href="../encode_slice_bench/radix64/3/report/index.html">encode_slice_bench/radix64/3</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_slice_bench/32/report/index.html">32</a></th>
+                            <td><a href="../encode_slice_bench/base64/32/report/index.html">encode_slice_bench/base64/32</a></td>
+                            <td><a href="../encode_slice_bench/radix64/32/report/index.html">encode_slice_bench/radix64/32</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_slice_bench/64/report/index.html">64</a></th>
+                            <td><a href="../encode_slice_bench/base64/64/report/index.html">encode_slice_bench/base64/64</a></td>
+                            <td><a href="../encode_slice_bench/radix64/64/report/index.html">encode_slice_bench/radix64/64</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_slice_bench/128/report/index.html">128</a></th>
+                            <td><a href="../encode_slice_bench/base64/128/report/index.html">encode_slice_bench/base64/128</a></td>
+                            <td><a href="../encode_slice_bench/radix64/128/report/index.html">encode_slice_bench/radix64/128</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_slice_bench/512/report/index.html">512</a></th>
+                            <td><a href="../encode_slice_bench/base64/512/report/index.html">encode_slice_bench/base64/512</a></td>
+                            <td><a href="../encode_slice_bench/radix64/512/report/index.html">encode_slice_bench/radix64/512</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_slice_bench/4096/report/index.html">4096</a></th>
+                            <td><a href="../encode_slice_bench/base64/4096/report/index.html">encode_slice_bench/base64/4096</a></td>
+                            <td><a href="../encode_slice_bench/radix64/4096/report/index.html">encode_slice_bench/radix64/4096</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_slice_bench/8192/report/index.html">8192</a></th>
+                            <td><a href="../encode_slice_bench/base64/8192/report/index.html">encode_slice_bench/base64/8192</a></td>
+                            <td><a href="../encode_slice_bench/radix64/8192/report/index.html">encode_slice_bench/radix64/8192</a></td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+            <li><a href="../encode_with_buffer_bench/report/index.html">encode_with_buffer_bench</a></li>
+            
+            <ul>
+                <li>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th><a href="../encode_with_buffer_bench/base64/report/index.html">base64</a></th>
+                            <th><a href="../encode_with_buffer_bench/radix64/report/index.html">radix64</a></th>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_with_buffer_bench/3/report/index.html">3</a></th>
+                            <td><a href="../encode_with_buffer_bench/base64/3/report/index.html">encode_with_buffer_bench/base64/3</a></td>
+                            <td><a href="../encode_with_buffer_bench/radix64/3/report/index.html">encode_with_buffer_bench/radix64/3</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_with_buffer_bench/32/report/index.html">32</a></th>
+                            <td><a href="../encode_with_buffer_bench/base64/32/report/index.html">encode_with_buffer_bench/base64/32</a></td>
+                            <td><a href="../encode_with_buffer_bench/radix64/32/report/index.html">encode_with_buffer_bench/radix64/32</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_with_buffer_bench/64/report/index.html">64</a></th>
+                            <td><a href="../encode_with_buffer_bench/base64/64/report/index.html">encode_with_buffer_bench/base64/64</a></td>
+                            <td><a href="../encode_with_buffer_bench/radix64/64/report/index.html">encode_with_buffer_bench/radix64/64</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_with_buffer_bench/128/report/index.html">128</a></th>
+                            <td><a href="../encode_with_buffer_bench/base64/128/report/index.html">encode_with_buffer_bench/base64/128</a></td>
+                            <td><a href="../encode_with_buffer_bench/radix64/128/report/index.html">encode_with_buffer_bench/radix64/128</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_with_buffer_bench/512/report/index.html">512</a></th>
+                            <td><a href="../encode_with_buffer_bench/base64/512/report/index.html">encode_with_buffer_bench/base64/512</a></td>
+                            <td><a href="../encode_with_buffer_bench/radix64/512/report/index.html">encode_with_buffer_bench/radix64/512</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_with_buffer_bench/4096/report/index.html">4096</a></th>
+                            <td><a href="../encode_with_buffer_bench/base64/4096/report/index.html">encode_with_buffer_bench/base64/4096</a></td>
+                            <td><a href="../encode_with_buffer_bench/radix64/4096/report/index.html">encode_with_buffer_bench/radix64/4096</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_with_buffer_bench/8192/report/index.html">8192</a></th>
+                            <td><a href="../encode_with_buffer_bench/base64/8192/report/index.html">encode_with_buffer_bench/base64/8192</a></td>
+                            <td><a href="../encode_with_buffer_bench/radix64/8192/report/index.html">encode_with_buffer_bench/radix64/8192</a></td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+            <li><a href="../encode_writer_bench/report/index.html">encode_writer_bench</a></li>
+            
+            <ul>
+                <li>
+                    <table>
+                        <tr>
+                            <th></th>
+                            <th><a href="../encode_writer_bench/base64/report/index.html">base64</a></th>
+                            <th><a href="../encode_writer_bench/radix64/report/index.html">radix64</a></th>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_writer_bench/3/report/index.html">3</a></th>
+                            <td><a href="../encode_writer_bench/base64/3/report/index.html">encode_writer_bench/base64/3</a></td>
+                            <td><a href="../encode_writer_bench/radix64/3/report/index.html">encode_writer_bench/radix64/3</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_writer_bench/32/report/index.html">32</a></th>
+                            <td><a href="../encode_writer_bench/base64/32/report/index.html">encode_writer_bench/base64/32</a></td>
+                            <td><a href="../encode_writer_bench/radix64/32/report/index.html">encode_writer_bench/radix64/32</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_writer_bench/64/report/index.html">64</a></th>
+                            <td><a href="../encode_writer_bench/base64/64/report/index.html">encode_writer_bench/base64/64</a></td>
+                            <td><a href="../encode_writer_bench/radix64/64/report/index.html">encode_writer_bench/radix64/64</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_writer_bench/128/report/index.html">128</a></th>
+                            <td><a href="../encode_writer_bench/base64/128/report/index.html">encode_writer_bench/base64/128</a></td>
+                            <td><a href="../encode_writer_bench/radix64/128/report/index.html">encode_writer_bench/radix64/128</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_writer_bench/512/report/index.html">512</a></th>
+                            <td><a href="../encode_writer_bench/base64/512/report/index.html">encode_writer_bench/base64/512</a></td>
+                            <td><a href="../encode_writer_bench/radix64/512/report/index.html">encode_writer_bench/radix64/512</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_writer_bench/4096/report/index.html">4096</a></th>
+                            <td><a href="../encode_writer_bench/base64/4096/report/index.html">encode_writer_bench/base64/4096</a></td>
+                            <td><a href="../encode_writer_bench/radix64/4096/report/index.html">encode_writer_bench/radix64/4096</a></td>
+                        </tr>
+                        <tr>
+                            <th><a href="../encode_writer_bench/8192/report/index.html">8192</a></th>
+                            <td><a href="../encode_writer_bench/base64/8192/report/index.html">encode_writer_bench/base64/8192</a></td>
+                            <td><a href="../encode_writer_bench/radix64/8192/report/index.html">encode_writer_bench/radix64/8192</a></td>
+                        </tr>
+                    </table>
+                </li>
+            </ul>
+        </ul>
+    </div>
+    <div id="footer">
+        <p>This report was generated by
+            <a href="https://github.com/bheisler/criterion.rs">Criterion.rs</a>, a statistics-driven benchmarking
+            library in Rust.</p>
+    </div>
+</body>
+</html>

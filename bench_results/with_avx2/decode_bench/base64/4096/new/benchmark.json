@@ -1,0 +1,1 @@
+{"group_id":"decode_bench","function_id":"base64","value_str":"4096","throughput":{"Bytes":4096},"full_id":"decode_bench/base64/4096","directory_name":"decode_bench/base64/4096","title":"decode_bench/base64/4096"}
