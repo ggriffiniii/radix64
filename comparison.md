@@ -6,8 +6,8 @@
  * encode/decode are methods on the config rather than free functions that
    accept the config.
  * The _buffer variants of encode and decode accept a buffer and return a slice
-   (&str when encoding, &[u8] when decoding) into the buffer. The buffer does not need to be, and
-   should not be for best performance, cleared. This minimizes reinitializing
+   (&str when encoding, &[u8] when decoding) into the buffer. The buffer does not need to be (and
+   for best performance should not be) cleared. This minimizes reinitializing
    the buffer to extend it for input. For this reason the _buffer variants have
    higher performance than the base64 versions and should be the primary
    functions used, rarely needing the _slice versions.
