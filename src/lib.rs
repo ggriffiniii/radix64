@@ -194,8 +194,9 @@ pub trait Config: Copy + private::SealedConfig {
     where
         I: AsRef<[u8]> + ?Sized,
     {
-        let mut output = Vec::new();
-        let bytes_written = self.encode_with_buffer(input, &mut output).len();
+        let input = input.as_ref();
+        let mut output = vec![0; input.len() * 4 / 3 + 3];
+        let bytes_written = crate::encode::encode_slice(self, input, output.as_mut_slice());
         output.truncate(bytes_written);
         // The builtin alphabets are all ascii and the CustomConfigBuilder
         // ensures any custom alphabets only contain ascii characters as well.
