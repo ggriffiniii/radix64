@@ -54,7 +54,7 @@ pub(crate) fn decode_slice<C>(
 where
     C: Config,
 {
-    input = remove_padding(config, input);
+    input = remove_padding(config, input)?;
     let (input_idx, output_idx) = decode_full_chunks_without_padding(config, input, output)?;
     input = &input[input_idx..];
     output = &mut output[output_idx..];
@@ -64,11 +64,14 @@ where
 }
 
 #[inline]
-fn remove_padding<C>(config: C, input: &[u8]) -> &[u8]
+fn remove_padding<C>(config: C, input: &[u8]) -> Result<&[u8], DecodeError>
 where
     C: Config,
 {
-    if let Some(padding) = config.padding_byte() {
+    Ok(if let Some(padding) = config.padding_byte() {
+        if input.len() % 4 != 0 {
+            return Err(DecodeError::InvalidLength);
+        }
         let num_padding_bytes = input
             .iter()
             .rev()
@@ -84,7 +87,7 @@ where
         }
     } else {
         input
-    }
+    })
 }
 
 #[inline]

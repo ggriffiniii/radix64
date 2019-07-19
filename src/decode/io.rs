@@ -110,7 +110,7 @@ where
 
         if self.eof_seen {
             let start_len = decodable_data.len();
-            decodable_data = crate::decode::remove_padding(self.config, decodable_data);
+            decodable_data = crate::decode::remove_padding(self.config, decodable_data).map_err(into_io_err)?;
             self.cap -= start_len - decodable_data.len();
         }
 
