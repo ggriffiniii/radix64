@@ -180,7 +180,7 @@ define_inherent_impl!(Fast);
 /// use radix64::CustomConfig;
 ///
 /// lazy_static::lazy_static! {
-///     pub static ref my_config: CustomConfig = CustomConfig::with_alphabet(
+///     pub static ref MY_CONFIG: CustomConfig = CustomConfig::with_alphabet(
 ///         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
 ///     )
 ///     .with_padding(b'=')
@@ -188,9 +188,9 @@ define_inherent_impl!(Fast);
 ///     .expect("failed to build custom base64 config");
 /// }
 ///
-/// let my_encoded_msg = my_config.encode("my message");
+/// let my_encoded_msg = MY_CONFIG.encode("my message");
 /// assert_eq!("bXkgbWVzc2FnZQ==", my_encoded_msg.as_str());
-/// assert_eq!("my message".as_bytes(), my_config.decode(&my_encoded_msg).unwrap().as_slice());
+/// assert_eq!("my message".as_bytes(), MY_CONFIG.decode(&my_encoded_msg).unwrap().as_slice());
 /// ```
 #[derive(Clone)]
 pub struct CustomConfig {

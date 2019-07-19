@@ -371,11 +371,7 @@ where
     loop {
         writer = match writer.finish() {
             Ok(_) => break,
-            Err(finish_err) => {
-                eprintln!("Finish error: {}", finish_err);
-                eprintln!("Finish i/o error: {:?}", finish_err.error());
-                finish_err.into_encode_writer()
-            }
+            Err(finish_err) => finish_err.into_encode_writer(),
         }
     }
 }
