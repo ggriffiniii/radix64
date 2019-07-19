@@ -1,0 +1,1199 @@
+Benchmarking encode_bench/radix64/3
+Benchmarking encode_bench/radix64/3: Warming up for 3.0000 s
+Benchmarking encode_bench/radix64/3: Collecting 100 samples in estimated 5.0001 s (233M iterations)
+Benchmarking encode_bench/radix64/3: Analyzing
+encode_bench/radix64/3  time:   [21.201 ns 21.256 ns 21.338 ns]
+                        thrpt:  [134.08 MiB/s 134.60 MiB/s 134.95 MiB/s]
+Found 7 outliers among 100 measurements (7.00%)
+  3 (3.00%) high mild
+  4 (4.00%) high severe
+Benchmarking encode_bench/radix64/32
+Benchmarking encode_bench/radix64/32: Warming up for 3.0000 s
+Benchmarking encode_bench/radix64/32: Collecting 100 samples in estimated 5.0001 s (167M iterations)
+Benchmarking encode_bench/radix64/32: Analyzing
+encode_bench/radix64/32 time:   [29.926 ns 30.208 ns 30.702 ns]
+                        thrpt:  [993.98 MiB/s 1010.3 MiB/s 1019.8 MiB/s]
+Found 14 outliers among 100 measurements (14.00%)
+  2 (2.00%) low mild
+  1 (1.00%) high mild
+  11 (11.00%) high severe
+Benchmarking encode_bench/radix64/64
+Benchmarking encode_bench/radix64/64: Warming up for 3.0000 s
+Benchmarking encode_bench/radix64/64: Collecting 100 samples in estimated 5.0001 s (118M iterations)
+Benchmarking encode_bench/radix64/64: Analyzing
+encode_bench/radix64/64 time:   [42.048 ns 42.115 ns 42.194 ns]
+                        thrpt:  [1.4126 GiB/s 1.4153 GiB/s 1.4176 GiB/s]
+Found 7 outliers among 100 measurements (7.00%)
+  1 (1.00%) low mild
+  3 (3.00%) high mild
+  3 (3.00%) high severe
+Benchmarking encode_bench/radix64/128
+Benchmarking encode_bench/radix64/128: Warming up for 3.0000 s
+Benchmarking encode_bench/radix64/128: Collecting 100 samples in estimated 5.0000 s (102M iterations)
+Benchmarking encode_bench/radix64/128: Analyzing
+encode_bench/radix64/128
+                        time:   [49.691 ns 49.772 ns 49.869 ns]
+                        thrpt:  [2.3905 GiB/s 2.3951 GiB/s 2.3990 GiB/s]
+Found 11 outliers among 100 measurements (11.00%)
+  3 (3.00%) low mild
+  2 (2.00%) high mild
+  6 (6.00%) high severe
+Benchmarking encode_bench/radix64/512
+Benchmarking encode_bench/radix64/512: Warming up for 3.0000 s
+Benchmarking encode_bench/radix64/512: Collecting 100 samples in estimated 5.0004 s (41M iterations)
+Benchmarking encode_bench/radix64/512: Analyzing
+encode_bench/radix64/512
+                        time:   [121.10 ns 121.44 ns 121.85 ns]
+                        thrpt:  [3.9132 GiB/s 3.9266 GiB/s 3.9375 GiB/s]
+Found 10 outliers among 100 measurements (10.00%)
+  5 (5.00%) high mild
+  5 (5.00%) high severe
+Benchmarking encode_bench/radix64/4096
+Benchmarking encode_bench/radix64/4096: Warming up for 3.0000 s
+Benchmarking encode_bench/radix64/4096: Collecting 100 samples in estimated 5.0033 s (5.9M iterations)
+Benchmarking encode_bench/radix64/4096: Analyzing
+encode_bench/radix64/4096
+                        time:   [847.87 ns 851.52 ns 856.34 ns]
+                        thrpt:  [4.4547 GiB/s 4.4799 GiB/s 4.4992 GiB/s]
+Found 13 outliers among 100 measurements (13.00%)
+  1 (1.00%) low mild
+  7 (7.00%) high mild
+  5 (5.00%) high severe
+Benchmarking encode_bench/radix64/8192
+Benchmarking encode_bench/radix64/8192: Warming up for 3.0000 s
+Benchmarking encode_bench/radix64/8192: Collecting 100 samples in estimated 5.0045 s (3.0M iterations)
+Benchmarking encode_bench/radix64/8192: Analyzing
+encode_bench/radix64/8192
+                        time:   [1.6167 us 1.6208 us 1.6260 us]
+                        thrpt:  [4.6921 GiB/s 4.7073 GiB/s 4.7191 GiB/s]
+Found 12 outliers among 100 measurements (12.00%)
+  6 (6.00%) high mild
+  6 (6.00%) high severe
+Benchmarking encode_bench/base64/3
+Benchmarking encode_bench/base64/3: Warming up for 3.0000 s
+Benchmarking encode_bench/base64/3: Collecting 100 samples in estimated 5.0001 s (102M iterations)
+Benchmarking encode_bench/base64/3: Analyzing
+encode_bench/base64/3   time:   [48.849 ns 48.991 ns 49.167 ns]
+                        thrpt:  [58.189 MiB/s 58.398 MiB/s 58.569 MiB/s]
+Found 12 outliers among 100 measurements (12.00%)
+  1 (1.00%) low mild
+  3 (3.00%) high mild
+  8 (8.00%) high severe
+Benchmarking encode_bench/base64/32
+Benchmarking encode_bench/base64/32: Warming up for 3.0000 s
+Benchmarking encode_bench/base64/32: Collecting 100 samples in estimated 5.0000 s (75M iterations)
+Benchmarking encode_bench/base64/32: Analyzing
+encode_bench/base64/32  time:   [66.830 ns 67.108 ns 67.468 ns]
+                        thrpt:  [452.33 MiB/s 454.75 MiB/s 456.64 MiB/s]
+Found 14 outliers among 100 measurements (14.00%)
+  1 (1.00%) low mild
+  5 (5.00%) high mild
+  8 (8.00%) high severe
+Benchmarking encode_bench/base64/64
+Benchmarking encode_bench/base64/64: Warming up for 3.0000 s
+Benchmarking encode_bench/base64/64: Collecting 100 samples in estimated 5.0003 s (60M iterations)
+Benchmarking encode_bench/base64/64: Analyzing
+encode_bench/base64/64  time:   [82.390 ns 82.571 ns 82.810 ns]
+                        thrpt:  [737.05 MiB/s 739.18 MiB/s 740.81 MiB/s]
+Found 12 outliers among 100 measurements (12.00%)
+  3 (3.00%) low mild
+  2 (2.00%) high mild
+  7 (7.00%) high severe
+Benchmarking encode_bench/base64/128
+Benchmarking encode_bench/base64/128: Warming up for 3.0000 s
+Benchmarking encode_bench/base64/128: Collecting 100 samples in estimated 5.0004 s (42M iterations)
+Benchmarking encode_bench/base64/128: Analyzing
+encode_bench/base64/128 time:   [119.41 ns 119.55 ns 119.71 ns]
+                        thrpt:  [1019.8 MiB/s 1021.1 MiB/s 1022.3 MiB/s]
+Found 10 outliers among 100 measurements (10.00%)
+  1 (1.00%) low mild
+  3 (3.00%) high mild
+  6 (6.00%) high severe
+Benchmarking encode_bench/base64/512
+Benchmarking encode_bench/base64/512: Warming up for 3.0000 s
+Benchmarking encode_bench/base64/512: Collecting 100 samples in estimated 5.0013 s (17M iterations)
+Benchmarking encode_bench/base64/512: Analyzing
+encode_bench/base64/512 time:   [296.12 ns 298.05 ns 300.19 ns]
+                        thrpt:  [1.5884 GiB/s 1.5999 GiB/s 1.6103 GiB/s]
+Found 23 outliers among 100 measurements (23.00%)
+  1 (1.00%) high mild
+  22 (22.00%) high severe
+Benchmarking encode_bench/base64/4096
+Benchmarking encode_bench/base64/4096: Warming up for 3.0000 s
+Benchmarking encode_bench/base64/4096: Collecting 100 samples in estimated 5.0035 s (2.6M iterations)
+Benchmarking encode_bench/base64/4096: Analyzing
+encode_bench/base64/4096
+                        time:   [1.9566 us 1.9612 us 1.9684 us]
+                        thrpt:  [1.9379 GiB/s 1.9451 GiB/s 1.9496 GiB/s]
+Found 10 outliers among 100 measurements (10.00%)
+  6 (6.00%) high mild
+  4 (4.00%) high severe
+Benchmarking encode_bench/base64/8192
+Benchmarking encode_bench/base64/8192: Warming up for 3.0000 s
+Benchmarking encode_bench/base64/8192: Collecting 100 samples in estimated 5.0071 s (1.3M iterations)
+Benchmarking encode_bench/base64/8192: Analyzing
+encode_bench/base64/8192
+                        time:   [3.7917 us 3.8031 us 3.8176 us]
+                        thrpt:  [1.9985 GiB/s 2.0061 GiB/s 2.0121 GiB/s]
+Found 8 outliers among 100 measurements (8.00%)
+  4 (4.00%) high mild
+  4 (4.00%) high severe
+
+Benchmarking encode_slice_bench/radix64/3
+Benchmarking encode_slice_bench/radix64/3: Warming up for 3.0000 s
+Benchmarking encode_slice_bench/radix64/3: Collecting 100 samples in estimated 5.0000 s (868M iterations)
+Benchmarking encode_slice_bench/radix64/3: Analyzing
+encode_slice_bench/radix64/3
+                        time:   [5.7364 ns 5.7475 ns 5.7601 ns]
+                        thrpt:  [496.69 MiB/s 497.79 MiB/s 498.74 MiB/s]
+Found 14 outliers among 100 measurements (14.00%)
+  8 (8.00%) high mild
+  6 (6.00%) high severe
+Benchmarking encode_slice_bench/radix64/32
+Benchmarking encode_slice_bench/radix64/32: Warming up for 3.0000 s
+Benchmarking encode_slice_bench/radix64/32: Collecting 100 samples in estimated 5.0001 s (353M iterations)
+Benchmarking encode_slice_bench/radix64/32: Analyzing
+encode_slice_bench/radix64/32
+                        time:   [14.025 ns 14.071 ns 14.127 ns]
+                        thrpt:  [2.1096 GiB/s 2.1180 GiB/s 2.1250 GiB/s]
+Found 8 outliers among 100 measurements (8.00%)
+  8 (8.00%) high severe
+Benchmarking encode_slice_bench/radix64/64
+Benchmarking encode_slice_bench/radix64/64: Warming up for 3.0000 s
+Benchmarking encode_slice_bench/radix64/64: Collecting 100 samples in estimated 5.0001 s (217M iterations)
+Benchmarking encode_slice_bench/radix64/64: Analyzing
+encode_slice_bench/radix64/64
+                        time:   [23.091 ns 23.130 ns 23.174 ns]
+                        thrpt:  [2.5720 GiB/s 2.5770 GiB/s 2.5813 GiB/s]
+Found 12 outliers among 100 measurements (12.00%)
+  3 (3.00%) low mild
+  5 (5.00%) high mild
+  4 (4.00%) high severe
+Benchmarking encode_slice_bench/radix64/128
+Benchmarking encode_slice_bench/radix64/128: Warming up for 3.0000 s
+Benchmarking encode_slice_bench/radix64/128: Collecting 100 samples in estimated 5.0000 s (178M iterations)
+Benchmarking encode_slice_bench/radix64/128: Analyzing
+encode_slice_bench/radix64/128
+                        time:   [28.790 ns 29.195 ns 29.639 ns]
+                        thrpt:  [4.0220 GiB/s 4.0832 GiB/s 4.1406 GiB/s]
+Found 2 outliers among 100 measurements (2.00%)
+  1 (1.00%) high mild
+  1 (1.00%) high severe
+Benchmarking encode_slice_bench/radix64/512
+Benchmarking encode_slice_bench/radix64/512: Warming up for 3.0000 s
+Benchmarking encode_slice_bench/radix64/512: Collecting 100 samples in estimated 5.0000 s (60M iterations)
+Benchmarking encode_slice_bench/radix64/512: Analyzing
+encode_slice_bench/radix64/512
+                        time:   [82.490 ns 82.957 ns 83.747 ns]
+                        thrpt:  [5.6938 GiB/s 5.7480 GiB/s 5.7805 GiB/s]
+Found 3 outliers among 100 measurements (3.00%)
+  1 (1.00%) high mild
+  2 (2.00%) high severe
+Benchmarking encode_slice_bench/radix64/4096
+Benchmarking encode_slice_bench/radix64/4096: Warming up for 3.0000 s
+Benchmarking encode_slice_bench/radix64/4096: Collecting 100 samples in estimated 5.0029 s (8.2M iterations)
+Benchmarking encode_slice_bench/radix64/4096: Analyzing
+encode_slice_bench/radix64/4096
+                        time:   [608.47 ns 612.84 ns 618.66 ns]
+                        thrpt:  [6.1660 GiB/s 6.2246 GiB/s 6.2693 GiB/s]
+Found 13 outliers among 100 measurements (13.00%)
+  7 (7.00%) high mild
+  6 (6.00%) high severe
+Benchmarking encode_slice_bench/radix64/8192
+Benchmarking encode_slice_bench/radix64/8192: Warming up for 3.0000 s
+Benchmarking encode_slice_bench/radix64/8192: Collecting 100 samples in estimated 5.0023 s (4.2M iterations)
+Benchmarking encode_slice_bench/radix64/8192: Analyzing
+encode_slice_bench/radix64/8192
+                        time:   [1.1967 us 1.2017 us 1.2080 us]
+                        thrpt:  [6.3158 GiB/s 6.3486 GiB/s 6.3752 GiB/s]
+Found 12 outliers among 100 measurements (12.00%)
+  4 (4.00%) high mild
+  8 (8.00%) high severe
+Benchmarking encode_slice_bench/base64/3
+Benchmarking encode_slice_bench/base64/3: Warming up for 3.0000 s
+Benchmarking encode_slice_bench/base64/3: Collecting 100 samples in estimated 5.0000 s (597M iterations)
+Benchmarking encode_slice_bench/base64/3: Analyzing
+encode_slice_bench/base64/3
+                        time:   [8.2833 ns 8.2987 ns 8.3172 ns]
+                        thrpt:  [343.99 MiB/s 344.76 MiB/s 345.40 MiB/s]
+Found 10 outliers among 100 measurements (10.00%)
+  3 (3.00%) high mild
+  7 (7.00%) high severe
+Benchmarking encode_slice_bench/base64/32
+Benchmarking encode_slice_bench/base64/32: Warming up for 3.0000 s
+Benchmarking encode_slice_bench/base64/32: Collecting 100 samples in estimated 5.0001 s (218M iterations)
+Benchmarking encode_slice_bench/base64/32: Analyzing
+encode_slice_bench/base64/32
+                        time:   [22.769 ns 22.912 ns 23.094 ns]
+                        thrpt:  [1.2905 GiB/s 1.3007 GiB/s 1.3089 GiB/s]
+Found 11 outliers among 100 measurements (11.00%)
+  3 (3.00%) high mild
+  8 (8.00%) high severe
+Benchmarking encode_slice_bench/base64/64
+Benchmarking encode_slice_bench/base64/64: Warming up for 3.0000 s
+Benchmarking encode_slice_bench/base64/64: Collecting 100 samples in estimated 5.0001 s (133M iterations)
+Benchmarking encode_slice_bench/base64/64: Analyzing
+encode_slice_bench/base64/64
+                        time:   [37.401 ns 37.466 ns 37.545 ns]
+                        thrpt:  [1.5876 GiB/s 1.5909 GiB/s 1.5937 GiB/s]
+Found 11 outliers among 100 measurements (11.00%)
+  1 (1.00%) low mild
+  5 (5.00%) high mild
+  5 (5.00%) high severe
+Benchmarking encode_slice_bench/base64/128
+Benchmarking encode_slice_bench/base64/128: Warming up for 3.0000 s
+Benchmarking encode_slice_bench/base64/128: Collecting 100 samples in estimated 5.0001 s (79M iterations)
+Benchmarking encode_slice_bench/base64/128: Analyzing
+encode_slice_bench/base64/128
+                        time:   [62.494 ns 62.676 ns 62.872 ns]
+                        thrpt:  [1.8961 GiB/s 1.9020 GiB/s 1.9075 GiB/s]
+Found 2 outliers among 100 measurements (2.00%)
+  2 (2.00%) high mild
+Benchmarking encode_slice_bench/base64/512
+Benchmarking encode_slice_bench/base64/512: Warming up for 3.0000 s
+Benchmarking encode_slice_bench/base64/512: Collecting 100 samples in estimated 5.0003 s (23M iterations)
+Benchmarking encode_slice_bench/base64/512: Analyzing
+encode_slice_bench/base64/512
+                        time:   [220.54 ns 222.48 ns 224.85 ns]
+                        thrpt:  [2.1207 GiB/s 2.1433 GiB/s 2.1621 GiB/s]
+Found 14 outliers among 100 measurements (14.00%)
+  1 (1.00%) low mild
+  3 (3.00%) high mild
+  10 (10.00%) high severe
+Benchmarking encode_slice_bench/base64/4096
+Benchmarking encode_slice_bench/base64/4096: Warming up for 3.0000 s
+Benchmarking encode_slice_bench/base64/4096: Collecting 100 samples in estimated 5.0078 s (2.9M iterations)
+Benchmarking encode_slice_bench/base64/4096: Analyzing
+encode_slice_bench/base64/4096
+                        time:   [1.7076 us 1.7116 us 1.7163 us]
+                        thrpt:  [2.2227 GiB/s 2.2287 GiB/s 2.2340 GiB/s]
+Found 11 outliers among 100 measurements (11.00%)
+  6 (6.00%) high mild
+  5 (5.00%) high severe
+Benchmarking encode_slice_bench/base64/8192
+Benchmarking encode_slice_bench/base64/8192: Warming up for 3.0000 s
+Benchmarking encode_slice_bench/base64/8192: Collecting 100 samples in estimated 5.0027 s (1.5M iterations)
+Benchmarking encode_slice_bench/base64/8192: Analyzing
+encode_slice_bench/base64/8192
+                        time:   [3.3832 us 3.3884 us 3.3948 us]
+                        thrpt:  [2.2474 GiB/s 2.2516 GiB/s 2.2551 GiB/s]
+Found 12 outliers among 100 measurements (12.00%)
+  2 (2.00%) low mild
+  5 (5.00%) high mild
+  5 (5.00%) high severe
+
+Benchmarking encode_with_buffer_bench/radix64/3
+Benchmarking encode_with_buffer_bench/radix64/3: Warming up for 3.0000 s
+Benchmarking encode_with_buffer_bench/radix64/3: Collecting 100 samples in estimated 5.0000 s (745M iterations)
+Benchmarking encode_with_buffer_bench/radix64/3: Analyzing
+encode_with_buffer_bench/radix64/3
+                        time:   [6.7770 ns 6.7944 ns 6.8153 ns]
+                        thrpt:  [419.79 MiB/s 421.08 MiB/s 422.17 MiB/s]
+Found 12 outliers among 100 measurements (12.00%)
+  6 (6.00%) high mild
+  6 (6.00%) high severe
+Benchmarking encode_with_buffer_bench/radix64/32
+Benchmarking encode_with_buffer_bench/radix64/32: Warming up for 3.0000 s
+Benchmarking encode_with_buffer_bench/radix64/32: Collecting 100 samples in estimated 5.0000 s (334M iterations)
+Benchmarking encode_with_buffer_bench/radix64/32: Analyzing
+encode_with_buffer_bench/radix64/32
+                        time:   [14.934 ns 14.984 ns 15.051 ns]
+                        thrpt:  [1.9801 GiB/s 1.9890 GiB/s 1.9956 GiB/s]
+Found 18 outliers among 100 measurements (18.00%)
+  1 (1.00%) low mild
+  4 (4.00%) high mild
+  13 (13.00%) high severe
+Benchmarking encode_with_buffer_bench/radix64/64
+Benchmarking encode_with_buffer_bench/radix64/64: Warming up for 3.0000 s
+Benchmarking encode_with_buffer_bench/radix64/64: Collecting 100 samples in estimated 5.0000 s (204M iterations)
+Benchmarking encode_with_buffer_bench/radix64/64: Analyzing
+encode_with_buffer_bench/radix64/64
+                        time:   [24.646 ns 24.740 ns 24.844 ns]
+                        thrpt:  [2.3992 GiB/s 2.4092 GiB/s 2.4184 GiB/s]
+Found 12 outliers among 100 measurements (12.00%)
+  3 (3.00%) high mild
+  9 (9.00%) high severe
+Benchmarking encode_with_buffer_bench/radix64/128
+Benchmarking encode_with_buffer_bench/radix64/128: Warming up for 3.0000 s
+Benchmarking encode_with_buffer_bench/radix64/128: Collecting 100 samples in estimated 5.0000 s (175M iterations)
+Benchmarking encode_with_buffer_bench/radix64/128: Analyzing
+encode_with_buffer_bench/radix64/128
+                        time:   [28.354 ns 28.447 ns 28.561 ns]
+                        thrpt:  [4.1738 GiB/s 4.1905 GiB/s 4.2043 GiB/s]
+Found 12 outliers among 100 measurements (12.00%)
+  3 (3.00%) high mild
+  9 (9.00%) high severe
+Benchmarking encode_with_buffer_bench/radix64/512
+Benchmarking encode_with_buffer_bench/radix64/512: Warming up for 3.0000 s
+Benchmarking encode_with_buffer_bench/radix64/512: Collecting 100 samples in estimated 5.0004 s (60M iterations)
+Benchmarking encode_with_buffer_bench/radix64/512: Analyzing
+encode_with_buffer_bench/radix64/512
+                        time:   [82.939 ns 83.185 ns 83.559 ns]
+                        thrpt:  [5.7066 GiB/s 5.7322 GiB/s 5.7492 GiB/s]
+Found 10 outliers among 100 measurements (10.00%)
+  4 (4.00%) low mild
+  4 (4.00%) high mild
+  2 (2.00%) high severe
+Benchmarking encode_with_buffer_bench/radix64/4096
+Benchmarking encode_with_buffer_bench/radix64/4096: Warming up for 3.0000 s
+Benchmarking encode_with_buffer_bench/radix64/4096: Collecting 100 samples in estimated 5.0012 s (8.1M iterations)
+Benchmarking encode_with_buffer_bench/radix64/4096: Analyzing
+encode_with_buffer_bench/radix64/4096
+                        time:   [615.55 ns 617.13 ns 618.83 ns]
+                        thrpt:  [6.1644 GiB/s 6.1813 GiB/s 6.1972 GiB/s]
+Found 4 outliers among 100 measurements (4.00%)
+  3 (3.00%) high mild
+  1 (1.00%) high severe
+Benchmarking encode_with_buffer_bench/radix64/8192
+Benchmarking encode_with_buffer_bench/radix64/8192: Warming up for 3.0000 s
+Benchmarking encode_with_buffer_bench/radix64/8192: Collecting 100 samples in estimated 5.0041 s (4.2M iterations)
+Benchmarking encode_with_buffer_bench/radix64/8192: Analyzing
+encode_with_buffer_bench/radix64/8192
+                        time:   [1.1897 us 1.1921 us 1.1947 us]
+                        thrpt:  [6.3859 GiB/s 6.4001 GiB/s 6.4127 GiB/s]
+Found 5 outliers among 100 measurements (5.00%)
+  2 (2.00%) high mild
+  3 (3.00%) high severe
+Benchmarking encode_with_buffer_bench/base64/3
+Benchmarking encode_with_buffer_bench/base64/3: Warming up for 3.0000 s
+Benchmarking encode_with_buffer_bench/base64/3: Collecting 100 samples in estimated 5.0001 s (191M iterations)
+Benchmarking encode_with_buffer_bench/base64/3: Analyzing
+encode_with_buffer_bench/base64/3
+                        time:   [25.812 ns 25.935 ns 26.059 ns]
+                        thrpt:  [109.79 MiB/s 110.31 MiB/s 110.84 MiB/s]
+Found 2 outliers among 100 measurements (2.00%)
+  1 (1.00%) high mild
+  1 (1.00%) high severe
+Benchmarking encode_with_buffer_bench/base64/32
+Benchmarking encode_with_buffer_bench/base64/32: Warming up for 3.0000 s
+Benchmarking encode_with_buffer_bench/base64/32: Collecting 100 samples in estimated 5.0002 s (111M iterations)
+Benchmarking encode_with_buffer_bench/base64/32: Analyzing
+encode_with_buffer_bench/base64/32
+                        time:   [44.734 ns 44.838 ns 44.953 ns]
+                        thrpt:  [678.88 MiB/s 680.61 MiB/s 682.20 MiB/s]
+Found 9 outliers among 100 measurements (9.00%)
+  2 (2.00%) low mild
+  2 (2.00%) high mild
+  5 (5.00%) high severe
+Benchmarking encode_with_buffer_bench/base64/64
+Benchmarking encode_with_buffer_bench/base64/64: Warming up for 3.0000 s
+Benchmarking encode_with_buffer_bench/base64/64: Collecting 100 samples in estimated 5.0001 s (84M iterations)
+Benchmarking encode_with_buffer_bench/base64/64: Analyzing
+encode_with_buffer_bench/base64/64
+                        time:   [59.853 ns 60.160 ns 60.498 ns]
+                        thrpt:  [1008.9 MiB/s 1014.6 MiB/s 1019.8 MiB/s]
+Found 14 outliers among 100 measurements (14.00%)
+  7 (7.00%) high mild
+  7 (7.00%) high severe
+Benchmarking encode_with_buffer_bench/base64/128
+Benchmarking encode_with_buffer_bench/base64/128: Warming up for 3.0000 s
+Benchmarking encode_with_buffer_bench/base64/128: Collecting 100 samples in estimated 5.0003 s (54M iterations)
+Benchmarking encode_with_buffer_bench/base64/128: Analyzing
+encode_with_buffer_bench/base64/128
+                        time:   [86.476 ns 86.919 ns 87.555 ns]
+                        thrpt:  [1.3615 GiB/s 1.3715 GiB/s 1.3785 GiB/s]
+Found 7 outliers among 100 measurements (7.00%)
+  2 (2.00%) high mild
+  5 (5.00%) high severe
+Benchmarking encode_with_buffer_bench/base64/512
+Benchmarking encode_with_buffer_bench/base64/512: Warming up for 3.0000 s
+Benchmarking encode_with_buffer_bench/base64/512: Collecting 100 samples in estimated 5.0010 s (19M iterations)
+Benchmarking encode_with_buffer_bench/base64/512: Analyzing
+encode_with_buffer_bench/base64/512
+                        time:   [261.65 ns 264.91 ns 269.10 ns]
+                        thrpt:  [1.7719 GiB/s 1.8000 GiB/s 1.8224 GiB/s]
+Found 14 outliers among 100 measurements (14.00%)
+  4 (4.00%) high mild
+  10 (10.00%) high severe
+Benchmarking encode_with_buffer_bench/base64/4096
+Benchmarking encode_with_buffer_bench/base64/4096: Warming up for 3.0000 s
+Benchmarking encode_with_buffer_bench/base64/4096: Collecting 100 samples in estimated 5.0047 s (2.6M iterations)
+Benchmarking encode_with_buffer_bench/base64/4096: Analyzing
+encode_with_buffer_bench/base64/4096
+                        time:   [1.9561 us 1.9657 us 1.9763 us]
+                        thrpt:  [1.9302 GiB/s 1.9407 GiB/s 1.9501 GiB/s]
+Found 14 outliers among 100 measurements (14.00%)
+  5 (5.00%) high mild
+  9 (9.00%) high severe
+Benchmarking encode_with_buffer_bench/base64/8192
+Benchmarking encode_with_buffer_bench/base64/8192: Warming up for 3.0000 s
+Benchmarking encode_with_buffer_bench/base64/8192: Collecting 100 samples in estimated 5.0018 s (1.3M iterations)
+Benchmarking encode_with_buffer_bench/base64/8192: Analyzing
+encode_with_buffer_bench/base64/8192
+                        time:   [3.8879 us 3.8948 us 3.9032 us]
+                        thrpt:  [1.9547 GiB/s 1.9588 GiB/s 1.9623 GiB/s]
+Found 15 outliers among 100 measurements (15.00%)
+  8 (8.00%) high mild
+  7 (7.00%) high severe
+
+Benchmarking encode_writer_bench/radix64/3
+Benchmarking encode_writer_bench/radix64/3: Warming up for 3.0000 s
+Benchmarking encode_writer_bench/radix64/3: Collecting 100 samples in estimated 5.0001 s (136M iterations)
+Benchmarking encode_writer_bench/radix64/3: Analyzing
+encode_writer_bench/radix64/3
+                        time:   [34.430 ns 34.700 ns 35.063 ns]
+                        thrpt:  [81.597 MiB/s 82.451 MiB/s 83.097 MiB/s]
+Found 15 outliers among 100 measurements (15.00%)
+  7 (7.00%) high mild
+  8 (8.00%) high severe
+Benchmarking encode_writer_bench/radix64/32
+Benchmarking encode_writer_bench/radix64/32: Warming up for 3.0000 s
+Benchmarking encode_writer_bench/radix64/32: Collecting 100 samples in estimated 5.0002 s (106M iterations)
+Benchmarking encode_writer_bench/radix64/32: Analyzing
+encode_writer_bench/radix64/32
+                        time:   [43.751 ns 44.069 ns 44.496 ns]
+                        thrpt:  [685.85 MiB/s 692.50 MiB/s 697.52 MiB/s]
+Found 13 outliers among 100 measurements (13.00%)
+  3 (3.00%) high mild
+  10 (10.00%) high severe
+Benchmarking encode_writer_bench/radix64/64
+Benchmarking encode_writer_bench/radix64/64: Warming up for 3.0000 s
+Benchmarking encode_writer_bench/radix64/64: Collecting 100 samples in estimated 5.0002 s (86M iterations)
+Benchmarking encode_writer_bench/radix64/64: Analyzing
+encode_writer_bench/radix64/64
+                        time:   [58.384 ns 58.607 ns 58.876 ns]
+                        thrpt:  [1.0124 GiB/s 1.0170 GiB/s 1.0209 GiB/s]
+Found 9 outliers among 100 measurements (9.00%)
+  4 (4.00%) high mild
+  5 (5.00%) high severe
+Benchmarking encode_writer_bench/radix64/128
+Benchmarking encode_writer_bench/radix64/128: Warming up for 3.0000 s
+Benchmarking encode_writer_bench/radix64/128: Collecting 100 samples in estimated 5.0003 s (83M iterations)
+Benchmarking encode_writer_bench/radix64/128: Analyzing
+encode_writer_bench/radix64/128
+                        time:   [57.330 ns 57.480 ns 57.653 ns]
+                        thrpt:  [2.0677 GiB/s 2.0739 GiB/s 2.0794 GiB/s]
+Found 12 outliers among 100 measurements (12.00%)
+  6 (6.00%) high mild
+  6 (6.00%) high severe
+Benchmarking encode_writer_bench/radix64/512
+Benchmarking encode_writer_bench/radix64/512: Warming up for 3.0000 s
+Benchmarking encode_writer_bench/radix64/512: Collecting 100 samples in estimated 5.0003 s (41M iterations)
+Benchmarking encode_writer_bench/radix64/512: Analyzing
+encode_writer_bench/radix64/512
+                        time:   [119.76 ns 120.14 ns 120.57 ns]
+                        thrpt:  [3.9547 GiB/s 3.9691 GiB/s 3.9815 GiB/s]
+Found 6 outliers among 100 measurements (6.00%)
+  5 (5.00%) high mild
+  1 (1.00%) high severe
+Benchmarking encode_writer_bench/radix64/4096
+Benchmarking encode_writer_bench/radix64/4096: Warming up for 3.0000 s
+Benchmarking encode_writer_bench/radix64/4096: Collecting 100 samples in estimated 5.0022 s (6.7M iterations)
+Benchmarking encode_writer_bench/radix64/4096: Analyzing
+encode_writer_bench/radix64/4096
+                        time:   [738.18 ns 743.64 ns 752.43 ns]
+                        thrpt:  [5.0699 GiB/s 5.1297 GiB/s 5.1677 GiB/s]
+Found 13 outliers among 100 measurements (13.00%)
+  2 (2.00%) low mild
+  4 (4.00%) high mild
+  7 (7.00%) high severe
+Benchmarking encode_writer_bench/radix64/8192
+Benchmarking encode_writer_bench/radix64/8192: Warming up for 3.0000 s
+Benchmarking encode_writer_bench/radix64/8192: Collecting 100 samples in estimated 5.0046 s (3.4M iterations)
+Benchmarking encode_writer_bench/radix64/8192: Analyzing
+encode_writer_bench/radix64/8192
+                        time:   [1.4305 us 1.4461 us 1.4669 us]
+                        thrpt:  [5.2011 GiB/s 5.2760 GiB/s 5.3334 GiB/s]
+Found 10 outliers among 100 measurements (10.00%)
+  5 (5.00%) high mild
+  5 (5.00%) high severe
+Benchmarking encode_writer_bench/base64/3
+Benchmarking encode_writer_bench/base64/3: Warming up for 3.0000 s
+Benchmarking encode_writer_bench/base64/3: Collecting 100 samples in estimated 5.0000 s (191M iterations)
+Benchmarking encode_writer_bench/base64/3: Analyzing
+encode_writer_bench/base64/3
+                        time:   [26.215 ns 26.304 ns 26.399 ns]
+                        thrpt:  [108.37 MiB/s 108.77 MiB/s 109.14 MiB/s]
+Found 3 outliers among 100 measurements (3.00%)
+  2 (2.00%) high mild
+  1 (1.00%) high severe
+Benchmarking encode_writer_bench/base64/32
+Benchmarking encode_writer_bench/base64/32: Warming up for 3.0000 s
+Benchmarking encode_writer_bench/base64/32: Collecting 100 samples in estimated 5.0001 s (96M iterations)
+Benchmarking encode_writer_bench/base64/32: Analyzing
+encode_writer_bench/base64/32
+                        time:   [52.348 ns 53.514 ns 54.859 ns]
+                        thrpt:  [556.30 MiB/s 570.28 MiB/s 582.98 MiB/s]
+Found 7 outliers among 100 measurements (7.00%)
+  7 (7.00%) high severe
+Benchmarking encode_writer_bench/base64/64
+Benchmarking encode_writer_bench/base64/64: Warming up for 3.0000 s
+Benchmarking encode_writer_bench/base64/64: Collecting 100 samples in estimated 5.0003 s (74M iterations)
+Benchmarking encode_writer_bench/base64/64: Analyzing
+encode_writer_bench/base64/64
+                        time:   [65.994 ns 66.186 ns 66.414 ns]
+                        thrpt:  [919.01 MiB/s 922.17 MiB/s 924.85 MiB/s]
+Found 9 outliers among 100 measurements (9.00%)
+  4 (4.00%) high mild
+  5 (5.00%) high severe
+Benchmarking encode_writer_bench/base64/128
+Benchmarking encode_writer_bench/base64/128: Warming up for 3.0000 s
+Benchmarking encode_writer_bench/base64/128: Collecting 100 samples in estimated 5.0000 s (54M iterations)
+Benchmarking encode_writer_bench/base64/128: Analyzing
+encode_writer_bench/base64/128
+                        time:   [91.433 ns 92.191 ns 93.314 ns]
+                        thrpt:  [1.2775 GiB/s 1.2931 GiB/s 1.3038 GiB/s]
+Found 12 outliers among 100 measurements (12.00%)
+  3 (3.00%) high mild
+  9 (9.00%) high severe
+Benchmarking encode_writer_bench/base64/512
+Benchmarking encode_writer_bench/base64/512: Warming up for 3.0000 s
+Benchmarking encode_writer_bench/base64/512: Collecting 100 samples in estimated 5.0011 s (20M iterations)
+Benchmarking encode_writer_bench/base64/512: Analyzing
+encode_writer_bench/base64/512
+                        time:   [252.33 ns 253.01 ns 253.82 ns]
+                        thrpt:  [1.8786 GiB/s 1.8847 GiB/s 1.8897 GiB/s]
+Found 11 outliers among 100 measurements (11.00%)
+  5 (5.00%) high mild
+  6 (6.00%) high severe
+Benchmarking encode_writer_bench/base64/4096
+Benchmarking encode_writer_bench/base64/4096: Warming up for 3.0000 s
+Benchmarking encode_writer_bench/base64/4096: Collecting 100 samples in estimated 5.0004 s (2.7M iterations)
+Benchmarking encode_writer_bench/base64/4096: Analyzing
+encode_writer_bench/base64/4096
+                        time:   [1.8200 us 1.8247 us 1.8300 us]
+                        thrpt:  [2.0846 GiB/s 2.0906 GiB/s 2.0960 GiB/s]
+Found 11 outliers among 100 measurements (11.00%)
+  7 (7.00%) high mild
+  4 (4.00%) high severe
+Benchmarking encode_writer_bench/base64/8192
+Benchmarking encode_writer_bench/base64/8192: Warming up for 3.0000 s
+Benchmarking encode_writer_bench/base64/8192: Collecting 100 samples in estimated 5.0047 s (1.4M iterations)
+Benchmarking encode_writer_bench/base64/8192: Analyzing
+encode_writer_bench/base64/8192
+                        time:   [3.6817 us 3.7083 us 3.7413 us]
+                        thrpt:  [2.0392 GiB/s 2.0574 GiB/s 2.0722 GiB/s]
+Found 8 outliers among 100 measurements (8.00%)
+  2 (2.00%) high mild
+  6 (6.00%) high severe
+
+Benchmarking decode_bench/radix64/3
+Benchmarking decode_bench/radix64/3: Warming up for 3.0000 s
+Benchmarking decode_bench/radix64/3: Collecting 100 samples in estimated 5.0001 s (199M iterations)
+Benchmarking decode_bench/radix64/3: Analyzing
+decode_bench/radix64/3  time:   [24.943 ns 25.064 ns 25.223 ns]
+                        thrpt:  [113.43 MiB/s 114.15 MiB/s 114.70 MiB/s]
+Found 13 outliers among 100 measurements (13.00%)
+  5 (5.00%) high mild
+  8 (8.00%) high severe
+Benchmarking decode_bench/radix64/32
+Benchmarking decode_bench/radix64/32: Warming up for 3.0000 s
+Benchmarking decode_bench/radix64/32: Collecting 100 samples in estimated 5.0001 s (142M iterations)
+Benchmarking decode_bench/radix64/32: Analyzing
+decode_bench/radix64/32 time:   [34.994 ns 35.424 ns 35.947 ns]
+                        thrpt:  [848.97 MiB/s 861.50 MiB/s 872.08 MiB/s]
+Found 10 outliers among 100 measurements (10.00%)
+  3 (3.00%) high mild
+  7 (7.00%) high severe
+Benchmarking decode_bench/radix64/64
+Benchmarking decode_bench/radix64/64: Warming up for 3.0000 s
+Benchmarking decode_bench/radix64/64: Collecting 100 samples in estimated 5.0000 s (107M iterations)
+Benchmarking decode_bench/radix64/64: Analyzing
+decode_bench/radix64/64 time:   [45.526 ns 45.883 ns 46.288 ns]
+                        thrpt:  [1.2877 GiB/s 1.2991 GiB/s 1.3092 GiB/s]
+Found 17 outliers among 100 measurements (17.00%)
+  3 (3.00%) high mild
+  14 (14.00%) high severe
+Benchmarking decode_bench/radix64/128
+Benchmarking decode_bench/radix64/128: Warming up for 3.0000 s
+Benchmarking decode_bench/radix64/128: Collecting 100 samples in estimated 5.0001 s (100M iterations)
+Benchmarking decode_bench/radix64/128: Analyzing
+decode_bench/radix64/128
+                        time:   [49.002 ns 49.314 ns 49.759 ns]
+                        thrpt:  [2.3957 GiB/s 2.4174 GiB/s 2.4327 GiB/s]
+Found 12 outliers among 100 measurements (12.00%)
+  2 (2.00%) high mild
+  10 (10.00%) high severe
+Benchmarking decode_bench/radix64/512
+Benchmarking decode_bench/radix64/512: Warming up for 3.0000 s
+Benchmarking decode_bench/radix64/512: Collecting 100 samples in estimated 5.0004 s (49M iterations)
+Benchmarking decode_bench/radix64/512: Analyzing
+decode_bench/radix64/512
+                        time:   [102.71 ns 104.38 ns 106.47 ns]
+                        thrpt:  [4.4787 GiB/s 4.5682 GiB/s 4.6423 GiB/s]
+Found 15 outliers among 100 measurements (15.00%)
+  4 (4.00%) high mild
+  11 (11.00%) high severe
+Benchmarking decode_bench/radix64/4096
+Benchmarking decode_bench/radix64/4096: Warming up for 3.0000 s
+Benchmarking decode_bench/radix64/4096: Collecting 100 samples in estimated 5.0023 s (6.9M iterations)
+Benchmarking decode_bench/radix64/4096: Analyzing
+decode_bench/radix64/4096
+                        time:   [727.49 ns 734.78 ns 744.41 ns]
+                        thrpt:  [5.1244 GiB/s 5.1916 GiB/s 5.2437 GiB/s]
+Found 14 outliers among 100 measurements (14.00%)
+  2 (2.00%) high mild
+  12 (12.00%) high severe
+Benchmarking decode_bench/radix64/8192
+Benchmarking decode_bench/radix64/8192: Warming up for 3.0000 s
+Benchmarking decode_bench/radix64/8192: Collecting 100 samples in estimated 5.0023 s (3.7M iterations)
+Benchmarking decode_bench/radix64/8192: Analyzing
+decode_bench/radix64/8192
+                        time:   [1.4815 us 1.4923 us 1.5063 us]
+                        thrpt:  [5.0651 GiB/s 5.1125 GiB/s 5.1499 GiB/s]
+Found 15 outliers among 100 measurements (15.00%)
+  1 (1.00%) low mild
+  6 (6.00%) high mild
+  8 (8.00%) high severe
+Benchmarking decode_bench/base64/3
+Benchmarking decode_bench/base64/3: Warming up for 3.0000 s
+Benchmarking decode_bench/base64/3: Collecting 100 samples in estimated 5.0003 s (82M iterations)
+Benchmarking decode_bench/base64/3: Analyzing
+decode_bench/base64/3   time:   [60.191 ns 63.770 ns 69.312 ns]
+                        thrpt:  [41.278 MiB/s 44.864 MiB/s 47.533 MiB/s]
+Found 21 outliers among 100 measurements (21.00%)
+  1 (1.00%) high mild
+  20 (20.00%) high severe
+Benchmarking decode_bench/base64/32
+Benchmarking decode_bench/base64/32: Warming up for 3.0000 s
+Benchmarking decode_bench/base64/32: Collecting 100 samples in estimated 5.0001 s (91M iterations)
+Benchmarking decode_bench/base64/32: Analyzing
+decode_bench/base64/32  time:   [54.622 ns 55.061 ns 55.707 ns]
+                        thrpt:  [547.83 MiB/s 554.25 MiB/s 558.71 MiB/s]
+Found 7 outliers among 100 measurements (7.00%)
+  3 (3.00%) high mild
+  4 (4.00%) high severe
+Benchmarking decode_bench/base64/64
+Benchmarking decode_bench/base64/64: Warming up for 3.0000 s
+Benchmarking decode_bench/base64/64: Collecting 100 samples in estimated 5.0000 s (64M iterations)
+Benchmarking decode_bench/base64/64: Analyzing
+decode_bench/base64/64  time:   [78.345 ns 78.482 ns 78.657 ns]
+                        thrpt:  [775.97 MiB/s 777.70 MiB/s 779.05 MiB/s]
+Found 11 outliers among 100 measurements (11.00%)
+  1 (1.00%) low mild
+  3 (3.00%) high mild
+  7 (7.00%) high severe
+Benchmarking decode_bench/base64/128
+Benchmarking decode_bench/base64/128: Warming up for 3.0000 s
+Benchmarking decode_bench/base64/128: Collecting 100 samples in estimated 5.0004 s (48M iterations)
+Benchmarking decode_bench/base64/128: Analyzing
+decode_bench/base64/128 time:   [104.43 ns 104.76 ns 105.13 ns]
+                        thrpt:  [1.1340 GiB/s 1.1380 GiB/s 1.1415 GiB/s]
+Found 12 outliers among 100 measurements (12.00%)
+  1 (1.00%) low mild
+  1 (1.00%) high mild
+  10 (10.00%) high severe
+Benchmarking decode_bench/base64/512
+Benchmarking decode_bench/base64/512: Warming up for 3.0000 s
+Benchmarking decode_bench/base64/512: Collecting 100 samples in estimated 5.0009 s (17M iterations)
+Benchmarking decode_bench/base64/512: Analyzing
+decode_bench/base64/512 time:   [298.32 ns 299.27 ns 300.40 ns]
+                        thrpt:  [1.5874 GiB/s 1.5933 GiB/s 1.5984 GiB/s]
+Found 16 outliers among 100 measurements (16.00%)
+  4 (4.00%) high mild
+  12 (12.00%) high severe
+Benchmarking decode_bench/base64/4096
+Benchmarking decode_bench/base64/4096: Warming up for 3.0000 s
+Benchmarking decode_bench/base64/4096: Collecting 100 samples in estimated 5.0071 s (2.3M iterations)
+Benchmarking decode_bench/base64/4096: Analyzing
+decode_bench/base64/4096
+                        time:   [2.2259 us 2.2428 us 2.2628 us]
+                        thrpt:  [1.6858 GiB/s 1.7009 GiB/s 1.7138 GiB/s]
+Found 17 outliers among 100 measurements (17.00%)
+  5 (5.00%) high mild
+  12 (12.00%) high severe
+Benchmarking decode_bench/base64/8192
+Benchmarking decode_bench/base64/8192: Warming up for 3.0000 s
+Benchmarking decode_bench/base64/8192: Collecting 100 samples in estimated 5.0209 s (1.2M iterations)
+Benchmarking decode_bench/base64/8192: Analyzing
+decode_bench/base64/8192
+                        time:   [4.2324 us 4.2415 us 4.2529 us]
+                        thrpt:  [1.7939 GiB/s 1.7987 GiB/s 1.8026 GiB/s]
+Found 15 outliers among 100 measurements (15.00%)
+  7 (7.00%) high mild
+  8 (8.00%) high severe
+
+Benchmarking decode_slice_bench/radix64/3
+Benchmarking decode_slice_bench/radix64/3: Warming up for 3.0000 s
+Benchmarking decode_slice_bench/radix64/3: Collecting 100 samples in estimated 5.0000 s (531M iterations)
+Benchmarking decode_slice_bench/radix64/3: Analyzing
+decode_slice_bench/radix64/3
+                        time:   [9.3938 ns 9.4083 ns 9.4258 ns]
+                        thrpt:  [303.53 MiB/s 304.10 MiB/s 304.57 MiB/s]
+Found 13 outliers among 100 measurements (13.00%)
+  2 (2.00%) low mild
+  4 (4.00%) high mild
+  7 (7.00%) high severe
+Benchmarking decode_slice_bench/radix64/32
+Benchmarking decode_slice_bench/radix64/32: Warming up for 3.0000 s
+Benchmarking decode_slice_bench/radix64/32: Collecting 100 samples in estimated 5.0000 s (262M iterations)
+Benchmarking decode_slice_bench/radix64/32: Analyzing
+decode_slice_bench/radix64/32
+                        time:   [19.077 ns 19.221 ns 19.435 ns]
+                        thrpt:  [1.5334 GiB/s 1.5505 GiB/s 1.5622 GiB/s]
+Found 15 outliers among 100 measurements (15.00%)
+  3 (3.00%) low mild
+  5 (5.00%) high mild
+  7 (7.00%) high severe
+Benchmarking decode_slice_bench/radix64/64
+Benchmarking decode_slice_bench/radix64/64: Warming up for 3.0000 s
+Benchmarking decode_slice_bench/radix64/64: Collecting 100 samples in estimated 5.0000 s (175M iterations)
+Benchmarking decode_slice_bench/radix64/64: Analyzing
+decode_slice_bench/radix64/64
+                        time:   [28.183 ns 28.310 ns 28.524 ns]
+                        thrpt:  [2.0896 GiB/s 2.1054 GiB/s 2.1149 GiB/s]
+Found 13 outliers among 100 measurements (13.00%)
+  1 (1.00%) low mild
+  5 (5.00%) high mild
+  7 (7.00%) high severe
+Benchmarking decode_slice_bench/radix64/128
+Benchmarking decode_slice_bench/radix64/128: Warming up for 3.0000 s
+Benchmarking decode_slice_bench/radix64/128: Collecting 100 samples in estimated 5.0002 s (158M iterations)
+Benchmarking decode_slice_bench/radix64/128: Analyzing
+decode_slice_bench/radix64/128
+                        time:   [31.204 ns 31.534 ns 31.863 ns]
+                        thrpt:  [3.7412 GiB/s 3.7804 GiB/s 3.8203 GiB/s]
+Benchmarking decode_slice_bench/radix64/512
+Benchmarking decode_slice_bench/radix64/512: Warming up for 3.0000 s
+Benchmarking decode_slice_bench/radix64/512: Collecting 100 samples in estimated 5.0001 s (71M iterations)
+Benchmarking decode_slice_bench/radix64/512: Analyzing
+decode_slice_bench/radix64/512
+                        time:   [70.435 ns 70.787 ns 71.198 ns]
+                        thrpt:  [6.6974 GiB/s 6.7362 GiB/s 6.7699 GiB/s]
+Found 10 outliers among 100 measurements (10.00%)
+  4 (4.00%) high mild
+  6 (6.00%) high severe
+Benchmarking decode_slice_bench/radix64/4096
+Benchmarking decode_slice_bench/radix64/4096: Warming up for 3.0000 s
+Benchmarking decode_slice_bench/radix64/4096: Collecting 100 samples in estimated 5.0000 s (10M iterations)
+Benchmarking decode_slice_bench/radix64/4096: Analyzing
+decode_slice_bench/radix64/4096
+                        time:   [477.76 ns 480.60 ns 484.07 ns]
+                        thrpt:  [7.8805 GiB/s 7.9373 GiB/s 7.9846 GiB/s]
+Found 14 outliers among 100 measurements (14.00%)
+  2 (2.00%) high mild
+  12 (12.00%) high severe
+Benchmarking decode_slice_bench/radix64/8192
+Benchmarking decode_slice_bench/radix64/8192: Warming up for 3.0000 s
+Benchmarking decode_slice_bench/radix64/8192: Collecting 100 samples in estimated 5.0009 s (5.1M iterations)
+Benchmarking decode_slice_bench/radix64/8192: Analyzing
+decode_slice_bench/radix64/8192
+                        time:   [976.32 ns 978.58 ns 981.13 ns]
+                        thrpt:  [7.7761 GiB/s 7.7964 GiB/s 7.8144 GiB/s]
+Found 5 outliers among 100 measurements (5.00%)
+  5 (5.00%) high mild
+Benchmarking decode_slice_bench/base64/3
+Benchmarking decode_slice_bench/base64/3: Warming up for 3.0000 s
+Benchmarking decode_slice_bench/base64/3: Collecting 100 samples in estimated 5.0000 s (310M iterations)
+Benchmarking decode_slice_bench/base64/3: Analyzing
+decode_slice_bench/base64/3
+                        time:   [16.076 ns 16.113 ns 16.158 ns]
+                        thrpt:  [177.07 MiB/s 177.56 MiB/s 177.97 MiB/s]
+Found 13 outliers among 100 measurements (13.00%)
+  2 (2.00%) high mild
+  11 (11.00%) high severe
+Benchmarking decode_slice_bench/base64/32
+Benchmarking decode_slice_bench/base64/32: Warming up for 3.0000 s
+Benchmarking decode_slice_bench/base64/32: Collecting 100 samples in estimated 5.0001 s (158M iterations)
+Benchmarking decode_slice_bench/base64/32: Analyzing
+decode_slice_bench/base64/32
+                        time:   [31.628 ns 31.801 ns 32.004 ns]
+                        thrpt:  [953.55 MiB/s 959.65 MiB/s 964.90 MiB/s]
+Found 17 outliers among 100 measurements (17.00%)
+  4 (4.00%) high mild
+  13 (13.00%) high severe
+Benchmarking decode_slice_bench/base64/64
+Benchmarking decode_slice_bench/base64/64: Warming up for 3.0000 s
+Benchmarking decode_slice_bench/base64/64: Collecting 100 samples in estimated 5.0001 s (94M iterations)
+Benchmarking decode_slice_bench/base64/64: Analyzing
+decode_slice_bench/base64/64
+                        time:   [52.929 ns 53.596 ns 54.387 ns]
+                        thrpt:  [1.0959 GiB/s 1.1121 GiB/s 1.1261 GiB/s]
+Found 15 outliers among 100 measurements (15.00%)
+  6 (6.00%) high mild
+  9 (9.00%) high severe
+Benchmarking decode_slice_bench/base64/128
+Benchmarking decode_slice_bench/base64/128: Warming up for 3.0000 s
+Benchmarking decode_slice_bench/base64/128: Collecting 100 samples in estimated 5.0001 s (65M iterations)
+Benchmarking decode_slice_bench/base64/128: Analyzing
+decode_slice_bench/base64/128
+                        time:   [76.191 ns 76.591 ns 77.071 ns]
+                        thrpt:  [1.5467 GiB/s 1.5564 GiB/s 1.5646 GiB/s]
+Found 13 outliers among 100 measurements (13.00%)
+  4 (4.00%) high mild
+  9 (9.00%) high severe
+Benchmarking decode_slice_bench/base64/512
+Benchmarking decode_slice_bench/base64/512: Warming up for 3.0000 s
+Benchmarking decode_slice_bench/base64/512: Collecting 100 samples in estimated 5.0011 s (20M iterations)
+Benchmarking decode_slice_bench/base64/512: Analyzing
+decode_slice_bench/base64/512
+                        time:   [253.91 ns 254.26 ns 254.67 ns]
+                        thrpt:  [1.8724 GiB/s 1.8754 GiB/s 1.8780 GiB/s]
+Found 9 outliers among 100 measurements (9.00%)
+  1 (1.00%) low mild
+  5 (5.00%) high mild
+  3 (3.00%) high severe
+Benchmarking decode_slice_bench/base64/4096
+Benchmarking decode_slice_bench/base64/4096: Warming up for 3.0000 s
+Benchmarking decode_slice_bench/base64/4096: Collecting 100 samples in estimated 5.0066 s (2.6M iterations)
+Benchmarking decode_slice_bench/base64/4096: Analyzing
+decode_slice_bench/base64/4096
+                        time:   [1.9448 us 1.9584 us 1.9762 us]
+                        thrpt:  [1.9303 GiB/s 1.9478 GiB/s 1.9615 GiB/s]
+Found 19 outliers among 100 measurements (19.00%)
+  2 (2.00%) high mild
+  17 (17.00%) high severe
+Benchmarking decode_slice_bench/base64/8192
+Benchmarking decode_slice_bench/base64/8192: Warming up for 3.0000 s
+Benchmarking decode_slice_bench/base64/8192: Collecting 100 samples in estimated 5.0087 s (1.3M iterations)
+Benchmarking decode_slice_bench/base64/8192: Analyzing
+decode_slice_bench/base64/8192
+                        time:   [3.8362 us 3.8408 us 3.8463 us]
+                        thrpt:  [1.9835 GiB/s 1.9864 GiB/s 1.9888 GiB/s]
+Found 10 outliers among 100 measurements (10.00%)
+  1 (1.00%) low mild
+  4 (4.00%) high mild
+  5 (5.00%) high severe
+
+Benchmarking decode_with_buffer_bench/radix64/3
+Benchmarking decode_with_buffer_bench/radix64/3: Warming up for 3.0000 s
+Benchmarking decode_with_buffer_bench/radix64/3: Collecting 100 samples in estimated 5.0000 s (502M iterations)
+Benchmarking decode_with_buffer_bench/radix64/3: Analyzing
+decode_with_buffer_bench/radix64/3
+                        time:   [9.9223 ns 9.9417 ns 9.9627 ns]
+                        thrpt:  [287.17 MiB/s 287.78 MiB/s 288.34 MiB/s]
+Found 4 outliers among 100 measurements (4.00%)
+  4 (4.00%) high mild
+Benchmarking decode_with_buffer_bench/radix64/32
+Benchmarking decode_with_buffer_bench/radix64/32: Warming up for 3.0000 s
+Benchmarking decode_with_buffer_bench/radix64/32: Collecting 100 samples in estimated 5.0000 s (257M iterations)
+Benchmarking decode_with_buffer_bench/radix64/32: Analyzing
+decode_with_buffer_bench/radix64/32
+                        time:   [19.413 ns 19.530 ns 19.673 ns]
+                        thrpt:  [1.5149 GiB/s 1.5260 GiB/s 1.5352 GiB/s]
+Found 13 outliers among 100 measurements (13.00%)
+  13 (13.00%) high mild
+Benchmarking decode_with_buffer_bench/radix64/64
+Benchmarking decode_with_buffer_bench/radix64/64: Warming up for 3.0000 s
+Benchmarking decode_with_buffer_bench/radix64/64: Collecting 100 samples in estimated 5.0001 s (170M iterations)
+Benchmarking decode_with_buffer_bench/radix64/64: Analyzing
+decode_with_buffer_bench/radix64/64
+                        time:   [28.751 ns 28.862 ns 28.982 ns]
+                        thrpt:  [2.0566 GiB/s 2.0652 GiB/s 2.0731 GiB/s]
+Found 18 outliers among 100 measurements (18.00%)
+  9 (9.00%) high mild
+  9 (9.00%) high severe
+Benchmarking decode_with_buffer_bench/radix64/128
+Benchmarking decode_with_buffer_bench/radix64/128: Warming up for 3.0000 s
+Benchmarking decode_with_buffer_bench/radix64/128: Collecting 100 samples in estimated 5.0000 s (150M iterations)
+Benchmarking decode_with_buffer_bench/radix64/128: Analyzing
+decode_with_buffer_bench/radix64/128
+                        time:   [31.070 ns 31.551 ns 32.064 ns]
+                        thrpt:  [3.7179 GiB/s 3.7783 GiB/s 3.8368 GiB/s]
+Found 1 outliers among 100 measurements (1.00%)
+  1 (1.00%) high mild
+Benchmarking decode_with_buffer_bench/radix64/512
+Benchmarking decode_with_buffer_bench/radix64/512: Warming up for 3.0000 s
+Benchmarking decode_with_buffer_bench/radix64/512: Collecting 100 samples in estimated 5.0002 s (71M iterations)
+Benchmarking decode_with_buffer_bench/radix64/512: Analyzing
+decode_with_buffer_bench/radix64/512
+                        time:   [70.182 ns 70.381 ns 70.626 ns]
+                        thrpt:  [6.7516 GiB/s 6.7751 GiB/s 6.7943 GiB/s]
+Found 9 outliers among 100 measurements (9.00%)
+  3 (3.00%) high mild
+  6 (6.00%) high severe
+Benchmarking decode_with_buffer_bench/radix64/4096
+Benchmarking decode_with_buffer_bench/radix64/4096: Warming up for 3.0000 s
+Benchmarking decode_with_buffer_bench/radix64/4096: Collecting 100 samples in estimated 5.0001 s (9.7M iterations)
+Benchmarking decode_with_buffer_bench/radix64/4096: Analyzing
+decode_with_buffer_bench/radix64/4096
+                        time:   [516.12 ns 520.85 ns 526.94 ns]
+                        thrpt:  [7.2394 GiB/s 7.3241 GiB/s 7.3912 GiB/s]
+Found 17 outliers among 100 measurements (17.00%)
+  8 (8.00%) high mild
+  9 (9.00%) high severe
+Benchmarking decode_with_buffer_bench/radix64/8192
+Benchmarking decode_with_buffer_bench/radix64/8192: Warming up for 3.0000 s
+Benchmarking decode_with_buffer_bench/radix64/8192: Collecting 100 samples in estimated 5.0014 s (5.1M iterations)
+Benchmarking decode_with_buffer_bench/radix64/8192: Analyzing
+decode_with_buffer_bench/radix64/8192
+                        time:   [980.60 ns 984.06 ns 988.89 ns]
+                        thrpt:  [7.7151 GiB/s 7.7530 GiB/s 7.7803 GiB/s]
+Found 5 outliers among 100 measurements (5.00%)
+  4 (4.00%) high mild
+  1 (1.00%) high severe
+Benchmarking decode_with_buffer_bench/base64/3
+Benchmarking decode_with_buffer_bench/base64/3: Warming up for 3.0000 s
+Benchmarking decode_with_buffer_bench/base64/3: Collecting 100 samples in estimated 5.0001 s (183M iterations)
+Benchmarking decode_with_buffer_bench/base64/3: Analyzing
+decode_with_buffer_bench/base64/3
+                        time:   [27.250 ns 27.295 ns 27.346 ns]
+                        thrpt:  [104.62 MiB/s 104.82 MiB/s 104.99 MiB/s]
+Found 10 outliers among 100 measurements (10.00%)
+  4 (4.00%) high mild
+  6 (6.00%) high severe
+Benchmarking decode_with_buffer_bench/base64/32
+Benchmarking decode_with_buffer_bench/base64/32: Warming up for 3.0000 s
+Benchmarking decode_with_buffer_bench/base64/32: Collecting 100 samples in estimated 5.0002 s (119M iterations)
+Benchmarking decode_with_buffer_bench/base64/32: Analyzing
+decode_with_buffer_bench/base64/32
+                        time:   [41.985 ns 42.063 ns 42.159 ns]
+                        thrpt:  [723.86 MiB/s 725.51 MiB/s 726.88 MiB/s]
+Found 17 outliers among 100 measurements (17.00%)
+  1 (1.00%) low severe
+  6 (6.00%) high mild
+  10 (10.00%) high severe
+Benchmarking decode_with_buffer_bench/base64/64
+Benchmarking decode_with_buffer_bench/base64/64: Warming up for 3.0000 s
+Benchmarking decode_with_buffer_bench/base64/64: Collecting 100 samples in estimated 5.0001 s (76M iterations)
+Benchmarking decode_with_buffer_bench/base64/64: Analyzing
+decode_with_buffer_bench/base64/64
+                        time:   [64.582 ns 64.700 ns 64.839 ns]
+                        thrpt:  [941.33 MiB/s 943.36 MiB/s 945.07 MiB/s]
+Found 10 outliers among 100 measurements (10.00%)
+  2 (2.00%) high mild
+  8 (8.00%) high severe
+Benchmarking decode_with_buffer_bench/base64/128
+Benchmarking decode_with_buffer_bench/base64/128: Warming up for 3.0000 s
+Benchmarking decode_with_buffer_bench/base64/128: Collecting 100 samples in estimated 5.0003 s (54M iterations)
+Benchmarking decode_with_buffer_bench/base64/128: Analyzing
+decode_with_buffer_bench/base64/128
+                        time:   [90.977 ns 91.589 ns 92.241 ns]
+                        thrpt:  [1.2924 GiB/s 1.3016 GiB/s 1.3103 GiB/s]
+Benchmarking decode_with_buffer_bench/base64/512
+Benchmarking decode_with_buffer_bench/base64/512: Warming up for 3.0000 s
+Benchmarking decode_with_buffer_bench/base64/512: Collecting 100 samples in estimated 5.0010 s (18M iterations)
+Benchmarking decode_with_buffer_bench/base64/512: Analyzing
+decode_with_buffer_bench/base64/512
+                        time:   [278.79 ns 279.39 ns 280.17 ns]
+                        thrpt:  [1.7020 GiB/s 1.7067 GiB/s 1.7104 GiB/s]
+Found 8 outliers among 100 measurements (8.00%)
+  2 (2.00%) high mild
+  6 (6.00%) high severe
+Benchmarking decode_with_buffer_bench/base64/4096
+Benchmarking decode_with_buffer_bench/base64/4096: Warming up for 3.0000 s
+Benchmarking decode_with_buffer_bench/base64/4096: Collecting 100 samples in estimated 5.0029 s (2.3M iterations)
+Benchmarking decode_with_buffer_bench/base64/4096: Analyzing
+decode_with_buffer_bench/base64/4096
+                        time:   [2.1294 us 2.1413 us 2.1593 us]
+                        thrpt:  [1.7666 GiB/s 1.7815 GiB/s 1.7914 GiB/s]
+Found 11 outliers among 100 measurements (11.00%)
+  2 (2.00%) low mild
+  2 (2.00%) high mild
+  7 (7.00%) high severe
+Benchmarking decode_with_buffer_bench/base64/8192
+Benchmarking decode_with_buffer_bench/base64/8192: Warming up for 3.0000 s
+Benchmarking decode_with_buffer_bench/base64/8192: Collecting 100 samples in estimated 5.0102 s (1.2M iterations)
+Benchmarking decode_with_buffer_bench/base64/8192: Analyzing
+decode_with_buffer_bench/base64/8192
+                        time:   [4.1710 us 4.1885 us 4.2169 us]
+                        thrpt:  [1.8093 GiB/s 1.8215 GiB/s 1.8291 GiB/s]
+Found 9 outliers among 100 measurements (9.00%)
+  2 (2.00%) low mild
+  2 (2.00%) high mild
+  5 (5.00%) high severe
+
+Benchmarking decode_reader_bench/radix64/3
+Benchmarking decode_reader_bench/radix64/3: Warming up for 3.0000 s
+Benchmarking decode_reader_bench/radix64/3: Collecting 100 samples in estimated 5.0001 s (113M iterations)
+Benchmarking decode_reader_bench/radix64/3: Analyzing
+decode_reader_bench/radix64/3
+                        time:   [43.297 ns 43.411 ns 43.538 ns]
+                        thrpt:  [65.713 MiB/s 65.905 MiB/s 66.079 MiB/s]
+Found 4 outliers among 100 measurements (4.00%)
+  2 (2.00%) high mild
+  2 (2.00%) high severe
+Benchmarking decode_reader_bench/radix64/32
+Benchmarking decode_reader_bench/radix64/32: Warming up for 3.0000 s
+Benchmarking decode_reader_bench/radix64/32: Collecting 100 samples in estimated 5.0001 s (78M iterations)
+Benchmarking decode_reader_bench/radix64/32: Analyzing
+decode_reader_bench/radix64/32
+                        time:   [66.488 ns 67.013 ns 67.684 ns]
+                        thrpt:  [450.88 MiB/s 455.40 MiB/s 459.00 MiB/s]
+Found 15 outliers among 100 measurements (15.00%)
+  3 (3.00%) high mild
+  12 (12.00%) high severe
+Benchmarking decode_reader_bench/radix64/64
+Benchmarking decode_reader_bench/radix64/64: Warming up for 3.0000 s
+Benchmarking decode_reader_bench/radix64/64: Collecting 100 samples in estimated 5.0003 s (66M iterations)
+Benchmarking decode_reader_bench/radix64/64: Analyzing
+decode_reader_bench/radix64/64
+                        time:   [76.092 ns 76.475 ns 76.950 ns]
+                        thrpt:  [793.18 MiB/s 798.11 MiB/s 802.13 MiB/s]
+Found 4 outliers among 100 measurements (4.00%)
+  2 (2.00%) high mild
+  2 (2.00%) high severe
+Benchmarking decode_reader_bench/radix64/128
+Benchmarking decode_reader_bench/radix64/128: Warming up for 3.0000 s
+Benchmarking decode_reader_bench/radix64/128: Collecting 100 samples in estimated 5.0003 s (63M iterations)
+Benchmarking decode_reader_bench/radix64/128: Analyzing
+decode_reader_bench/radix64/128
+                        time:   [79.152 ns 79.497 ns 79.880 ns]
+                        thrpt:  [1.4924 GiB/s 1.4995 GiB/s 1.5061 GiB/s]
+Found 2 outliers among 100 measurements (2.00%)
+  2 (2.00%) high severe
+Benchmarking decode_reader_bench/radix64/512
+Benchmarking decode_reader_bench/radix64/512: Warming up for 3.0000 s
+Benchmarking decode_reader_bench/radix64/512: Collecting 100 samples in estimated 5.0007 s (35M iterations)
+Benchmarking decode_reader_bench/radix64/512: Analyzing
+decode_reader_bench/radix64/512
+                        time:   [139.36 ns 139.84 ns 140.37 ns]
+                        thrpt:  [3.3970 GiB/s 3.4099 GiB/s 3.4215 GiB/s]
+Found 10 outliers among 100 measurements (10.00%)
+  3 (3.00%) high mild
+  7 (7.00%) high severe
+Benchmarking decode_reader_bench/radix64/4096
+Benchmarking decode_reader_bench/radix64/4096: Warming up for 3.0000 s
+Benchmarking decode_reader_bench/radix64/4096: Collecting 100 samples in estimated 5.0030 s (6.5M iterations)
+Benchmarking decode_reader_bench/radix64/4096: Analyzing
+decode_reader_bench/radix64/4096
+                        time:   [739.19 ns 745.05 ns 754.30 ns]
+                        thrpt:  [5.0573 GiB/s 5.1200 GiB/s 5.1606 GiB/s]
+Found 14 outliers among 100 measurements (14.00%)
+  4 (4.00%) high mild
+  10 (10.00%) high severe
+Benchmarking decode_reader_bench/radix64/8192
+Benchmarking decode_reader_bench/radix64/8192: Warming up for 3.0000 s
+Benchmarking decode_reader_bench/radix64/8192: Collecting 100 samples in estimated 5.0019 s (3.3M iterations)
+Benchmarking decode_reader_bench/radix64/8192: Analyzing
+decode_reader_bench/radix64/8192
+                        time:   [1.4480 us 1.4525 us 1.4578 us]
+                        thrpt:  [5.2335 GiB/s 5.2527 GiB/s 5.2688 GiB/s]
+Found 11 outliers among 100 measurements (11.00%)
+  4 (4.00%) high mild
+  7 (7.00%) high severe
+
+Benchmarking display_bench/radix64/3
+Benchmarking display_bench/radix64/3: Warming up for 3.0000 s
+Benchmarking display_bench/radix64/3: Collecting 100 samples in estimated 5.0000 s (139M iterations)
+Benchmarking display_bench/radix64/3: Analyzing
+display_bench/radix64/3 time:   [35.143 ns 35.235 ns 35.354 ns]
+                        thrpt:  [80.925 MiB/s 81.199 MiB/s 81.412 MiB/s]
+Found 6 outliers among 100 measurements (6.00%)
+  4 (4.00%) high mild
+  2 (2.00%) high severe
+Benchmarking display_bench/radix64/32
+Benchmarking display_bench/radix64/32: Warming up for 3.0000 s
+Benchmarking display_bench/radix64/32: Collecting 100 samples in estimated 5.0002 s (116M iterations)
+Benchmarking display_bench/radix64/32: Analyzing
+display_bench/radix64/32
+                        time:   [42.536 ns 42.603 ns 42.684 ns]
+                        thrpt:  [714.96 MiB/s 716.33 MiB/s 717.45 MiB/s]
+Found 9 outliers among 100 measurements (9.00%)
+  4 (4.00%) high mild
+  5 (5.00%) high severe
+Benchmarking display_bench/radix64/64
+Benchmarking display_bench/radix64/64: Warming up for 3.0000 s
+Benchmarking display_bench/radix64/64: Collecting 100 samples in estimated 5.0000 s (91M iterations)
+Benchmarking display_bench/radix64/64: Analyzing
+display_bench/radix64/64
+                        time:   [54.630 ns 54.700 ns 54.785 ns]
+                        thrpt:  [1.0880 GiB/s 1.0897 GiB/s 1.0911 GiB/s]
+Found 8 outliers among 100 measurements (8.00%)
+  1 (1.00%) low mild
+  2 (2.00%) high mild
+  5 (5.00%) high severe
+Benchmarking display_bench/radix64/128
+Benchmarking display_bench/radix64/128: Warming up for 3.0000 s
+Benchmarking display_bench/radix64/128: Collecting 100 samples in estimated 5.0003 s (86M iterations)
+Benchmarking display_bench/radix64/128: Analyzing
+display_bench/radix64/128
+                        time:   [57.471 ns 57.780 ns 58.113 ns]
+                        thrpt:  [2.0513 GiB/s 2.0631 GiB/s 2.0742 GiB/s]
+Found 5 outliers among 100 measurements (5.00%)
+  4 (4.00%) high mild
+  1 (1.00%) high severe
+Benchmarking display_bench/radix64/512
+Benchmarking display_bench/radix64/512: Warming up for 3.0000 s
+Benchmarking display_bench/radix64/512: Collecting 100 samples in estimated 5.0006 s (40M iterations)
+Benchmarking display_bench/radix64/512: Analyzing
+display_bench/radix64/512
+                        time:   [125.62 ns 125.91 ns 126.28 ns]
+                        thrpt:  [3.7760 GiB/s 3.7873 GiB/s 3.7959 GiB/s]
+Found 7 outliers among 100 measurements (7.00%)
+  1 (1.00%) low mild
+  3 (3.00%) high mild
+  3 (3.00%) high severe
+Benchmarking display_bench/radix64/4096
+Benchmarking display_bench/radix64/4096: Warming up for 3.0000 s
+Benchmarking display_bench/radix64/4096: Collecting 100 samples in estimated 5.0043 s (5.7M iterations)
+Benchmarking display_bench/radix64/4096: Analyzing
+display_bench/radix64/4096
+                        time:   [867.50 ns 869.77 ns 872.39 ns]
+                        thrpt:  [4.3727 GiB/s 4.3859 GiB/s 4.3973 GiB/s]
+Found 11 outliers among 100 measurements (11.00%)
+  1 (1.00%) low mild
+  6 (6.00%) high mild
+  4 (4.00%) high severe
+Benchmarking display_bench/radix64/8192
+Benchmarking display_bench/radix64/8192: Warming up for 3.0000 s
+Benchmarking display_bench/radix64/8192: Collecting 100 samples in estimated 5.0043 s (3.2M iterations)
+Benchmarking display_bench/radix64/8192: Analyzing
+display_bench/radix64/8192
+                        time:   [1.5818 us 1.5853 us 1.5896 us]
+                        thrpt:  [4.7997 GiB/s 4.8127 GiB/s 4.8233 GiB/s]
+Found 8 outliers among 100 measurements (8.00%)
+  1 (1.00%) low mild
+  3 (3.00%) high mild
+  4 (4.00%) high severe
+Benchmarking display_bench/base64/3
+Benchmarking display_bench/base64/3: Warming up for 3.0000 s
+Benchmarking display_bench/base64/3: Collecting 100 samples in estimated 5.0002 s (115M iterations)
+Benchmarking display_bench/base64/3: Analyzing
+display_bench/base64/3  time:   [43.204 ns 43.593 ns 44.111 ns]
+                        thrpt:  [64.859 MiB/s 65.631 MiB/s 66.221 MiB/s]
+Found 16 outliers among 100 measurements (16.00%)
+  6 (6.00%) high mild
+  10 (10.00%) high severe
+Benchmarking display_bench/base64/32
+Benchmarking display_bench/base64/32: Warming up for 3.0000 s
+Benchmarking display_bench/base64/32: Collecting 100 samples in estimated 5.0001 s (76M iterations)
+Benchmarking display_bench/base64/32: Analyzing
+display_bench/base64/32 time:   [65.243 ns 65.872 ns 66.464 ns]
+                        thrpt:  [459.16 MiB/s 463.28 MiB/s 467.75 MiB/s]
+Found 19 outliers among 100 measurements (19.00%)
+  4 (4.00%) low severe
+  4 (4.00%) high mild
+  11 (11.00%) high severe
+Benchmarking display_bench/base64/64
+Benchmarking display_bench/base64/64: Warming up for 3.0000 s
+Benchmarking display_bench/base64/64: Collecting 100 samples in estimated 5.0001 s (66M iterations)
+Benchmarking display_bench/base64/64: Analyzing
+display_bench/base64/64 time:   [76.050 ns 76.618 ns 77.321 ns]
+                        thrpt:  [789.38 MiB/s 796.62 MiB/s 802.56 MiB/s]
+Found 14 outliers among 100 measurements (14.00%)
+  3 (3.00%) high mild
+  11 (11.00%) high severe
+Benchmarking display_bench/base64/128
+Benchmarking display_bench/base64/128: Warming up for 3.0000 s
+Benchmarking display_bench/base64/128: Collecting 100 samples in estimated 5.0004 s (48M iterations)
+Benchmarking display_bench/base64/128: Analyzing
+display_bench/base64/128
+                        time:   [103.96 ns 104.40 ns 104.93 ns]
+                        thrpt:  [1.1361 GiB/s 1.1419 GiB/s 1.1466 GiB/s]
+Found 10 outliers among 100 measurements (10.00%)
+  1 (1.00%) high mild
+  9 (9.00%) high severe
+Benchmarking display_bench/base64/512
+Benchmarking display_bench/base64/512: Warming up for 3.0000 s
+Benchmarking display_bench/base64/512: Collecting 100 samples in estimated 5.0010 s (17M iterations)
+Benchmarking display_bench/base64/512: Analyzing
+display_bench/base64/512
+                        time:   [284.55 ns 284.99 ns 285.51 ns]
+                        thrpt:  [1.6701 GiB/s 1.6732 GiB/s 1.6758 GiB/s]
+Found 10 outliers among 100 measurements (10.00%)
+  1 (1.00%) low mild
+  5 (5.00%) high mild
+  4 (4.00%) high severe
+Benchmarking display_bench/base64/4096
+Benchmarking display_bench/base64/4096: Warming up for 3.0000 s
+Benchmarking display_bench/base64/4096: Collecting 100 samples in estimated 5.0088 s (2.3M iterations)
+Benchmarking display_bench/base64/4096: Analyzing
+display_bench/base64/4096
+                        time:   [2.2199 us 2.2284 us 2.2413 us]
+                        thrpt:  [1.7020 GiB/s 1.7119 GiB/s 1.7184 GiB/s]
+Found 12 outliers among 100 measurements (12.00%)
+  5 (5.00%) high mild
+  7 (7.00%) high severe
+Benchmarking display_bench/base64/8192
+Benchmarking display_bench/base64/8192: Warming up for 3.0000 s
+Benchmarking display_bench/base64/8192: Collecting 100 samples in estimated 5.0161 s (1.2M iterations)
+Benchmarking display_bench/base64/8192: Analyzing
+display_bench/base64/8192
+                        time:   [4.2737 us 4.2830 us 4.2949 us]
+                        thrpt:  [1.7764 GiB/s 1.7813 GiB/s 1.7852 GiB/s]
+Found 14 outliers among 100 measurements (14.00%)
+  2 (2.00%) low mild
+  4 (4.00%) high mild
+  8 (8.00%) high severe
+

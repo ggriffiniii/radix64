@@ -12,7 +12,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-radix64 = "0.1"
+radix64 = "0.2"
 ```
 
 ### Examples
@@ -54,7 +54,11 @@ let decoded = STD.decode_with_buffer("AA==", &buf);
 Define and use a custom alphabet
 ```rust
 use radix64::ConfigBuilder;
-let my_cfg = ConfigBuilder::with_alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#&").no_padding().build().unwrap();
+let my_cfg =
+    ConfigBuilder::with_alphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz#&")
+        .no_padding()
+        .build()
+        .unwrap();
 let encoded = my_cfg.encode("my message");
 let decoded = my_cfg.decode(&encoded).unwrap();
 ```
@@ -68,3 +72,5 @@ default to see if AVX2 is available. If you specify compiling for an AVX2
 enabled platform the runtime check will be avoided. If you want to avoid using
 the AVX2 implementation you can disable the "simd" feature when compiling the
 crate.
+
+See a sample of benchmark runs [here](https://ggriffiniii.github.io/radix64/bench_results)
