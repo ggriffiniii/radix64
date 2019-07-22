@@ -1,8 +1,9 @@
 radix64
 =======
 
-[![build status](https://api.travis-ci.org/ggriffiniii/radix64.svg)](https://travis-ci.org/ggriffiniii/radix64)
 [![](http://meritbadge.herokuapp.com/radix64)](https://crates.io/crates/radix64)
+[![Docs](https://docs.rs/radix64/badge.svg)](https://docs.rs/radix64)
+[![build status](https://api.travis-ci.org/ggriffiniii/radix64.svg)](https://travis-ci.org/ggriffiniii/radix64)
 
 Fast and easy base64 encoding and decoding.
 
