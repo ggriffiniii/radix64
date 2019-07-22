@@ -1,6 +1,6 @@
 [package]
 name = "radix64"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["Glenn Griffin <ggriffiniii@gmail.com>"]
 edition = "2018"
 description = "A base64 library by another name"
