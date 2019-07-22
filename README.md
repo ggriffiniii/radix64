@@ -13,7 +13,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-radix64 = "0.2"
+radix64 = "0.3"
 ```
 
 ### Examples
