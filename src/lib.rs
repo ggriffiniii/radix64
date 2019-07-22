@@ -59,7 +59,7 @@
 //!
 //! There are a variety of base64 configurations. There are constants defined
 //! representing the most common varieties and the ability to define a custom
-//! configuration using [ConfigBuilder](struct.ConfigBuilder.html). Each
+//! configuration using [CustomConfig](struct.CustomConfig.html). Each
 //! configuration has a set of methods for encoding and decoding. The methods
 //! are as follows:
 //!
