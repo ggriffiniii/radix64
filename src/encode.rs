@@ -37,7 +37,7 @@ where
 
     // Encode the remaining non-padding 3 byte chunks of input.
     let mut iter = EncodeIter::new(input, output);
-    for (input, output) in iter.by_ref() {
+    while let Some((input, output)) = iter.next_chunk() {
         encode_chunk(config, *input, output);
     }
     let (chunk_input_idx, chunk_output_idx) = iter.remaining();

@@ -77,7 +77,7 @@ mod avx2 {
             output: &mut [u8],
         ) -> (usize, usize) {
             let mut iter = BlockIter::new(input, output);
-            for (input_block, output_block) in iter.by_ref() {
+            while let Some((input_block, output_block)) = iter.next_chunk() {
                 #[allow(clippy::cast_ptr_alignment)]
                 let mut data = _mm256_loadu_si256(input_block.as_ptr() as *const __m256i);
                 data = match self.decode_block(data) {
@@ -86,7 +86,7 @@ mod avx2 {
                         // Move back to the beginning of the chunk that failed
                         // and return the remaining slice to the non-optimized
                         // decoder for better error reporting.
-                        iter.next_back();
+                        iter.step_back();
                         return iter.remaining();
                     }
                 };

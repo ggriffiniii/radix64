@@ -61,7 +61,7 @@ where
 {
     fn decode_blocks(self, input: &[u8], output: &mut [u8]) -> Result<(usize, usize), DecodeError> {
         let mut iter = BlockIter::new(input, output);
-        for (input_block, output_block) in iter.by_ref() {
+        while let Some((input_block, output_block)) = iter.next_chunk() {
             self.decode_block(input_block, output_block)
                 .map_err(DecodeError::InvalidByte)?;
         }

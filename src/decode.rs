@@ -116,7 +116,7 @@ where
     output = &mut output[output_idx..];
 
     let mut iter = DecodeIter::new(input, output);
-    for (input, output) in iter.by_ref() {
+    while let Some((input, output)) = iter.next_chunk() {
         decode_chunk(config, *input, output).map_err(DecodeError::InvalidByte)?;
     }
 

@@ -307,9 +307,17 @@ pub trait Config: Copy + private::SealedConfig {
 /// by a defined stride (again possibly different for input and output). It uses
 /// unsafe mechanisms for efficiency, but the exposed api should be sound.
 macro_rules! define_block_iter {
-    (name = $name:ident, input_chunk_size = $input_chunk_size:expr, input_stride = $input_stride:expr, output_chunk_size = $output_chunk_size:expr, output_stride = $output_stride:expr) => {
-        /// An iterator that accepts an input slice and output slice. It yields (&[u8; $input_chunk_size], &mut [u8; $output_chunk_size]).
-        /// Each yield advances the input $input_stride bytes and the output $output_stride bytes.
+    (
+        name = $name:ident,
+        input_chunk_size = $input_chunk_size:expr,
+        input_stride = $input_stride:expr,
+        output_chunk_size = $output_chunk_size:expr,
+        output_stride = $output_stride:expr
+    ) => {
+        /// An iterator that accepts an input slice and output slice. It yields
+        /// (&[u8; $input_chunk_size], &mut [u8; $output_chunk_size]). Each yield
+        /// advances the input $input_stride bytes and the output $output_stride
+        /// bytes.
         struct $name<'a, 'b> {
             input: &'a [u8],
             output: &'b mut [u8],
@@ -329,31 +337,15 @@ macro_rules! define_block_iter {
             }
 
             #[inline]
-            fn remaining(self) -> (usize, usize) {
-                (
-                    self.input_index,
-                    self.output_index,
-                )
-            }
-
-            #[inline]
-            unsafe fn get(&mut self) -> (&'a [u8; $input_chunk_size], &'b mut [u8; $output_chunk_size]) {
-                let input = &*(self.input.as_ptr().add(self.input_index) as *const [u8; $input_chunk_size]);
-                let output = &mut *(self.output.as_mut_ptr().add(self.output_index) as *mut [u8; $output_chunk_size]);
-                (input, output)
-            }
-        }
-
-        impl<'a, 'b> Iterator for $name<'a, 'b> {
-            type Item = (
-                &'a [u8; $input_chunk_size],
-                &'b mut [u8; $output_chunk_size],
-            );
-
-            #[inline]
-            fn next(&mut self) -> Option<Self::Item> {
-                if self.input_index + $input_chunk_size <= self.input.len() && self.output_index + $output_chunk_size <= self.output.len() {
-                    let (input, output) = unsafe { self.get() };
+            fn next_chunk(
+                &mut self,
+            ) -> Option<(&[u8; $input_chunk_size], &mut [u8; $output_chunk_size])> {
+                if self.input_index + $input_chunk_size <= self.input.len()
+                    && self.output_index + $output_chunk_size <= self.output.len()
+                {
+                    use arrayref::{array_mut_ref, array_ref};
+                    let input = array_ref!(self.input, self.input_index, $input_chunk_size);
+                    let output = array_mut_ref!(self.output, self.output_index, $output_chunk_size);
                     self.input_index += $input_stride;
                     self.output_index += $output_stride;
                     Some((input, output))
@@ -361,64 +353,21 @@ macro_rules! define_block_iter {
                     None
                 }
             }
-        }
 
-        impl<'a, 'b> DoubleEndedIterator for $name<'a, 'b> {
-            fn next_back(&mut self) -> Option<Self::Item> {
+            #[allow(dead_code)]
+            fn step_back(&mut self) {
                 if self.input_index > 0 {
                     self.input_index -= $input_stride;
                     self.output_index -= $output_stride;
-                    Some(unsafe { self.get() })
-                } else {
-                    None
                 }
             }
-        }
 
-        // Hardcoding this module name means that we can't define more than one
-        // block iter per module. This is fine for now, but would be nice to
-        // come up with a better solution.
-        /// Property based tests to ensure
-        #[cfg(test)]
-        mod block_iter_tests {
-            use super::$name;
-            use proptest::prelude::{any, proptest};
-
-            proptest! {
-                #[test]
-                fn stay_within_bounds(input in any::<Vec<u8>>(), mut output in any::<Vec<u8>>()) {
-                    let input_ptr = input.as_ptr();
-                    let input_len = input.len();
-                    let output_ptr = output.as_ptr();
-                    let output_len = output.len();
-                    unsafe {
-                        let mut iter = $name::new(&input, output.as_mut_slice());
-                        let mut chunk_count = 0;
-                        for (input_chunk, output_chunk) in iter.by_ref() {
-                            chunk_count += 1;
-                            assert!(input_chunk.as_ptr() >= input_ptr);
-                            assert!(input_chunk.as_ptr().add($input_chunk_size) <= input_ptr.add(input_len));
-                            assert!(output_chunk.as_ptr() >= output_ptr);
-                            assert!(output_chunk.as_ptr().add($output_chunk_size) <= output_ptr.add(output_len));
-                        }
-                        let (input_idx, output_idx) = iter.remaining();
-
-                        assert!(input_idx <= input.len());
-                        assert!(output_idx <= output.len());
-                        let input_advanced = chunk_count * $input_stride;
-                        assert_eq!(input_idx, input_advanced);
-                        let output_advanced = chunk_count * $output_stride;
-                        assert_eq!(output_idx, output_advanced);
-
-                        let input_remaining = input.len() - input_idx;
-                        let output_remaining = output.len() - output_idx;
-                        assert!(input_remaining < $input_chunk_size || output_remaining < $output_chunk_size);
-                    }
-                }
+            #[inline]
+            fn remaining(self) -> (usize, usize) {
+                (self.input_index, self.output_index)
             }
         }
     };
-
 }
 
 // mod definitions need to appear after the macro definition.

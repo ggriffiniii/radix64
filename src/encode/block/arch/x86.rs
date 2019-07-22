@@ -65,7 +65,7 @@ mod avx2 {
         #[target_feature(enable = "avx2")]
         unsafe fn _encode_blocks(self, input: &[u8], output: &mut [u8]) -> (usize, usize) {
             let mut iter = BlockIter::new(input, output);
-            for (input, output) in iter.by_ref() {
+            while let Some((input, output)) = iter.next_chunk() {
                 #[allow(clippy::cast_ptr_alignment)]
                 let lo_data = _mm_loadu_si128(input.as_ptr() as *const __m128i);
                 #[allow(clippy::cast_ptr_alignment)]
