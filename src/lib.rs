@@ -92,34 +92,34 @@
 //! #### Encoding
 //! | Input Byte Size | radix64 Throughput | base64 Throughput |
 //! | --------------- | ------------------ | ----------------- |
-//! | 3 bytes         | 498 MiB/s          | 344 MiB/s         |
-//! | 32 bytes        | 2.12 GiB/s         | 1.30 GiB/s        |
-//! | 128 bytes       | 4.08 GiB/s         | 1.90 GiB/s        |
-//! | 8192 bytes      | 6.35 GiB/s         | 2.25 GiB/s        |
+//! | 3 bytes         | 508 MiB/s          | 344 MiB/s         |
+//! | 32 bytes        | 2.09 GiB/s         | 1.30 GiB/s        |
+//! | 128 bytes       | 4.16 GiB/s         | 1.92 GiB/s        |
+//! | 8192 bytes      | 5.94 GiB/s         | 2.25 GiB/s        |
 //!
 //! #### Decoding
 //! | Input Byte Size | radix64 Throughput | base64 Throughput |
 //! | --------------- | ------------------ | ----------------- |
-//! | 3 bytes         | 304 MiB/s          | 178 MiB/s         |
-//! | 32 bytes        | 1.55 GiB/s         | 959 MiB/s         |
-//! | 128 bytes       | 3.78 GiB/s         | 1.56 GiB/s        |
-//! | 8192 bytes      | 7.80 GiB/s         | 1.99 GiB/s        |
+//! | 3 bytes         | 293 MiB/s          | 178 MiB/s         |
+//! | 32 bytes        | 1.47 GiB/s         | 973 MiB/s         |
+//! | 128 bytes       | 3.85 GiB/s         | 1.55 GiB/s        |
+//! | 8192 bytes      | 8.21 GiB/s         | 1.93 GiB/s        |
 //!
 //! ## Without any SIMD optimizations (--no-default-features)
 //! #### Encoding
 //! | Input Byte Size | radix64 Throughput | base64 Throughput |
 //! | --------------- | ------------------ | ----------------- |
-//! | 3 bytes         | 499 MiB/s          | 347 MiB/s         |
-//! | 32 bytes        | 1.54 GiB/s         | 1.31 GiB/s        |
-//! | 128 bytes       | 2.03 GiB/s         | 1.89 GiB/s        |
-//! | 8192 bytes      | 2.26 GiB/s         | 2.23 GiB/s        |
+//! | 3 bytes         | 530 MiB/s          | 347 MiB/s         |
+//! | 32 bytes        | 1.54 GiB/s         | 1.29 GiB/s        |
+//! | 128 bytes       | 2.01 GiB/s         | 1.91 GiB/s        |
+//! | 8192 bytes      | 2.25 GiB/s         | 2.20 GiB/s        |
 //!
 //! #### Decoding
 //! | Input Byte Size | radix64 Throughput | base64 Throughput |
 //! | --------------- | ------------------ | ----------------- |
-//! | 3 bytes         | 305 MiB/s          | 176 MiB/s         |
-//! | 32 bytes        | 1.01 GiB/s         | 970 MiB/s         |
-//! | 128 bytes       | 1.59 GiB/s         | 1.54 GiB/s        |
+//! | 3 bytes         | 302 MiB/s          | 178 MiB/s         |
+//! | 32 bytes        | 969 MiB/s          | 976 MiB/s         |
+//! | 128 bytes       | 1.59 GiB/s         | 1.55 GiB/s        |
 //! | 8192 bytes      | 2.04 GiB/s         | 1.98 GiB/s        |
 
 #![deny(missing_docs)]
