@@ -2,6 +2,10 @@
 
 set -ex
 
-cargo build
 cargo doc
+
+cargo build --no-default-features
+cargo test --no-default-features
+
+cargo build
 cargo test
