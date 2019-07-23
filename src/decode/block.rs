@@ -90,7 +90,7 @@ impl IntoBlockDecoder for &CustomConfig {
 #[inline]
 fn write_be_u48(n: u64, buf: &mut [u8; 6]) {
     unsafe {
-        let n = (&n.to_be_bytes()) as *const u8;
-        std::ptr::copy_nonoverlapping(n, buf.as_mut_ptr(), 6);
+        let n: [u8; 8] = *(&n.to_be() as *const _ as *const [u8; 8]);
+        std::ptr::copy_nonoverlapping(n.as_ptr(), buf.as_mut_ptr(), 6);
     }
 }

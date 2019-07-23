@@ -99,7 +99,7 @@ fn decode_full_chunks_without_padding<C>(
 where
     C: Config,
 {
-    use block::BlockDecoder;
+    use crate::decode::block::BlockDecoder;
     let (input_idx, output_idx) = if input.len() < 32 {
         (0, 0)
     } else {
@@ -193,8 +193,8 @@ fn decode_chunk<C: Config>(config: C, input: [u8; 4], output: &mut [u8; 3]) -> R
 #[inline]
 fn write_be_u24(n: u32, buf: &mut [u8; 3]) {
     unsafe {
-        let n = (&n.to_be_bytes()) as *const u8;
-        std::ptr::copy_nonoverlapping(n, buf.as_mut_ptr(), 3);
+        let n: [u8; 4] = *(&n.to_be() as *const _ as *const [u8; 4]);
+        std::ptr::copy_nonoverlapping(n.as_ptr(), buf.as_mut_ptr(), 3);
     }
 }
 

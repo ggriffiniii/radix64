@@ -45,13 +45,21 @@ where
         while let Some((input_block, output_block)) = iter.next_chunk() {
             for i in 0..4 {
                 self.encode_chunk(
-                    u64::from_be_bytes(*array_ref!(input_block, i * 6, 8)),
+                    from_be_bytes(*array_ref!(input_block, i * 6, 8)),
                     array_mut_ref!(output_block, i * 8, 8),
                 );
             }
         }
         iter.remaining()
     }
+}
+
+fn from_be_bytes(input: [u8; 8]) -> u64 {
+    let mut output: u64 = 0;
+    unsafe {
+        std::ptr::copy_nonoverlapping(input.as_ptr(), &mut output as *mut u64 as *mut u8, 8);
+    }
+    output.to_be()
 }
 
 define_block_iter!(

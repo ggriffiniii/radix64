@@ -125,11 +125,11 @@
 #![deny(missing_docs)]
 
 #[doc(inline)]
-pub use configs::CustomConfig;
-pub use decode::DecodeError;
-pub use display::Display;
+pub use crate::configs::CustomConfig;
+pub use crate::decode::DecodeError;
+pub use crate::display::Display;
 
-use configs::{Crypt, Fast, Std, StdNoPad, UrlSafe, UrlSafeNoPad};
+use crate::configs::{Crypt, Fast, Std, StdNoPad, UrlSafe, UrlSafeNoPad};
 
 /// Encode and Decode using the standard characer set with padding.
 ///

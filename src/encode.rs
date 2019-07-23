@@ -24,7 +24,7 @@ pub(crate) fn encode_full_chunks_without_padding<C>(
 where
     C: Config,
 {
-    use block::BlockEncoder;
+    use crate::encode::block::BlockEncoder;
     let (full_block_input_idx, full_block_output_idx) = if input.len() < 32 {
         (0, 0)
     } else {
