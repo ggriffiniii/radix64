@@ -304,8 +304,7 @@ pub trait Config: Copy + private::SealedConfig {
 /// Both encoding and decoding iterate work on chunks of input and output slices.
 /// This macro allows creating an efficient iterator to break the slices into
 /// defined chunks (possibly differents sizes for input and output) and advance
-/// by a defined stride (again possibly different for input and output). It uses
-/// unsafe mechanisms for efficiency, but the exposed api should be sound.
+/// by a defined stride (again possibly different for input and output).
 macro_rules! define_block_iter {
     (
         name = $name:ident,
