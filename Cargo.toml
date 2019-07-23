@@ -1,6 +1,6 @@
 [package]
 name = "radix64"
-version = "0.5.0"
+version = "0.5.1"
 authors = ["Glenn Griffin <ggriffiniii@gmail.com>"]
 edition = "2018"
 description = "A base64 library by another name"
@@ -13,12 +13,12 @@ categories = ["encoding"]
 license = "MIT OR Apache-2.0"
 exclude = ["/ci/*", "/.travis.yml", "bench_results/*"]
 
+[package.metadata.release]
+no-dev-version = true
+
 [features]
 default = ["simd"]
 simd = []
-
-[package.metadata.release]
-no-dev-version = true
 
 [dev-dependencies]
 base64 = "0.10.1"
