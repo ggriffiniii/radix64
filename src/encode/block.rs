@@ -54,6 +54,7 @@ where
     }
 }
 
+#[inline]
 fn from_be_bytes(input: [u8; 8]) -> u64 {
     let mut output: u64 = 0;
     unsafe {
