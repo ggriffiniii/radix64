@@ -29,7 +29,7 @@ macro_rules! impl_config_from_table {
 macro_rules! define_inherent_impl {
     ($cfg:ty) => {
         impl $cfg {
-            /// See [Config::encode](trait.Config.html#method.encode).
+            /// See [Config::encode](../trait.Config.html#method.encode).
             #[inline]
             pub fn encode<I>(self, input: &I) -> String
             where
@@ -38,7 +38,7 @@ macro_rules! define_inherent_impl {
                 <Self as Config>::encode(self, input)
             }
 
-            /// See [Config::encode_with_buffer](trait.Config.html#method.encode_with_buffer).
+            /// See [Config::encode_with_buffer](../trait.Config.html#method.encode_with_buffer).
             #[inline]
             pub fn encode_with_buffer<'i, 'b, I>(
                 self,
@@ -51,7 +51,7 @@ macro_rules! define_inherent_impl {
                 <Self as Config>::encode_with_buffer(self, input, buffer)
             }
 
-            /// See [Config::encode_slice](trait.Config.html#method.encode_slice).
+            /// See [Config::encode_slice](../trait.Config.html#method.encode_slice).
             #[inline]
             pub fn encode_slice<I>(self, input: &I, output: &mut [u8]) -> usize
             where
@@ -60,7 +60,7 @@ macro_rules! define_inherent_impl {
                 <Self as Config>::encode_slice(self, input, output)
             }
 
-            /// See [Config::decode](trait.Config.html#method.decode).
+            /// See [Config::decode](../trait.Config.html#method.decode).
             #[inline]
             pub fn decode<I>(self, input: &I) -> Result<Vec<u8>, DecodeError>
             where
@@ -69,7 +69,7 @@ macro_rules! define_inherent_impl {
                 <Self as Config>::decode(self, input)
             }
 
-            /// See [Config::decode_with_buffer](trait.Config.html#method.decode_with_buffer).
+            /// See [Config::decode_with_buffer](../trait.Config.html#method.decode_with_buffer).
             #[inline]
             pub fn decode_with_buffer<'i, 'b, I>(
                 self,
@@ -82,7 +82,7 @@ macro_rules! define_inherent_impl {
                 <Self as Config>::decode_with_buffer(self, input, buffer)
             }
 
-            /// See [Config::decode_slice](trait.Config.html#method.decode_slice).
+            /// See [Config::decode_slice](../trait.Config.html#method.decode_slice).
             #[inline]
             pub fn decode_slice<I>(self, input: &I, output: &mut [u8]) -> Result<usize, DecodeError>
             where
@@ -222,7 +222,7 @@ impl CustomConfig {
         CustomConfigBuilder::with_alphabet(alphabet)
     }
 
-    /// See [Config::encode](trait.Config.html#method.encode).
+    /// See [Config::encode](../trait.Config.html#method.encode).
     #[inline]
     pub fn encode<I>(&self, input: &I) -> String
     where
@@ -231,7 +231,7 @@ impl CustomConfig {
         <&Self as Config>::encode(self, input)
     }
 
-    /// See [Config::encode_with_buffer](trait.Config.html#method.encode_with_buffer).
+    /// See [Config::encode_with_buffer](../trait.Config.html#method.encode_with_buffer).
     #[inline]
     pub fn encode_with_buffer<'i, 'b, I>(&self, input: &'i I, buffer: &'b mut Vec<u8>) -> &'b str
     where
@@ -240,7 +240,7 @@ impl CustomConfig {
         <&Self as Config>::encode_with_buffer(self, input, buffer)
     }
 
-    /// See [Config::encode_slice](trait.Config.html#method.encode_slice).
+    /// See [Config::encode_slice](../trait.Config.html#method.encode_slice).
     #[inline]
     pub fn encode_slice<I>(&self, input: &I, output: &mut [u8]) -> usize
     where
@@ -249,7 +249,7 @@ impl CustomConfig {
         <&Self as Config>::encode_slice(self, input, output)
     }
 
-    /// See [Config::decode](trait.Config.html#method.decode).
+    /// See [Config::decode](../trait.Config.html#method.decode).
     #[inline]
     pub fn decode<I>(&self, input: &I) -> Result<Vec<u8>, DecodeError>
     where
@@ -258,7 +258,7 @@ impl CustomConfig {
         <&Self as Config>::decode(self, input)
     }
 
-    /// See [Config::decode_with_buffer](trait.Config.html#method.decode_with_buffer).
+    /// See [Config::decode_with_buffer](../trait.Config.html#method.decode_with_buffer).
     #[inline]
     pub fn decode_with_buffer<'i, 'b, I>(
         &self,
@@ -271,7 +271,7 @@ impl CustomConfig {
         <&Self as Config>::decode_with_buffer(self, input, buffer)
     }
 
-    /// See [Config::decode_slice](trait.Config.html#method.decode_slice).
+    /// See [Config::decode_slice](../trait.Config.html#method.decode_slice).
     #[inline]
     pub fn decode_slice<'a, 'b, I>(
         &self,
