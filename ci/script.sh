@@ -6,12 +6,12 @@ cargo doc
 
 cargo build --no-default-features
 
-if [[ -z "${MSRV}" ]]; then
+if [[ ${TRAVIS_RUST_VERSION} == "1.31.0" ]]; then
   cargo test --no-default-features
 fi
 
 cargo build
 
-if [[ -z "${MSRV}" ]]; then
+if [[ ${TRAVIS_RUST_VERSION} == "1.31.0" ]]; then
   cargo test
 fi
