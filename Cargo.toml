@@ -17,6 +17,9 @@ exclude = ["/ci/*", "/.travis.yml", "bench_results/*"]
 default = ["simd"]
 simd = []
 
+[package.metadata.release]
+no-dev-version = true
+
 [dev-dependencies]
 base64 = "0.10.1"
 criterion = "0.2.11"
