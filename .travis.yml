@@ -2,6 +2,7 @@ dist: trusty
 language: rust
 rust:
   - 1.31.0
+    env: "MSRV=true"
   - stable
   - beta
   - nightly
