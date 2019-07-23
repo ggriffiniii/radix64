@@ -9,15 +9,6 @@ Fast and easy base64 encoding and decoding.
 
 ### Usage
 
-Add this to your `Cargo.toml`:
-
-```toml
-[dependencies]
-radix64 = "0.3"
-```
-
-### Examples
-
 Encode and decode with the standard alphabet
 
 ```rust
