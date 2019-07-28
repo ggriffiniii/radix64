@@ -97,7 +97,7 @@ macro_rules! define_inherent_impl {
 /// The standard character set (uses `+` and `/`) with `=` padding.
 ///
 /// See [RFC 4648](https://tools.ietf.org/html/rfc4648#section-4).
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Default, Clone, Copy)]
 pub struct Std;
 impl_config_from_table!(Std, STD_ENCODE, STD_DECODE, Some(b'='));
 define_inherent_impl!(Std);
@@ -105,7 +105,7 @@ define_inherent_impl!(Std);
 /// The standard character set (uses `+` and `/`) *without* padding.
 ///
 /// See [RFC 4648](https://tools.ietf.org/html/rfc4648#section-4).
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Default, Clone, Copy)]
 pub struct StdNoPad;
 impl_config_from_table!(StdNoPad, STD_ENCODE, STD_DECODE, None);
 define_inherent_impl!(StdNoPad);
@@ -113,7 +113,7 @@ define_inherent_impl!(StdNoPad);
 /// The URL safe character set (uses `-` and `_`) with `=` padding.
 ///
 /// See [RFC 4648](https://tools.ietf.org/html/rfc4648#section-5).
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Default, Clone, Copy)]
 pub struct UrlSafe;
 impl_config_from_table!(UrlSafe, URL_SAFE_ENCODE, URL_SAFE_DECODE, Some(b'='));
 define_inherent_impl!(UrlSafe);
@@ -121,7 +121,7 @@ define_inherent_impl!(UrlSafe);
 /// The URL safe character set (uses `-` and `_`) *without* padding.
 ///
 /// See [RFC 4648](https://tools.ietf.org/html/rfc4648#section-5).
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Default, Clone, Copy)]
 pub struct UrlSafeNoPad;
 impl_config_from_table!(UrlSafeNoPad, URL_SAFE_ENCODE, URL_SAFE_DECODE, None);
 define_inherent_impl!(UrlSafeNoPad);
@@ -130,7 +130,7 @@ define_inherent_impl!(UrlSafeNoPad);
 ///
 /// (uses `./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`)
 /// *without* padding.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Default, Clone, Copy)]
 pub struct Crypt;
 impl_config_from_table!(Crypt, CRYPT_ENCODE, CRYPT_DECODE, None);
 define_inherent_impl!(Crypt);
@@ -139,7 +139,7 @@ define_inherent_impl!(Crypt);
 ///
 /// (uses `:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz`)
 /// *without* padding.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Default, Clone, Copy)]
 pub struct Fast;
 impl_config_from_table!(Fast, FAST_ENCODE, FAST_DECODE, None);
 define_inherent_impl!(Fast);
