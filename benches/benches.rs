@@ -298,7 +298,7 @@ pub fn display_benches(byte_sizes: &[usize]) -> ParameterizedBenchmark<usize> {
 }
 
 fn customize_benchmark(benchmark: ParameterizedBenchmark<usize>) -> ParameterizedBenchmark<usize> {
-    benchmark.throughput(|s| Throughput::Bytes(*s as u32))
+    benchmark.throughput(|s| Throughput::Bytes(*s as u64))
 }
 
 fn bench(c: &mut Criterion) {
