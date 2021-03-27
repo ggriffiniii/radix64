@@ -1,7 +1,7 @@
 use crate::copy_in_place;
 use crate::encode::{encode_chunk, encode_full_chunks_without_padding, encode_partial_chunk};
 use crate::Config;
-use std::{fmt, fmt::Debug, io};
+use std::{error::Error, fmt, fmt::Debug, io};
 
 /// Encode base64 data to a std::io::Write.
 ///
@@ -289,11 +289,7 @@ impl<T> FinishError<T> {
     }
 }
 
-impl<T: Send + fmt::Debug> std::error::Error for FinishError<T> {
-    fn description(&self) -> &str {
-        std::error::Error::description(self.error())
-    }
-}
+impl<T: Send + fmt::Debug> Error for FinishError<T> {}
 
 impl<T> fmt::Display for FinishError<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
