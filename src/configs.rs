@@ -355,17 +355,15 @@ impl<'a> CustomConfigBuilder<'a> {
                 return Err(CustomConfigError::DuplicateValue(b));
             }
         }
-        let mut decode_scratch: Vec<u8> = vec![INVALID_VALUE; 256];
+        let mut decode_table = [INVALID_VALUE; 256];
         for (i, b) in self.alphabet.iter().cloned().enumerate() {
-            if decode_scratch[b as usize] != INVALID_VALUE {
+            if decode_table[b as usize] != INVALID_VALUE {
                 return Err(CustomConfigError::DuplicateValue(b));
             }
-            decode_scratch[b as usize] = i as u8;
+            decode_table[b as usize] = i as u8;
         }
         let mut encode_table = [0; 64];
-        let mut decode_table = [0; 256];
         encode_table.copy_from_slice(self.alphabet);
-        decode_table.copy_from_slice(&decode_scratch);
         Ok(CustomConfig {
             encode_table,
             decode_table,
