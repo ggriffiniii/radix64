@@ -34,7 +34,7 @@ impl FromIterator<String> for Mode {
     }
 }
 
-fn main() -> Result<(), Box<Error>> {
+fn main() -> Result<(), Box<dyn Error>> {
     let mode: Mode = env::args().collect();
 
     match mode {
