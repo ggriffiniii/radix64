@@ -1,7 +1,7 @@
 //! This module is included whenever running on an architecture that doesn't have a specialized module.
 
-use crate::{Std, StdNoPad, UrlSafe, UrlSafeNoPad, Crypt, Fast};
 use crate::encode::block::{IntoBlockEncoder, ScalarBlockEncoder};
+use crate::{Crypt, Fast, Std, StdNoPad, UrlSafe, UrlSafeNoPad};
 
 macro_rules! impl_into_block_encoder {
     ($( $cfg:ident ),+) => {$(

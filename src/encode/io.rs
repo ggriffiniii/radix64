@@ -289,11 +289,7 @@ impl<T> FinishError<T> {
     }
 }
 
-impl<T: Send + fmt::Debug> std::error::Error for FinishError<T> {
-    fn description(&self) -> &str {
-        std::error::Error::description(self.error())
-    }
-}
+impl<T: Send + fmt::Debug> std::error::Error for FinishError<T> {}
 
 impl<T> fmt::Display for FinishError<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

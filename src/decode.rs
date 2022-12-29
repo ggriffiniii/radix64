@@ -227,5 +227,4 @@ mod tests {
             STD.decode("AAAAiYX=")
         );
     }
-
 }

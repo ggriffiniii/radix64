@@ -39,7 +39,7 @@ where
             if output_remaining > 3 {
                 debug_assert!(input.len() < 3);
                 // We must have either consumed the entire input, or there is a partial chunk remaining with enough room in the buffer to encode it.
-                output_idx += encode_partial_chunk(self.config, &input, &mut buffer[output_idx..]);
+                output_idx += encode_partial_chunk(self.config, input, &mut buffer[output_idx..]);
                 input = &input[0..0];
             }
             // Encoded output is always ascii and therefore valid utf8.
