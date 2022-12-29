@@ -26,11 +26,10 @@ where
         ScalarBlockDecoder(config)
     }
     fn decode_block(self, input: &[u8; 32], output: &mut [u8; 24]) -> Result<(), u8> {
-        use arrayref::{array_mut_ref, array_ref};
         for i in 0..4 {
             self.decode_chunk(
-                array_ref!(input, i * 8, 8),
-                array_mut_ref!(output, i * 6, 6),
+                (&input[i * 8..][..8]).try_into().unwrap(),
+                (&mut output[i * 6..][..6]).try_into().unwrap(),
             )?;
         }
         Ok(())

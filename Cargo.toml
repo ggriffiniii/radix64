@@ -2,7 +2,7 @@
 name = "radix64"
 version = "0.6.2"
 authors = ["Glenn Griffin <ggriffiniii@gmail.com>"]
-edition = "2018"
+edition = "2021"
 description = "A base64 library by another name"
 repository = "https://github.com/ggriffiniii/radix64"
 homepage = "https://github.com/ggriffiniii/radix64"
@@ -36,4 +36,3 @@ debug = true
 
 [dependencies]
 cfg-if = "0.1.9"
-arrayref = "0.3.5"

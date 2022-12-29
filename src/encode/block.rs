@@ -40,13 +40,12 @@ where
 {
     #[inline]
     fn encode_blocks(self, input: &[u8], output: &mut [u8]) -> (usize, usize) {
-        use arrayref::{array_mut_ref, array_ref};
         let mut iter = BlockIter::new(input, output);
         while let Some((input_block, output_block)) = iter.next_chunk() {
             for i in 0..4 {
                 self.encode_chunk(
-                    from_be_bytes(*array_ref!(input_block, i * 6, 8)),
-                    array_mut_ref!(output_block, i * 8, 8),
+                    from_be_bytes((&input_block[i * 6..][..8]).try_into().unwrap()),
+                    (&mut output_block[i * 8..][..8]).try_into().unwrap(),
                 );
             }
         }

@@ -197,11 +197,9 @@ where
                     encode_chunk(
                         self.config,
                         self.partial_input,
-                        arrayref::array_mut_ref!(
-                            self.pending_output,
-                            self.bytes_in_pending_output,
-                            4
-                        ),
+                        (&mut self.pending_output[self.bytes_in_pending_output..][..4])
+                            .try_into()
+                            .unwrap(),
                     );
                     self.bytes_in_pending_output += 4;
                     self.bytes_in_partial_input = 0;

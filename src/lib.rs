@@ -34,7 +34,7 @@
 //!
 //! Decode data from stdin.
 //! ```
-//! # fn example() -> Result<(), Box<std::error::Error>> {
+//! # fn example() -> Result<(), Box<dyn std::error::Error>> {
 //! # use std::io::Read;
 //! use radix64::{STD, io::DecodeReader};
 //! let mut reader = DecodeReader::new(STD, std::io::stdin());
@@ -46,7 +46,7 @@
 //!
 //! Encode data to stdout.
 //! ```
-//! # fn example() -> Result<(), Box<std::error::Error>> {
+//! # fn example() -> Result<(), Box<dyn std::error::Error>> {
 //! # use std::io::Write;
 //! use radix64::{STD, io::EncodeWriter};
 //! let mut writer = EncodeWriter::new(STD, std::io::stdout());
@@ -342,9 +342,13 @@ macro_rules! define_block_iter {
                 if self.input_index + $input_chunk_size <= self.input.len()
                     && self.output_index + $output_chunk_size <= self.output.len()
                 {
-                    use arrayref::{array_mut_ref, array_ref};
-                    let input = array_ref!(self.input, self.input_index, $input_chunk_size);
-                    let output = array_mut_ref!(self.output, self.output_index, $output_chunk_size);
+                    use std::convert::TryInto;
+                    let input = (&self.input[self.input_index..][..$input_chunk_size])
+                        .try_into()
+                        .unwrap();
+                    let output = (&mut self.output[self.output_index..][..$output_chunk_size])
+                        .try_into()
+                        .unwrap();
                     self.input_index += $input_stride;
                     self.output_index += $output_stride;
                     Some((input, output))
