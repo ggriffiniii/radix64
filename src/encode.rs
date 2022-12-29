@@ -36,7 +36,7 @@ where
     output = &mut output[full_block_output_idx..];
 
     // Encode the remaining non-padding 3 byte chunks of input.
-    let mut iter = EncodeIter::new(input, output);
+    let mut iter = crate::BlockIter::<3, 3, 4, 4>::new(input, output);
     while let Some((input, output)) = iter.next_chunk() {
         encode_chunk(config, *input, output);
     }
@@ -94,14 +94,6 @@ pub(crate) fn encode_using_table(table: &[u8; 64], input: U6) -> u8 {
     let encoded = unsafe { table.get_unchecked(idx) };
     *encoded
 }
-
-define_block_iter!(
-    name = EncodeIter,
-    input_chunk_size = 3,
-    input_stride = 3,
-    output_chunk_size = 4,
-    output_stride = 4
-);
 
 #[cfg(test)]
 mod tests {
