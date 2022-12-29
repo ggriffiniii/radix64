@@ -347,6 +347,7 @@ impl<'a, 'b, const ICS: usize, const IS: usize, const OCS: usize, const OS: usiz
     }
 
     #[inline]
+    #[allow(dead_code)] // only used within arch specific implementations
     fn step_back(&mut self) {
         if self.input_index > 0 {
             self.input_index -= IS;

@@ -313,7 +313,7 @@ impl CustomConfigBuilder {
     /// The provided alphabet needs to be 64 non-repeating ascii bytes.
     pub const fn with_alphabet(alphabet: [u8; 64]) -> Self {
         CustomConfigBuilder {
-            alphabet: alphabet,
+            alphabet,
             padding_byte: Some(b'='),
         }
     }
