@@ -6,50 +6,42 @@ use std::io;
 // Create a custom config that should match each of the builtin configs.
 mod custom_configs {
     use radix64::CustomConfig;
-    lazy_static::lazy_static! {
 
-        pub static ref STD: CustomConfig = CustomConfig::with_alphabet(
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
-        )
-        .with_padding(b'=')
-        .build()
-        .expect("failed to build custom base64 config");
+    pub static STD: CustomConfig = CustomConfig::with_alphabet(
+        b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
+    )
+    .with_padding(b'=')
+    .build_or_die();
 
-        pub static ref STD_NO_PAD: CustomConfig = CustomConfig::with_alphabet(
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
-        )
-        .no_padding()
-        .build()
-        .expect("failed to build custom base64 config");
+    pub static STD_NO_PAD: CustomConfig = CustomConfig::with_alphabet(
+        b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
+    )
+    .no_padding()
+    .build_or_die();
 
-        pub static ref URL_SAFE: CustomConfig = CustomConfig::with_alphabet(
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_",
-        )
-        .with_padding(b'=')
-        .build()
-        .expect("failed to build custom base64 config");
+    pub static URL_SAFE: CustomConfig = CustomConfig::with_alphabet(
+        b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_",
+    )
+    .with_padding(b'=')
+    .build_or_die();
 
-        pub static ref URL_SAFE_NO_PAD: CustomConfig = CustomConfig::with_alphabet(
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_",
-        )
-        .no_padding()
-        .build()
-        .expect("failed to build custom base64 config");
+    pub static URL_SAFE_NO_PAD: CustomConfig = CustomConfig::with_alphabet(
+        b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_",
+    )
+    .no_padding()
+    .build_or_die();
 
-        pub static ref CRYPT: CustomConfig = CustomConfig::with_alphabet(
-            "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
-        )
-        .no_padding()
-        .build()
-        .expect("failed to build custom base64 config");
-        pub static ref FAST: CustomConfig = CustomConfig::with_alphabet(
-            r#">?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}"#
-        )
-        .no_padding()
-        .build()
-        .expect("failed to build custom base64 config");
+    pub static CRYPT: CustomConfig = CustomConfig::with_alphabet(
+        b"./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+    )
+    .no_padding()
+    .build_or_die();
 
-    }
+    pub static FAST: CustomConfig = CustomConfig::with_alphabet(
+        br#">?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}"#,
+    )
+    .no_padding()
+    .build_or_die();
 }
 
 macro_rules! tests_for_configs {
