@@ -9,16 +9,16 @@ impl U6 {
     }
 }
 
-impl Into<usize> for U6 {
+impl From<U6> for usize {
     #[inline]
-    fn into(self) -> usize {
-        <Self as Into<u8>>::into(self).into()
+    fn from(from: U6) -> usize {
+        from.0 as usize
     }
 }
 
-impl Into<u8> for U6 {
+impl From<U6> for u8 {
     #[inline]
-    fn into(self) -> u8 {
-        self.0
+    fn from(from: U6) -> u8 {
+        from.0
     }
 }

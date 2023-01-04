@@ -197,11 +197,9 @@ where
                     encode_chunk(
                         self.config,
                         self.partial_input,
-                        arrayref::array_mut_ref!(
-                            self.pending_output,
-                            self.bytes_in_pending_output,
-                            4
-                        ),
+                        (&mut self.pending_output[self.bytes_in_pending_output..][..4])
+                            .try_into()
+                            .unwrap(),
                     );
                     self.bytes_in_pending_output += 4;
                     self.bytes_in_partial_input = 0;
@@ -289,11 +287,7 @@ impl<T> FinishError<T> {
     }
 }
 
-impl<T: Send + fmt::Debug> std::error::Error for FinishError<T> {
-    fn description(&self) -> &str {
-        std::error::Error::description(self.error())
-    }
-}
+impl<T: Send + fmt::Debug> std::error::Error for FinishError<T> {}
 
 impl<T> fmt::Display for FinishError<T> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

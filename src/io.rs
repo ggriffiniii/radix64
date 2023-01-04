@@ -2,7 +2,7 @@
 //!
 //! ### Received base64 encoded data from stdin, decode it, and print it to stdout.
 //! ```
-//! # fn example() -> Result<(), Box<std::error::Error>> {
+//! # fn example() -> Result<(), Box<dyn std::error::Error>> {
 //! use radix64::{STD, io::DecodeReader};
 //! use std::io;
 //!
@@ -15,7 +15,7 @@
 //!
 //! ### Received data from stdin, encode it, and print it to stdout.
 //! ```
-//! # fn example() -> Result<(), Box<std::error::Error>> {
+//! # fn example() -> Result<(), Box<dyn std::error::Error>> {
 //! use radix64::{STD, io::EncodeWriter};
 //! use std::io;
 //! let mut dst = EncodeWriter::new(STD, io::stdout());

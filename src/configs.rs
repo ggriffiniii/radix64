@@ -158,7 +158,7 @@ define_inherent_impl!(Fast);
 /// use radix64::CustomConfig;
 ///
 /// let my_config = CustomConfig::with_alphabet(
-///     "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+///     b"./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
 /// )
 /// .no_padding()
 /// .build()
@@ -172,21 +172,16 @@ define_inherent_impl!(Fast);
 /// Note that building a custom configuration is somewhat expensive. It needs to
 /// iterate over the provided alphabet, sanity check it's contents, create an
 /// inverted alphabet for decoding, and store the results. For this reason it's
-/// encouraged to create a custom config early in program execution and share a
-/// single instance throughout the code. A simple way to do this is by utilizing
-/// lazy_static.
+/// encouraged to create a static instance of custom config and share that
+/// instance throughout the code.
 /// ```
-/// use lazy_static::lazy_static;
 /// use radix64::CustomConfig;
 ///
-/// lazy_static::lazy_static! {
-///     pub static ref MY_CONFIG: CustomConfig = CustomConfig::with_alphabet(
-///         "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
-///     )
-///     .with_padding(b'=')
-///     .build()
-///     .expect("failed to build custom base64 config");
-/// }
+/// pub static MY_CONFIG: CustomConfig = CustomConfig::with_alphabet(
+///     b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
+/// )
+/// .with_padding(b'=')
+/// .build_or_die();
 ///
 /// let my_encoded_msg = MY_CONFIG.encode("my message");
 /// assert_eq!("bXkgbWVzc2FnZQ==", my_encoded_msg.as_str());
@@ -218,8 +213,8 @@ impl Config for &CustomConfig {}
 impl CustomConfig {
     /// Start creating a new CustomConfig with the provided alphabet.
     /// The provided alphabet needs to be 64 non-repeating ascii bytes.
-    pub fn with_alphabet<A: AsRef<[u8]> + ?Sized>(alphabet: &A) -> CustomConfigBuilder {
-        CustomConfigBuilder::with_alphabet(alphabet)
+    pub const fn with_alphabet(alphabet: &[u8; 64]) -> CustomConfigBuilder {
+        CustomConfigBuilder::with_alphabet(*alphabet)
     }
 
     /// See [Config::encode](../trait.Config.html#method.encode).
@@ -299,75 +294,91 @@ impl fmt::Debug for CustomConfig {
 ///
 /// See [CustomConfig](struct.CustomConfig.html)
 #[derive(Debug, Clone)]
-pub struct CustomConfigBuilder<'a> {
-    alphabet: &'a [u8],
+pub struct CustomConfigBuilder {
+    alphabet: [u8; 64],
     padding_byte: Option<u8>,
 }
 
 /// Errors that can occur when building a `CustomConfig`.
 #[derive(Debug, Clone)]
 pub enum CustomConfigError {
-    /// The alphabet is not 64 characters long.
-    AlphabetNot64Bytes,
     /// The alphabet contains non-ascii characters.
     NonAscii(u8),
     /// The alphabet contains duplicate values.
     DuplicateValue(u8),
 }
 
-impl<'a> CustomConfigBuilder<'a> {
+impl CustomConfigBuilder {
     /// Set the alphabet to use.
     /// The provided alphabet needs to be 64 non-repeating ascii bytes.
-    pub fn with_alphabet<A: AsRef<[u8]> + ?Sized>(alphabet: &'a A) -> Self {
+    pub const fn with_alphabet(alphabet: [u8; 64]) -> Self {
         CustomConfigBuilder {
-            alphabet: alphabet.as_ref(),
+            alphabet,
             padding_byte: Some(b'='),
         }
     }
 
     /// Set which character to use for padding.
-    pub fn with_padding(mut self, padding_byte: u8) -> Self {
+    pub const fn with_padding(mut self, padding_byte: u8) -> Self {
         self.padding_byte = Some(padding_byte);
         self
     }
 
     /// Do not use any padding.
-    pub fn no_padding(mut self) -> Self {
+    pub const fn no_padding(mut self) -> Self {
         self.padding_byte = None;
         self
     }
 
-    /// Validate and build the `CustomConfig`.
-    pub fn build(self) -> Result<CustomConfig, CustomConfigError> {
+    /// Validate and build the `CustomConfig`
+    pub const fn build(self) -> Result<CustomConfig, CustomConfigError> {
         use crate::decode::INVALID_VALUE;
-        if self.alphabet.len() != 64 {
-            return Err(CustomConfigError::AlphabetNot64Bytes);
-        }
-        if let Some(&b) = self.alphabet.iter().find(|b| !b.is_ascii()) {
-            return Err(CustomConfigError::NonAscii(b));
+
+        let mut i = 0;
+        while i < 64 {
+            let b = self.alphabet[i];
+            if !b.is_ascii() {
+                panic!("non-ascii characater in alphabet");
+            }
+
+            match self.padding_byte {
+                Some(pad) if pad == b => panic!("padding matches alphabet character"),
+                _ => {}
+            }
+            i += 1;
         }
         if let Some(b) = self.padding_byte {
             if !b.is_ascii() {
-                return Err(CustomConfigError::NonAscii(b));
-            }
-            // Verify the padding character is not part of the alphabet.
-            if self.alphabet.iter().cloned().any(|c| c == b) {
-                return Err(CustomConfigError::DuplicateValue(b));
+                panic!("non-ascii character in padding");
             }
         }
         let mut decode_table = [INVALID_VALUE; 256];
-        for (i, b) in self.alphabet.iter().cloned().enumerate() {
+        let mut i = 0;
+        while i < 64 {
+            let b = self.alphabet[i];
             if decode_table[b as usize] != INVALID_VALUE {
-                return Err(CustomConfigError::DuplicateValue(b));
+                panic!("duplicate character in alphabet");
             }
             decode_table[b as usize] = i as u8;
+
+            i += 1;
         }
-        let mut encode_table = [0; 64];
-        encode_table.copy_from_slice(self.alphabet);
         Ok(CustomConfig {
-            encode_table,
+            encode_table: self.alphabet,
             decode_table,
             padding_byte: self.padding_byte,
         })
+    }
+
+    /// Validate and build the `CustomConfig`. Panicking if validation failed.
+    /// This is particularly useful within const contexts.
+    pub const fn build_or_die(self) -> CustomConfig {
+        match self.build() {
+            Ok(cfg) => cfg,
+            Err(CustomConfigError::NonAscii(_)) => panic!("{}", "non-ascsii character in alphabet"),
+            Err(CustomConfigError::DuplicateValue(_)) => {
+                panic!("{}", "duplicate character in alphabet")
+            }
+        }
     }
 }

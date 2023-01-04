@@ -76,7 +76,7 @@ mod avx2 {
             input: &[u8],
             output: &mut [u8],
         ) -> (usize, usize) {
-            let mut iter = BlockIter::new(input, output);
+            let mut iter = crate::BlockIter::<32,32,32,24>::new(input, output);
             while let Some((input_block, output_block)) = iter.next_chunk() {
                 #[allow(clippy::cast_ptr_alignment)]
                 let mut data = _mm256_loadu_si256(input_block.as_ptr() as *const __m256i);
@@ -121,8 +121,6 @@ mod avx2 {
             Ok(_mm256_permutevar8x32_epi32(input, _mm256_setr_epi32(0, 1, 2, 4, 5, 6, -1, -1)))
         }
     }
-
-    define_block_iter!(name=BlockIter, input_chunk_size=32, input_stride=32, output_chunk_size=32, output_stride=24);
 
     #[target_feature(enable = "avx2")]
     #[inline]

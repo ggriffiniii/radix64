@@ -34,7 +34,7 @@
 //!
 //! Decode data from stdin.
 //! ```
-//! # fn example() -> Result<(), Box<std::error::Error>> {
+//! # fn example() -> Result<(), Box<dyn std::error::Error>> {
 //! # use std::io::Read;
 //! use radix64::{STD, io::DecodeReader};
 //! let mut reader = DecodeReader::new(STD, std::io::stdin());
@@ -46,7 +46,7 @@
 //!
 //! Encode data to stdout.
 //! ```
-//! # fn example() -> Result<(), Box<std::error::Error>> {
+//! # fn example() -> Result<(), Box<dyn std::error::Error>> {
 //! # use std::io::Write;
 //! use radix64::{STD, io::EncodeWriter};
 //! let mut writer = EncodeWriter::new(STD, std::io::stdout());
@@ -302,71 +302,63 @@ pub trait Config: Copy + private::SealedConfig {
 }
 
 /// Both encoding and decoding iterate work on chunks of input and output slices.
-/// This macro allows creating an efficient iterator to break the slices into
-/// defined chunks (possibly differents sizes for input and output) and advance
-/// by a defined stride (again possibly different for input and output).
-macro_rules! define_block_iter {
-    (
-        name = $name:ident,
-        input_chunk_size = $input_chunk_size:expr,
-        input_stride = $input_stride:expr,
-        output_chunk_size = $output_chunk_size:expr,
-        output_stride = $output_stride:expr
-    ) => {
-        /// An iterator that accepts an input slice and output slice. It yields
-        /// (&[u8; $input_chunk_size], &mut [u8; $output_chunk_size]). Each yield
-        /// advances the input $input_stride bytes and the output $output_stride
-        /// bytes.
-        struct $name<'a, 'b> {
-            input: &'a [u8],
-            output: &'b mut [u8],
-            input_index: usize,
-            output_index: usize,
+/// BlockIter is an iterator that breaks the slices into defined chunks
+/// (possibly differents sizes for input and output) and advance by a defined
+/// stride (again possibly different for input and output).
+///
+/// ICS: input_chunk_size
+/// IS: input_stride
+/// OCS: output_chunk_size
+/// OS: output_stride
+struct BlockIter<'a, 'b, const ICS: usize, const IS: usize, const OCS: usize, const OS: usize> {
+    input: &'a [u8],
+    output: &'b mut [u8],
+    input_index: usize,
+    output_index: usize,
+}
+impl<'a, 'b, const ICS: usize, const IS: usize, const OCS: usize, const OS: usize>
+    BlockIter<'a, 'b, ICS, IS, OCS, OS>
+{
+    #[inline]
+    fn new(input: &'a [u8], output: &'b mut [u8]) -> Self {
+        Self {
+            input,
+            output,
+            input_index: 0,
+            output_index: 0,
         }
+    }
 
-        impl<'a, 'b> $name<'a, 'b> {
-            #[inline]
-            fn new(input: &'a [u8], output: &'b mut [u8]) -> Self {
-                $name {
-                    input,
-                    output,
-                    input_index: 0,
-                    output_index: 0,
-                }
-            }
-
-            #[inline]
-            fn next_chunk(
-                &mut self,
-            ) -> Option<(&[u8; $input_chunk_size], &mut [u8; $output_chunk_size])> {
-                if self.input_index + $input_chunk_size <= self.input.len()
-                    && self.output_index + $output_chunk_size <= self.output.len()
-                {
-                    use arrayref::{array_mut_ref, array_ref};
-                    let input = array_ref!(self.input, self.input_index, $input_chunk_size);
-                    let output = array_mut_ref!(self.output, self.output_index, $output_chunk_size);
-                    self.input_index += $input_stride;
-                    self.output_index += $output_stride;
-                    Some((input, output))
-                } else {
-                    None
-                }
-            }
-
-            #[allow(dead_code)]
-            fn step_back(&mut self) {
-                if self.input_index > 0 {
-                    self.input_index -= $input_stride;
-                    self.output_index -= $output_stride;
-                }
-            }
-
-            #[inline]
-            fn remaining(self) -> (usize, usize) {
-                (self.input_index, self.output_index)
-            }
+    #[inline]
+    fn next_chunk(&mut self) -> Option<(&[u8; ICS], &mut [u8; OCS])> {
+        if self.input_index + ICS <= self.input.len()
+            && self.output_index + OCS <= self.output.len()
+        {
+            let input = (&self.input[self.input_index..][..ICS]).try_into().unwrap();
+            let output = (&mut self.output[self.output_index..][..OCS])
+                .try_into()
+                .unwrap();
+            self.input_index += IS;
+            self.output_index += OS;
+            Some((input, output))
+        } else {
+            None
         }
-    };
+    }
+
+    #[inline]
+    #[allow(dead_code)] // only used within arch specific implementations
+    fn step_back(&mut self) {
+        if self.input_index > 0 {
+            self.input_index -= IS;
+            self.output_index -= OS;
+        }
+    }
+
+    #[inline]
+    fn remaining(self) -> (usize, usize) {
+        (self.input_index, self.output_index)
+    }
 }
 
 // mod definitions need to appear after the macro definition.

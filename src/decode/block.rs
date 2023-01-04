@@ -26,11 +26,10 @@ where
         ScalarBlockDecoder(config)
     }
     fn decode_block(self, input: &[u8; 32], output: &mut [u8; 24]) -> Result<(), u8> {
-        use arrayref::{array_mut_ref, array_ref};
         for i in 0..4 {
             self.decode_chunk(
-                array_ref!(input, i * 8, 8),
-                array_mut_ref!(output, i * 6, 6),
+                (&input[i * 8..][..8]).try_into().unwrap(),
+                (&mut output[i * 6..][..6]).try_into().unwrap(),
             )?;
         }
         Ok(())
@@ -60,7 +59,7 @@ where
     C: Config,
 {
     fn decode_blocks(self, input: &[u8], output: &mut [u8]) -> Result<(usize, usize), DecodeError> {
-        let mut iter = BlockIter::new(input, output);
+        let mut iter = crate::BlockIter::<32, 32, 24, 24>::new(input, output);
         while let Some((input_block, output_block)) = iter.next_chunk() {
             self.decode_block(input_block, output_block)
                 .map_err(DecodeError::InvalidByte)?;
@@ -68,14 +67,6 @@ where
         Ok(iter.remaining())
     }
 }
-
-define_block_iter!(
-    name = BlockIter,
-    input_chunk_size = 32,
-    input_stride = 32,
-    output_chunk_size = 24,
-    output_stride = 24
-);
 
 impl IntoBlockDecoder for &CustomConfig {
     type BlockDecoder = ScalarBlockDecoder<Self>;

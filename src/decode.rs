@@ -115,7 +115,7 @@ where
     input = &input[input_idx..];
     output = &mut output[output_idx..];
 
-    let mut iter = DecodeIter::new(input, output);
+    let mut iter = crate::BlockIter::<4, 4, 3, 3>::new(input, output);
     while let Some((input, output)) = iter.next_chunk() {
         decode_chunk(config, *input, output).map_err(DecodeError::InvalidByte)?;
     }
@@ -203,14 +203,6 @@ pub(crate) fn decode_using_table(table: &[u8; 256], input: u8) -> u8 {
     table[input as usize]
 }
 
-define_block_iter!(
-    name = DecodeIter,
-    input_chunk_size = 4,
-    input_stride = 4,
-    output_chunk_size = 3,
-    output_stride = 3
-);
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -227,5 +219,4 @@ mod tests {
             STD.decode("AAAAiYX=")
         );
     }
-
 }
