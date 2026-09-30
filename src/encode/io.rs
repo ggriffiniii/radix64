@@ -125,6 +125,11 @@ where
     W: io::Write,
 {
     fn write(&mut self, mut input: &[u8]) -> io::Result<usize> {
+        // An empty write is legal and must return Ok(0). Without this early
+        // return the loop below never consumes any input and never exits.
+        if input.is_empty() {
+            return Ok(0);
+        }
         let mut input_bytes_consumed = 0;
         let mut bytes_in_partial_input_checkpoint = 0;
         let mut bytes_in_pending_output_checkpoint = 0;

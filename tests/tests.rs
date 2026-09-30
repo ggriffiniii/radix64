@@ -416,3 +416,26 @@ where
 }
 
 tests_for_configs!(STD, STD_NO_PAD, URL_SAFE, URL_SAFE_NO_PAD, CRYPT, FAST);
+
+mod encode_writer_empty_write {
+    use radix64::io::EncodeWriter;
+    use radix64::STD;
+    use std::io::Write;
+
+    #[test]
+    fn empty_write_with_nothing_buffered_returns_zero() {
+        let mut writer = EncodeWriter::new(STD, Vec::new());
+        assert_eq!(writer.write(&[]).unwrap(), 0);
+        assert_eq!(writer.finish().unwrap(), b"");
+    }
+
+    #[test]
+    fn empty_write_with_partial_chunk_buffered_returns_zero() {
+        let mut writer = EncodeWriter::new(STD, Vec::new());
+        assert_eq!(writer.write(b"a").unwrap(), 1);
+        assert_eq!(writer.write(&[]).unwrap(), 0);
+        assert_eq!(writer.write(b"bc").unwrap(), 2);
+        assert_eq!(writer.write(&[]).unwrap(), 0);
+        assert_eq!(writer.finish().unwrap(), b"YWJj");
+    }
+}
