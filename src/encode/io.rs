@@ -1,4 +1,3 @@
-use crate::copy_in_place;
 use crate::encode::{encode_chunk, encode_full_chunks_without_padding, encode_partial_chunk};
 use crate::Config;
 use std::{fmt, fmt::Debug, io};
@@ -110,11 +109,7 @@ where
 
     fn consume_pending_output(&mut self, num_bytes: usize) {
         debug_assert!(num_bytes <= self.bytes_in_pending_output);
-        copy_in_place(
-            &mut self.pending_output[..self.bytes_in_pending_output],
-            num_bytes..,
-            0,
-        );
+        self.pending_output[..self.bytes_in_pending_output].copy_within(num_bytes.., 0);
         self.bytes_in_pending_output -= num_bytes;
     }
 }
