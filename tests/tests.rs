@@ -416,3 +416,57 @@ where
 }
 
 tests_for_configs!(STD, STD_NO_PAD, URL_SAFE, URL_SAFE_NO_PAD, CRYPT, FAST);
+
+mod custom_config_validation {
+    use radix64::configs::CustomConfigError;
+    use radix64::CustomConfig;
+
+    const VALID: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+    #[test]
+    fn valid_alphabet_builds() {
+        assert!(CustomConfig::with_alphabet(VALID).build().is_ok());
+    }
+
+    #[test]
+    fn duplicate_alphabet_byte_is_an_error() {
+        let mut alphabet = *VALID;
+        alphabet[63] = b'A';
+        match CustomConfig::with_alphabet(&alphabet).build() {
+            Err(CustomConfigError::DuplicateValue(b'A')) => {}
+            other => panic!("expected DuplicateValue(b'A'), got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn non_ascii_alphabet_byte_is_an_error() {
+        let mut alphabet = *VALID;
+        alphabet[0] = 0xff;
+        match CustomConfig::with_alphabet(&alphabet).build() {
+            Err(CustomConfigError::NonAscii(0xff)) => {}
+            other => panic!("expected NonAscii(0xff), got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn padding_byte_in_alphabet_is_an_error() {
+        match CustomConfig::with_alphabet(VALID).with_padding(b'A').build() {
+            Err(CustomConfigError::DuplicateValue(b'A')) => {}
+            other => panic!("expected DuplicateValue(b'A'), got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn non_ascii_padding_byte_is_an_error() {
+        match CustomConfig::with_alphabet(VALID).with_padding(0x80).build() {
+            Err(CustomConfigError::NonAscii(0x80)) => {}
+            other => panic!("expected NonAscii(0x80), got {:?}", other),
+        }
+    }
+
+    #[test]
+    fn build_or_die_still_works_in_const_context() {
+        static CFG: CustomConfig = CustomConfig::with_alphabet(VALID).build_or_die();
+        assert_eq!(CFG.encode("my message"), "bXkgbWVzc2FnZQ==");
+    }
+}
