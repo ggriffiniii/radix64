@@ -330,37 +330,36 @@ impl CustomConfigBuilder {
         self
     }
 
-    /// Validate and build the `CustomConfig`
+    /// Validate and build the `CustomConfig`.
+    ///
+    /// Returns an error if the alphabet or padding byte contains a non-ascii
+    /// character, if the alphabet contains a duplicate character, or if the
+    /// padding byte is also part of the alphabet.
     pub const fn build(self) -> Result<CustomConfig, CustomConfigError> {
         use crate::decode::INVALID_VALUE;
 
-        let mut i = 0;
-        while i < 64 {
-            let b = self.alphabet[i];
-            if !b.is_ascii() {
-                panic!("non-ascii characater in alphabet");
-            }
-
-            match self.padding_byte {
-                Some(pad) if pad == b => panic!("padding matches alphabet character"),
-                _ => {}
-            }
-            i += 1;
-        }
         if let Some(b) = self.padding_byte {
             if !b.is_ascii() {
-                panic!("non-ascii character in padding");
+                return Err(CustomConfigError::NonAscii(b));
             }
         }
         let mut decode_table = [INVALID_VALUE; 256];
         let mut i = 0;
         while i < 64 {
             let b = self.alphabet[i];
+            if !b.is_ascii() {
+                return Err(CustomConfigError::NonAscii(b));
+            }
+            // The padding byte must not be part of the alphabet.
+            if let Some(pad) = self.padding_byte {
+                if pad == b {
+                    return Err(CustomConfigError::DuplicateValue(b));
+                }
+            }
             if decode_table[b as usize] != INVALID_VALUE {
-                panic!("duplicate character in alphabet");
+                return Err(CustomConfigError::DuplicateValue(b));
             }
             decode_table[b as usize] = i as u8;
-
             i += 1;
         }
         Ok(CustomConfig {
@@ -370,14 +369,17 @@ impl CustomConfigBuilder {
         })
     }
 
-    /// Validate and build the `CustomConfig`. Panicking if validation failed.
-    /// This is particularly useful within const contexts.
+    /// Validate and build the `CustomConfig`, panicking if validation failed.
+    /// This is particularly useful within const contexts, where `build()`'s
+    /// error cannot be unwrapped.
     pub const fn build_or_die(self) -> CustomConfig {
         match self.build() {
             Ok(cfg) => cfg,
-            Err(CustomConfigError::NonAscii(_)) => panic!("{}", "non-ascsii character in alphabet"),
+            Err(CustomConfigError::NonAscii(_)) => {
+                panic!("non-ascii character in alphabet or padding")
+            }
             Err(CustomConfigError::DuplicateValue(_)) => {
-                panic!("{}", "duplicate character in alphabet")
+                panic!("duplicate character in alphabet or padding")
             }
         }
     }

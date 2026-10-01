@@ -369,32 +369,3 @@ pub(crate) mod encode;
 pub mod io;
 pub(crate) mod tables;
 pub(crate) mod u6;
-
-use std::ops::Bound;
-use std::ops::RangeBounds;
-
-// Copy the data in slice within the src range, to the index specified by dest.
-// This is just a stop-gap until slice::copy_within is stabilized.
-pub(crate) fn copy_in_place<T: Copy, R: RangeBounds<usize>>(slice: &mut [T], src: R, dest: usize) {
-    let src_start = match src.start_bound() {
-        Bound::Included(&n) => n,
-        Bound::Excluded(&n) => n.checked_add(1).expect("range bound overflows usize"),
-        Bound::Unbounded => 0,
-    };
-    let src_end = match src.end_bound() {
-        Bound::Included(&n) => n.checked_add(1).expect("range bound overflows usize"),
-        Bound::Excluded(&n) => n,
-        Bound::Unbounded => slice.len(),
-    };
-    assert!(src_start <= src_end, "src end is before src start");
-    assert!(src_end <= slice.len(), "src is out of bounds");
-    let count = src_end - src_start;
-    assert!(dest <= slice.len() - count, "dest is out of bounds");
-    unsafe {
-        core::ptr::copy(
-            slice.get_unchecked(src_start),
-            slice.get_unchecked_mut(dest),
-            count,
-        );
-    }
-}
