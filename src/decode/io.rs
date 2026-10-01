@@ -54,7 +54,7 @@ where
     }
 
     fn fill(&mut self) -> std::io::Result<()> {
-        crate::copy_in_place(&mut self.data, self.pos..self.cap, 0);
+        self.data.copy_within(self.pos..self.cap, 0);
         self.cap -= self.pos;
         self.pos = 0;
         let n = self.rdr.read(&mut self.data[self.cap..])?;
